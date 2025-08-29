@@ -1,8 +1,7 @@
 package org.example.mobble.user;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @NoArgsConstructor
@@ -26,5 +25,14 @@ public class User {
     private String email;
 
     // reCAPTCHA 추가? : 봇 생성 방지용
+
+
+    @Builder
+    public User(Integer id, String username, String password, String email) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
 }
 

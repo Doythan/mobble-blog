@@ -1,8 +1,11 @@
 package org.example.mobble.board;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.sql.Timestamp;
 
 @Data
 @NoArgsConstructor
@@ -23,15 +26,26 @@ public class Board {
     // 조회수
     private Integer views;
 
-    // 좋아요
-    private Integer likes;
-
-    // 북마크
-    private Integer bookmarks;
-
-    // 댓글 : 라이브리 사용 시 필요 없음
-    private Integer replies;
-
     // 카테고리
-    private String category;
+    private Integer categoryId;
+    
+    // 글 작성 시간
+    @CreationTimestamp
+    private Timestamp createdAt;
+    
+    // 글 수정 시간
+    @UpdateTimestamp
+    private Timestamp updatedAt;
+
+    @Builder
+    public Board(Integer id, String title, String content, Integer userId, Integer views, Integer categoryId, Timestamp createdAt, Timestamp updatedAt) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.userId = userId;
+        this.views = views;
+        this.categoryId = categoryId;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
 }
