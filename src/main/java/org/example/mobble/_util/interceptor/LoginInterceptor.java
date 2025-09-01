@@ -12,8 +12,8 @@ public class LoginInterceptor implements HandlerInterceptor {
         String uri = request.getRequestURI();
         System.out.println("uri: " + uri);
 
-        HttpSession session = request.getSession();
-        User sessionUser = (User) session.getAttribute("sessionUser");
+        HttpSession session = request.getSession(false);
+        User sessionUser = session == null ? null : (User) session.getAttribute("sessionUser");
 
         if (sessionUser == null) {
             if (uri.contains("/api")) {
