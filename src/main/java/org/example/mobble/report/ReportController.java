@@ -1,5 +1,6 @@
 package org.example.mobble.report;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 
@@ -7,4 +8,5 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class ReportController {
     private final ReportService reportService;
+    private final HttpSession session;
 }
