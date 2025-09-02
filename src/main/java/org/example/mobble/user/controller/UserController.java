@@ -77,10 +77,10 @@ public class UserController {
         return "redirect:/";
     }
 
-    @PostMapping("/users/check-nickname")
+    @PostMapping("/users/check-username")
     @ResponseBody
-    public Map<String, Boolean> checkNickname(@RequestParam String username) {
-        return Map.of("duplicate", userService.isNicknameDuplicate(username));
+    public Map<String, Boolean> checkUsername(@RequestBody UserRequest.UsernameDTO reqDTO) {
+        return Map.of("duplicate", userService.isNicknameDuplicate(reqDTO));
     }
 
     private User getLoginUser() {

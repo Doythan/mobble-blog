@@ -55,8 +55,8 @@ public class UserService {
     }
 
     // 해당 로직은 외부에서 중복 아이디를 확인하는 로직으로 private 설정이 불가하여 public으로 놔두었습니다.
-    public boolean isNicknameDuplicate(String username) {
-        return userRepository.existsByNickname(username);
+    public boolean isNicknameDuplicate(UserRequest.UsernameDTO reqDTO) {
+        return userRepository.existsByNickname(reqDTO.getUsername());
     }
 
     private void checkPermissions(User user, Integer userId) {

@@ -37,6 +37,16 @@ public class UserRequest {
     }
 
     @Data
+    public static class UsernameDTO {
+        private String username;
+
+        @Builder
+        public UsernameDTO(String username) {
+            this.username = username;
+        }
+    }
+
+    @Data
     public static class JoinDTO {
         private String email;
         private String username;
