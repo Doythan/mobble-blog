@@ -1,0 +1,161 @@
+:root {
+    --black: #111;
+    --gray: #bcbcbc;
+    --soft: #f7f7f7;
+    --radius: 14px;
+}
+
+* {
+    box-sizing: border-box
+}
+
+body {
+    margin: 0;
+    background: #fff;
+    color: #111;
+    font: 16px/1.6 "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.wrap {
+    max-width: 980px;
+    margin: 28px auto 80px;
+    padding: 0 18px;
+}
+
+/* 상단 바 */
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: #fff;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 18px;
+    margin: -28px -18px 28px;
+}
+
+.left, .right {
+    display: flex;
+    gap: 10px;
+    align-items: center
+}
+
+.btn {
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 14px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn.ghost {
+    background: #fff;
+    color: #111;
+    border: 1px solid #ddd
+}
+
+.btn.circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+
+.logo-square {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: #000;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800
+}
+
+.logo-btn {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: #fff;
+    cursor: pointer
+}
+
+.publish {
+    padding: 10px 16px;
+    border-radius: 10px
+}
+
+/* 폼 */
+.title {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 44px;
+    font-weight: 800;
+    margin: 8px 0;
+}
+
+.title::placeholder {
+    color: #e0e0e0
+}
+
+.desc {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 18px;
+    color: #888;
+    margin: 2px 0 18px;
+}
+
+.cat-line {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 8px 0 18px;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #111;
+    color: #fff;
+    font-weight: 700;
+    padding: 8px 10px;
+    border-radius: 8px;
+    margin-right: 6px;
+}
+
+.chip .del {
+    background: #fff;
+    color: #111;
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    cursor: pointer
+}
+
+.note-editor.note-frame {
+    border-radius: 10px;
+    border: 1px solid #eee
+}
+
+.note-toolbar {
+    border-bottom: 1px solid #eee
+}
+
+.footer-space {
+    height: 30px
+}

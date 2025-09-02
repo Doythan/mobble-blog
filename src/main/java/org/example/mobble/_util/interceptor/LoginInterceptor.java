@@ -1,9 +1,11 @@
 package org.example.mobble._util.interceptor;
 
-import jakarta.servlet.http.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.example.mobble._util.error.ex.Exception401;
 import org.example.mobble._util.error.ex.ExceptionApi401;
-import org.example.mobble.user.User;
+import org.example.mobble.user.domain.User;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 public class LoginInterceptor implements HandlerInterceptor {

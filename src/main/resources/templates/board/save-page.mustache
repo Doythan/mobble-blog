@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>New Post</title>
+
+    <!-- Summernote (간단 WYSIWYG) -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
+    <link rel="stylesheet" href="/css/board-save.css">
+</head>
+<body>
+<div class="wrap">
+
+    <!-- 상단 바 -->
+    <div class="topbar">
+        <div class="left">
+            <div class="logo-square">N</div>
+            <button type="button" class="logo-btn">Logo Area</button>
+        </div>
+        <div class="right">
+            <button id="publishBtn" class="btn publish">Publish</button>
+            <button class="btn circle">P</button>
+        </div>
+    </div>
+
+    <!-- 제목/설명 -->
+    <input class="title" type="text" id="title" name="title" placeholder="Post title &lt;h1&gt;">
+    <input class="desc" type="text" id="description" name="description" placeholder="Description">
+
+    <!-- 카테고리 -->
+    <div class="cat-line">
+        <button type="button" id="addCatBtn" class="btn ghost">Add Category ▪</button>
+        <div id="chips">
+        </div>
+    </div>
+
+    <!-- 본문 에디터 -->
+    <textarea id="editor" name="content"></textarea>
+
+    <div class="footer-space"></div>
+</div>
+
+<script>
+    // Summernote init
+    $('#editor').summernote({
+        placeholder: 'Start writing...',
+        height: 380,
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'italic', 'underline', 'clear']],
+            ['fontname', ['fontname']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['insert', ['link', 'picture', 'video', 'table', 'codeview']],
+            ['view', ['help']]
+        ]
+    });
+    const catLine = document.querySelector('.cat-line');
+    const chips = document.getElementById('chips');
+    var addCatBtn = document.getElementById('addCatBtn');
+    addCatBtn.addEventListener('click', () => {
+        const name = prompt('Add category');
+        if (!name) return;
+        if ([...chips.querySelectorAll('.chip')].some(c => c.dataset.name === name)) return;
+        const span = document.createElement('span');
+        span.className = 'chip';
+        span.dataset.name = name;
+        span.innerHTML = `${name} <span class="del">×</span>`;
+        chips.appendChild(span);
+        addCatBtn.remove();
+    });
+    chips.addEventListener('click', (e) => {
+        if (e.target.classList.contains('del')) {
+            catLine.appendChild(addCatBtn);
+            e.target.closest('.chip').remove();
+        }
+    });
+
+    document.getElementById('publishBtn').addEventListener('click', async () => {
+        const payload = {
+            title: document.getElementById('title').value?.trim(),
+            description: document.getElementById('description').value?.trim(),
+            categories: document.querySelector('.chip'),
+            content: $('#editor').summernote('code')
+        };
+        try {
+            const response = await fetch('/boards/save', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (response.ok) {
+                alert("게시글이 저장되었습니다.");
+                // 저장 후 이동할 페이지 지정 가능
+                // window.location.href = "/";
+            } else {
+                const text = await response.text();
+                alert("에러 발생: " + text);
+            }
+        } catch (e) {
+            alert("요청 실패: " + e.message);
+        }
+    });
+</script>
+</body>
+</html>

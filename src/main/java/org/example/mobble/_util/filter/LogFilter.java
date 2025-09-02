@@ -3,14 +3,13 @@ package org.example.mobble._util.filter;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.example.mobble.user.UserRepository;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+@Component
 @RequiredArgsConstructor
 public class LogFilter implements Filter {
-
-    private final UserRepository userRepository;
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
