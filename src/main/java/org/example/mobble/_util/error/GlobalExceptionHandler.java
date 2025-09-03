@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     // 302 FOUND
-    @ExceptionHandler(Exception400.class)
+    @ExceptionHandler(Exception302.class)
     public ResponseEntity<String> ex302(Exception302 e) {
         return ResponseEntity.status(HttpStatus.FOUND)
                 .contentType(MediaType.TEXT_HTML)
