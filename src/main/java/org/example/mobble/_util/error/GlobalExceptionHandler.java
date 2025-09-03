@@ -3,11 +3,22 @@ package org.example.mobble._util.error;
 import org.example.mobble._util.error.ex.*;
 import org.example.mobble._util.util.Resp;
 import org.example.mobble._util.util.Script;
-import org.springframework.http.*;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice // ← 핵심: 리턴값을 “바디”로 보냄
 public class GlobalExceptionHandler {
+
+    // 302 FOUND
+    @ExceptionHandler(Exception400.class)
+    public ResponseEntity<String> ex302(Exception302 e) {
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .contentType(MediaType.TEXT_HTML)
+                .body(Script.back(e.getMessage()));
+    }
 
     // 400 Bad Request
     @ExceptionHandler(Exception400.class)
