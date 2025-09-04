@@ -22,9 +22,14 @@ public class UserController {
      *  ------------------------------------------------------------------
      */
     @GetMapping("/login-form")
-    public String loginForm(UserRequest.JoinDTO reqDTO) {
-        userService.save(reqDTO);
+    public String loginForm() {
         return "auth/login-page";
+    }
+
+    @GetMapping("/join")
+    public String join(UserRequest.JoinDTO reqDTO) {
+        userService.save(reqDTO);
+        return "redirect:/login-form";
     }
 
     @GetMapping("/join-form")
@@ -80,7 +85,7 @@ public class UserController {
     @PostMapping("/users/check-username")
     @ResponseBody
     public Map<String, Boolean> checkUsername(@RequestBody UserRequest.UsernameDTO reqDTO) {
-        return Map.of("duplicate", userService.isNicknameDuplicate(reqDTO));
+        return Map.of("duplicate", userService.isUsernameDuplicate(reqDTO));
     }
 
     private User getLoginUser() {

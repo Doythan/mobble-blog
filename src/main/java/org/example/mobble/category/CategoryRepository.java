@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -25,5 +26,9 @@ public class CategoryRepository {
         } catch (Exception e) {
             return Optional.empty();
         }
+    }
+
+    public List<String> getPopularList(Integer maxResult) {
+        return em.createQuery("select c.category from Category c group by c.category order by count(c) desc", String.class).setFirstResult(0).setMaxResults(maxResult).getResultList();
     }
 }

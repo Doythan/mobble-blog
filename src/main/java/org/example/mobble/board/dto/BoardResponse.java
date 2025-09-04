@@ -3,37 +3,81 @@ package org.example.mobble.board.dto;
 import lombok.Builder;
 import lombok.Data;
 import org.example.mobble.board.domain.Board;
+import org.example.mobble.category.Category;
+import org.example.mobble.user.domain.User;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 public class BoardResponse {
+    @Data
+    public static class mainListDTO {
+        List<DTO> boardList;
+        List<String> categoryList;
+
+        @Builder
+        public mainListDTO(List<DTO> boardList, List<String> categoryList) {
+            this.boardList = boardList;
+            this.categoryList = categoryList;
+        }
+    }
 
     // 팀원 간 컨벤션 토의
     @Data
     public static class DTO {
         Integer id;
+        String username;
         String title;
         String content;
-        String imageUrl;
         Integer views;
         Integer bookmarkCount;
-        Integer categoryId;
-        Integer userId;
+        String category;
         Timestamp createAt;
         Timestamp updateAt;
+        String image;
 
         @Builder
-        public DTO(Board board, Integer bookmarkCount, String imageUrl) {
+        public DTO(Board board, User user, Category category, Integer bookmarkCount, String image) {
             this.id = board.getId();
+            this.username = user.getUsername();
             this.title = board.getTitle();
             this.content = board.getContent();
-            this.imageUrl = imageUrl;
             this.views = board.getViews();
             this.bookmarkCount = bookmarkCount;
-            this.categoryId = board.getCategoryId();
-            this.userId = board.getUserId();
+            this.category = category.getCategory();
             this.createAt = board.getCreatedAt();
             this.updateAt = board.getUpdatedAt();
+            this.image = image;
+        }
+    }
+
+    @Data
+    public static class DetailDTO {
+        Integer id;
+        String username;
+        String title;
+        String content;
+        Integer views;
+        Integer bookmarkCount;
+        String category;
+        Timestamp createAt;
+        Timestamp updateAt;
+        String profileImage;
+        Boolean isBookmark;
+
+        @Builder
+        public DetailDTO(Board board, User user, Category category, Integer bookmarkCount, Boolean isBookmark) {
+            this.id = board.getId();
+            this.username = user.getUsername();
+            this.title = board.getTitle();
+            this.content = board.getContent();
+            this.views = board.getViews();
+            this.bookmarkCount = bookmarkCount;
+            this.category = category.getCategory();
+            this.createAt = board.getCreatedAt();
+            this.updateAt = board.getUpdatedAt();
+            this.profileImage = user.getProfileImage();
+            this.isBookmark = isBookmark;
         }
     }
 }
