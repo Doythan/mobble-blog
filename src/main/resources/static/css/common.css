@@ -1,0 +1,23 @@
+:root {
+  --appbar-h: 64px;
+  --container-max: 1920px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #fff;
+  color: #111;
+}
+
+/* 공통 버튼 기본 */
+button {
+  cursor: pointer;
+  font-size: 14px;
+  border-radius: 6px;
+}

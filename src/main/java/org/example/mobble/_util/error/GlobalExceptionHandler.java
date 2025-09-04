@@ -55,7 +55,6 @@ public class GlobalExceptionHandler {
     // Unknown Server Error
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> exUnknown(Exception e) {
-        System.out.println("Error Log : " + e.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .contentType(MediaType.TEXT_HTML)
                 .body(Script.back("관리자에게 문의해주세요."));

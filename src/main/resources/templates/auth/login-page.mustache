@@ -1,59 +1,67 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <link rel="stylesheet" href="/css/login-page.css"/>
-    <title>Login</title>
+  <head>
+    <meta charset="UTF-8" />
+    <title>로그인</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/css/common.css" />
+    <link rel="stylesheet" href="/css/header.css" />
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/auth.css" />
+    <link rel="stylesheet" href="/css/login.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <header>
+      <div class="header-inner">
+        <a href="/" class="logo">Mobble</a>
+        <button class="join-btn" onclick="location.href='/join-form'">
+          JoinBtn Area
+        </button>
+      </div>
+    </header>
 
-</head>
-<body>
-
-<!-- 상단 바 -->
-<div class="topbar">
-    <button class="btn" onclick="location.href='/'">Logo Area</button>
-    <button class="btn primary" onclick="location.href='/join'">JoinBtn Area</button>
-</div>
-
-<div class="container">
-    <div class="grid">
-        <!-- Left: 소개 -->
-        <section class="hero">
-            <h1>Lorem Ipsum</h1>
-            <p>
-                Lorem ipsum dolor sit amet consectetur. Viverra id lacinia nisl fringilla eget a.
-                Est habitasse mattis penatibus turpis feugiat. Eget sed nibh dui proin leo amet
-                etiam. At neque quisque sed nunc tempor. Risus hendrerit egestas sit est nisl blandit morbi.
-                Arcu leo et leo nunc purus aliquam mollis ut justo. At aliquam elit egestas eget mi imperdiet in in
-                magna.
-                Pellentesque vitae lacus at suspendisse commodo gravida duis massa nulla. Risus est arcu placerat
-                lobortis risus sed cras.
-            </p>
+    <main>
+      <div class="auth-content">
+        <section class="auth-left">
+          <h1>로그인하여 당신의 스토리를</h1>
+          <h1>공유해 보세요.</h1>
+          <p>
+            모두와 함께하는 블로그, Mobble입니다.
+          </p>
         </section>
 
-        <!-- Right: 폼 -->
-        <section class="panel">
-            <h3>로그인</h3>
-            <form method="post" action="/login">
-                <!-- 서버에서 CSRF 토큰을 내려주면 바인딩 -->
-                {{#_csrf}}
-                    <input type="hidden" name="{{parameterName}}" value="{{token}}">
-                {{/_csrf}}
+        <aside class="auth-right">
+          <h3>로그인</h3>
+          <form class="auth-form" action="/login" method="post">
+            <div class="form-group">
+              <input
+                type="text"
+                name="username"
+                placeholder="아이디"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <input
+                type="password"
+                name="password"
+                placeholder="비밀번호"
+                required
+              />
+            </div>
+            <button type="submit" class="auth-submit">LogIn</button>
+          </form>
+          <br/>
+          <div class="auth-subtext">
+            아직 계정이 없으신가요? <a href="/join-form">회원가입</a>
+          </div>
+        </aside>
+      </div>
+    </main>
 
-                <input class="field" type="text" name="username" placeholder="아이디" value="{{prefillUsername}}">
-                <input class="field" type="password" name="password" placeholder="비밀번호">
-
-                <button class="btn primary submit" type="submit">LogIn</button>
-
-                <div class="helper">
-                    <a href="/join">회원가입</a>
-                </div>
-            </form>
-        </section>
-    </div>
-</div>
-
-<div class="footerline"></div>
-
-</body>
+    <footer>
+      <div class="footer-inner">© Footer Content</div>
+    </footer>
+  </body>
 </html>

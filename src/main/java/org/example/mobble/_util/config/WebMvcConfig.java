@@ -3,6 +3,7 @@ package org.example.mobble._util.config;
 import org.example.mobble._util.interceptor.LoginInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
@@ -20,4 +21,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/board/{id:\\d+}")
                 .excludePathPatterns("/check-username-available/**");
     }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/**")
+                .addResourceLocations("classpath:/static/"); // static 아래 전부
+    }
+
 }

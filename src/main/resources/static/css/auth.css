@@ -1,0 +1,96 @@
+/* 메인 중앙 정렬(공통) */
+main {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: var(--appbar-h);
+  padding-bottom: 40px;
+}
+
+/* 중앙 레이아웃(좌 텍스트 / 우 폼) */
+.auth-content {
+  display: flex;
+  gap: 80px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 1200px;
+}
+
+/* 좌측 소개 텍스트 */
+.auth-left {
+  flex: 1 1 400px;
+  text-align: left;
+}
+.auth-left h1 {
+  font-size: 48px;
+  font-weight: 800;
+  margin-bottom: 20px;
+}
+.auth-left p {
+  font-size: 14px;
+  line-height: 1.75;
+  color: #222;
+}
+
+/* 우측 폼 박스 */
+.auth-right {
+  flex: 1 1 300px;
+  max-width: 480px;
+}
+.auth-right h3 {
+  margin-bottom: 12px;
+  font-size: 16px;
+}
+
+/* 폼 요소 */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.auth-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.auth-form input,
+.auth-form select {
+  padding: 12px;
+  border: 1px solid #aaa;
+  border-radius: 8px;
+  font-size: 14px;
+}
+.auth-submit {
+  width: 100%;
+  padding: 12px;
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 8px;
+}
+.auth-subtext {
+  text-align: center;
+  font-size: 13px;
+}
+.auth-subtext a {
+  color: #000;
+  text-decoration: none;
+}
+
+/* 반응형 */
+@media (max-width: 1024px) {
+  .auth-content {
+    flex-direction: column;
+    gap: 40px;
+    text-align: center;
+  }
+  .auth-left {
+    text-align: center;
+  }
+}
