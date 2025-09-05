@@ -19,20 +19,20 @@ public class Category {
     private Integer id;
 
     // 만든 사람
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
     // 카테고리명
     private String category;
 
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_id")
     private List<Board> boards;
 
     @Builder
-    public Category(Integer id, User user, String category) {
+    public Category(Integer id, User user, String category, List<Board> boards) {
         this.id = id;
         this.user = user;
         this.category = category;
+        this.boards = boards;
     }
 }

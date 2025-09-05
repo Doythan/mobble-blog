@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.mobble.board.domain.Board;
+import org.example.mobble.user.domain.User;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
@@ -19,8 +21,10 @@ public class Bookmark {
     private Integer id;
     // 테이블 설정 후 추가
 
-    private Integer boardId;
-    private Integer userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Board board;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
 
     // 만든 시간
     @CreationTimestamp
@@ -31,10 +35,10 @@ public class Bookmark {
 
 
     @Builder
-    public Bookmark(Integer id, Integer boardId, Integer userId, Timestamp createdAt) {
+    public Bookmark(Integer id, Board board, User user, Timestamp createdAt) {
         this.id = id;
-        this.boardId = boardId;
-        this.userId = userId;
+        this.board = board;
+        this.user = user;
         this.createdAt = createdAt;
     }
 }

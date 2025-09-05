@@ -30,7 +30,13 @@ public class UserService {
         User user = userRepository.findByUsername(reqDTO.getUsername()).orElse(null);
         if (user != null) throw new Exception302(ErrorEnum.FOUND_USER_TO_USERNAME);
         String pw = bCryptPasswordEncoder.encode(reqDTO.getPassword());
-        userRepository.save(new User(null, reqDTO.getUsername(), pw, reqDTO.getEmail(), null));
+        userRepository.save(
+                User.builder()
+                        .username(reqDTO.getUsername())
+                        .email(reqDTO.getEmail())
+                        .password(pw)
+                        .build()
+        );
     }
 
     @Transactional
