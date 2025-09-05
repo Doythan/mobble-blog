@@ -1,112 +1,112 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8"/>
+  <head>
+    <meta charset="UTF-8" />
     <title>회원가입</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- 공통 / 레이아웃 CSS -->
-    <link rel="stylesheet" href="/css/common.css"/>
-    <link rel="stylesheet" href="/css/header.css"/>
-    <link rel="stylesheet" href="/css/footer.css"/>
-    <link rel="stylesheet" href="/css/auth.css"/>
+    <link rel="stylesheet" href="/css/common.css" />
+    <link rel="stylesheet" href="/css/header.css" />
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/auth.css" />
 
     <!-- 회원가입 전용 CSS (시안 커스터마이즈) -->
-    <link rel="stylesheet" href="/css/signup.css"/>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet">
-</head>
-<body>
-<!-- 헤더: 100% 경계, 내부 1920 컨테이너 -->
-<header>
-    <div class="header-inner">
+    <link rel="stylesheet" href="/css/join.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- 헤더: 100% 경계, 내부 1920 컨테이너 -->
+    <header>
+      <div class="header-inner">
         <a href="/" class="logo">Mobble</a>
         <button class="join-btn" disabled>JoinBtn Area</button>
-    </div>
-</header>
+      </div>
+    </header>
 
-<main>
-    <div class="auth-content">
+    <main>
+      <div class="auth-content">
         <!-- 좌측: 비주얼 박스는 signup.css의 ::before로 그려짐 -->
         <section class="auth-left">
-            <h1>Mobble과 함께 하세요.</h1>
-            <h2>당신의 이야기를 여기서 시작해 보세요.</h2>
-            <br/>
-            <p>
-                모두와 함께하는 블로그, Mobble입니다.
-            </p>
+          <h1>Mobble과 함께 하세요.</h1>
+          <h2>당신의 이야기를 여기서 시작해 보세요.</h2>
+          <br />
+          <p>모두와 함께하는 블로그, Mobble입니다.</p>
         </section>
 
         <!-- 우측: 회원가입 폼 -->
         <aside class="auth-right">
-            <h3>회원가입</h3>
+          <h3>회원가입</h3>
 
-            <form class="auth-form" action="/join" method="post" novalidate>
-                <!-- 아이디 -->
-                <div class="form-group">
-                    <input
-                            type="text"
-                            name="username"
-                            placeholder="아이디"
-                            autocomplete="username"
-                            required
-                    />
-                    <!-- 에러가 있을 때는 위 input에 is-error 클래스를 추가하고 아래 small을 노출하세요.
-                  <small class="error-text">중복된 아이디 입니다</small>
-                  --></div>
+          <form class="auth-form" action="/join" method="post" novalidate>
+            <!-- 아이디 -->
+            <div class="form-group">
+              <input
+                type="text"
+                name="username"
+                placeholder="아이디"
+                autocomplete="username"
+                required
+              />
+              <!-- 에러가 있을 때는 위 input에 is-error 클래스를 추가하고 아래 small을 노출하세요.
+            <small class="error-text">중복된 아이디 입니다</small>
+            --></div>
 
-                <!-- 비밀번호 -->
-                <div class="form-group">
-                    <input
-                            type="password"
-                            name="password"
-                            placeholder="비밀번호"
-                            autocomplete="new-password"
-                            required
-                    />
-                </div>
+            <!-- 비밀번호 -->
+            <div class="form-group">
+              <input
+                type="password"
+                name="password"
+                placeholder="비밀번호"
+                autocomplete="new-password"
+                required
+              />
+            </div>
 
-                <!-- 비밀번호 재입력 -->
-                <div class="form-group">
-                    <input
-                            type="password"
-                            name="passwordConfirm"
-                            placeholder="비밀번호 재입력"
-                            autocomplete="new-password"
-                            required
-                    />
-                </div>
+            <!-- 비밀번호 재입력 -->
+            <div class="form-group">
+              <input
+                type="password"
+                name="passwordConfirm"
+                placeholder="비밀번호 재입력"
+                autocomplete="new-password"
+                required
+              />
+            </div>
 
-                <!-- 시안 텍스트에 맞춰 버튼 라벨은 'LogIn'으로 유지 -->
-                <button type="submit" class="auth-submit">LogIn</button>
-            </form>
+            <button type="submit" class="auth-submit">회원가입</button>
+          </form>
         </aside>
-    </div>
-</main>
+      </div>
+    </main>
 
-<!-- 푸터: 100% 경계, 내부 1920 컨테이너 -->
-<footer>
-    <div class="footer-inner">© Footer Content</div>
-</footer>
+    <!-- 푸터: 100% 경계, 내부 1920 컨테이너 -->
+    <footer>
+      <div class="footer-inner">© Footer Content</div>
+    </footer>
 
-<!-- 선택: 데모용 간단 스크립트 (아이디 'ssar'이면 에러 표시)
-<script>
-const form = document.querySelector('.auth-form');
-form.addEventListener('submit', (e) => {
-  const id = form.username.value.trim();
-  const input = form.username;
-  const old = form.querySelector('.error-text');
-  if (old) old.remove();
-  input.classList.remove('is-error');
+    <!-- 선택: 데모용 간단 스크립트 (아이디 'ssar'이면 에러 표시)
+  <script>
+    const form = document.querySelector('.auth-form');
+    form.addEventListener('submit', (e) => {
+      const id = form.username.value.trim();
+      const input = form.username;
+      const old = form.querySelector('.error-text');
+      if (old) old.remove();
+      input.classList.remove('is-error');
 
-  if (id.toLowerCase() === 'ssar') {
-    e.preventDefault();
-    input.classList.add('is-error');
-    const small = document.createElement('small');
-    small.className = 'error-text';
-    small.textContent = '중복된 아이디 입니다';
-    input.parentElement.appendChild(small);
-  }
-});
-</script>
---></body>
+      if (id.toLowerCase() === 'ssar') {
+        e.preventDefault();
+        input.classList.add('is-error');
+        const small = document.createElement('small');
+        small.className = 'error-text';
+        small.textContent = '중복된 아이디 입니다';
+        input.parentElement.appendChild(small);
+      }
+    });
+  </script>
+  --></body>
 </html>
