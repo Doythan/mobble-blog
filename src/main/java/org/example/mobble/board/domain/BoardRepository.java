@@ -28,9 +28,9 @@ public class BoardRepository {
         return Optional.ofNullable(em.createQuery("""
                         select b, u, c, bm
                         from Board b
-                        left join Bookmark bm on bm.boardId = b.id
-                        left join Category c on c.id = b.categoryId
-                        left join User u on u.id = b.userId
+                        left join Bookmark bm on bm.board.id = b.id
+                        left join Category c on c.id = b.category.id
+                        left join User u on u.id = b.user.id
                         where b.id = :boardId
                         """, BoardResponse.DetailDTO.class)
                 .setParameter("boardId", boardId).getSingleResult());
@@ -40,11 +40,11 @@ public class BoardRepository {
         return Optional.ofNullable(em.createQuery("""
                         select b, u, c, bm
                         from Board b
-                        left join Bookmark bm on bm.boardId = b.id
-                        left join Category c on c.id = b.categoryId
-                        left join User u on u.id = b.userId
+                        left join Bookmark bm on bm.board.id = b.id
+                        left join Category c on c.id = b.category.id
+                        left join User u on u.id = b.user.id
                         where b.id = :boardId
-                        and b.userId = :userId
+                        and b.user.id = :userId
                         """, BoardResponse.DetailDTO.class)
                 .setParameter("boardId", boardId)
                 .setParameter("userId", userId)
@@ -90,9 +90,9 @@ public class BoardRepository {
         return """
                 select b, u, c, count(bm)
                 from Board b
-                left join Bookmark bm on bm.boardId = b.id
-                left join Category c on c.id = b.categoryId
-                left join User u on u.id = b.userId
+                left join Bookmark bm on bm.board.id = b.id
+                left join Category c on c.id = b.category.id
+                left join User u on u.id = b.user.id
                 """ + where +
                 " group by b, u, c " +
                 safeOrderBy(orderByClause);
