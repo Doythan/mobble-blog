@@ -3,6 +3,7 @@ package org.example.mobble._util.interceptor;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.example.mobble._util.error.ErrorEnum;
 import org.example.mobble._util.error.ex.Exception401;
 import org.example.mobble._util.error.ex.ExceptionApi401;
 import org.example.mobble.user.domain.User;
@@ -15,7 +16,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         System.out.println("uri: " + uri);
 
         HttpSession session = request.getSession(false);
-        User sessionUser = session == null ? null : (User) session.getAttribute("sessionUser");
+        User sessionUser = session == null ? null : (User) session.getAttribute("user");
 
         if (sessionUser == null) {
             if (uri.contains("/api")) {
@@ -29,7 +30,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 //                out.println(responseBody);
 //                return false;
             } else {
-                throw new Exception401("인증이 필요합니다.");
+                throw new Exception401(ErrorEnum.UNAUTHORIZED_NO_EXISTS_USER_INFO);
 //                response.setStatus(401);
 //                response.setHeader("Content-Type", "text/html");
 //                PrintWriter out = response.getWriter();

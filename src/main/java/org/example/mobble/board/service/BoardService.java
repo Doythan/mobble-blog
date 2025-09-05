@@ -41,7 +41,7 @@ public class BoardService {
                 () -> new Exception404(ErrorEnum.NOT_FOUND_BOARD)
         );
     }
-    
+
     @Transactional(readOnly = true)
     public BoardResponse.DetailDTO getUpdateBoardDetail(Integer boardId, User user) {
         checkPermissions(findById(boardId), user);
@@ -54,7 +54,7 @@ public class BoardService {
         if (category == null) {
             category = categoryRepository.save(
                     Category.builder()
-                            .userId(user.getId())
+                            .user(user)
                             .category(reqDTO.getCategory())
                             .build()
             );
@@ -63,8 +63,8 @@ public class BoardService {
                 Board.builder()
                         .title(reqDTO.getTitle())
                         .content(reqDTO.getContent())
-                        .userId(user.getId())
-                        .categoryId(category.getId())
+                        .user(user)
+                        .category(category)
                         .build();
         return boardRepository.save(board);
     }
@@ -98,8 +98,8 @@ public class BoardService {
         ReportCase reportCase = ReportCase.valueOf(reqDTO.getResult());
         Report report =
                 Report.builder()
-                        .userId(user.getId())
-                        .boardId(boardId)
+                        .user(user)
+                        .board(boardPS)
                         .content(reqDTO.getContent())
                         .result(reportCase)
                         .build();
@@ -140,7 +140,7 @@ public class BoardService {
      */
     // 권한 확인 로직
     private void checkPermissions(Board board, User user) {
-        if (!board.getUserId().equals(user.getId())) throw new Exception403(ErrorEnum.FORBIDDEN_USER_AT_BOARD);
+        if (!board.getUser().getId().equals(user.getId())) throw new Exception403(ErrorEnum.FORBIDDEN_USER_AT_BOARD);
     }
 
     private void checkBoardId(Integer boardId) {

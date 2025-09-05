@@ -4,8 +4,6 @@ package org.example.mobble.board.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.example.mobble._util.error.ErrorEnum;
-import org.example.mobble._util.error.ex.Exception401;
 import org.example.mobble.board.domain.Board;
 import org.example.mobble.board.domain.SearchOrderCase;
 import org.example.mobble.board.dto.BoardRequest;
@@ -31,13 +29,12 @@ public class BoardController {
     //게시글 저장 페이지 이동
     @GetMapping("/save-form")
     public String boardSaveForm() {
-        getLoginUser();
         return "board/save-page";
     }
 
     @GetMapping("/{id}/update-form")
     public String boardUpdateForm(@PathVariable(name = "id") Integer boardId, HttpServletRequest request) {
-        User user = getLoginUser();
+        User user = (User) session.getAttribute("user");
         BoardResponse.DetailDTO model = boardService.getUpdateBoardDetail(boardId, user);
         request.setAttribute("model", model);
         return "board/update-page";
@@ -46,7 +43,6 @@ public class BoardController {
     // 모든 게시물 목록 찾기
     @GetMapping
     public String getBoardsList(HttpServletRequest request, @RequestParam(defaultValue = "1") Integer page) {
-        getLoginUser();
         List<BoardResponse.DTO> boardDTOList = boardService.getList(getFirstIndex(page), PER_PAGE + 1);
         boardDTOList = applyPagingFlags(request, boardDTOList, page);
         BoardResponse.mainListDTO resDTO = getMainList(boardDTOList);
@@ -56,7 +52,6 @@ public class BoardController {
 
     @GetMapping("/{id}")
     public String getBoard(HttpServletRequest request, @PathVariable(name = "id") Integer boardId) {
-        getLoginUser();
         BoardResponse.DetailDTO model = boardService.getBoardDetail(boardId);
         request.setAttribute("model", model);
         return "board/detail-page";
@@ -64,7 +59,7 @@ public class BoardController {
 
     @PostMapping("/{id}/update")
     public String update(@PathVariable(name = "id") Integer boardId, BoardRequest.BoardUpdateDTO reqDTO, HttpServletRequest request) {
-        User user = getLoginUser();
+        User user = (User) session.getAttribute("user");
         boardService.update(boardId, reqDTO, user);
         return "redirect:/boards/" + boardId;
     }
@@ -72,21 +67,21 @@ public class BoardController {
     // 게시글 저장하기
     @PostMapping
     public String save(BoardRequest.BoardSaveDTO reqDTO) {
-        User user = getLoginUser();
+        User user = (User) session.getAttribute("user");
         Board board = boardService.save(reqDTO, user);
         return "redirect:/boards/" + board.getId();
     }
 
     @PostMapping("/{id}/delete")
     public String delete(@PathVariable(name = "id") Integer boardId) {
-        User user = getLoginUser();
+        User user = (User) session.getAttribute("user");
         boardService.delete(boardId, user);
         return "redirect:/boards";
     }
 
     @PostMapping("/{id}/report")
-    public String report(@PathVariable(name = "id") Integer boardId, BoardRequest.BoardReportDTO reqDTO, HttpServletRequest request) {
-        User user = getLoginUser();
+    public String report(@PathVariable(name = "id") Integer boardId, @RequestBody BoardRequest.BoardReportDTO reqDTO) {
+        User user = (User) session.getAttribute("user");
         boardService.report(user, boardId, reqDTO);
         return "redirect:/boards/" + boardId;
     }
@@ -96,7 +91,6 @@ public class BoardController {
      */
     @GetMapping("/search")
     public String findList(HttpServletRequest request, @RequestParam String keyword, @RequestParam(defaultValue = "CREATED_AT_ASC") String order, @RequestParam(defaultValue = "1") Integer page) {
-        getLoginUser();
         List<BoardResponse.DTO> boardDTOList = boardService.findBy(keyword, safeOrder(order), getFirstIndex(page), PER_PAGE + 1);
         boardDTOList = applyPagingFlags(request, boardDTOList, page);
         BoardResponse.mainListDTO resDTO = getMainList(boardDTOList);
@@ -107,12 +101,6 @@ public class BoardController {
     /*                             private logic part
      * ----------------------------------------------------------------------------------
      */
-    //서비스 이용자 확인 절차.
-    private User getLoginUser() {
-        User user = (User) session.getAttribute("user");
-        if (user == null) throw new Exception401(ErrorEnum.UNAUTHORIZED_LOGIN);
-        return user;
-    }
 
     private SearchOrderCase safeOrder(String order) {
         try {

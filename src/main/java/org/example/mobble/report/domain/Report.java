@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.mobble.board.domain.Board;
+import org.example.mobble.user.domain.User;
 
 @Data
 @NoArgsConstructor
@@ -17,10 +19,12 @@ public class Report {
     // 테이블 설정 후 추가
 
     // 신고할 게시글
-    private Integer boardId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Board board;
 
     // 신고하는 유저
-    private Integer userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
 
     // 신고 사유
     private ReportCase result;
@@ -32,10 +36,10 @@ public class Report {
     private String content;
 
     @Builder
-    public Report(Integer id, Integer boardId, Integer userId, ReportCase result, String resultEtc, String content) {
+    public Report(Integer id, Board board, User user, ReportCase result, String resultEtc, String content) {
         this.id = id;
-        this.boardId = boardId;
-        this.userId = userId;
+        this.board = board;
+        this.user = user;
         this.result = result;
         this.resultEtc = resultEtc;
         this.content = content;

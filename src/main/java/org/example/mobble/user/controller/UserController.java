@@ -2,11 +2,11 @@ package org.example.mobble.user.controller;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.example.mobble._util.error.ex.Exception401;
 import org.example.mobble.user.domain.User;
 import org.example.mobble.user.dto.UserRequest;
 import org.example.mobble.user.dto.UserResponse;
 import org.example.mobble.user.service.UserService;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,22 +26,22 @@ public class UserController {
         return "auth/login-page";
     }
 
-    @GetMapping("/join")
-    public String join(UserRequest.JoinDTO reqDTO) {
-        userService.save(reqDTO);
-        return "redirect:/login-form";
-    }
-
     @GetMapping("/join-form")
     public String joinForm() {
         return "auth/join-page";
     }
 
-    @PostMapping("/login")
-    public String login(@RequestBody UserRequest.LoginDTO reqDTO) {
+    @PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, value = "/login")
+    public String login(@ModelAttribute UserRequest.LoginDTO reqDTO) {
         User user = userService.findByUser(reqDTO);
-        session.setAttribute("model", user);
+        session.setAttribute("user", user);
         return "redirect:/boards";
+    }
+
+    @PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, value = "/join")
+    public String join(@ModelAttribute UserRequest.JoinDTO reqDTO) {
+        userService.save(reqDTO);
+        return "redirect:/login-form";
     }
 
     @GetMapping("/logout")
@@ -55,42 +55,38 @@ public class UserController {
      */
     @GetMapping("/users")
     public String getUsers() {
-        User user = getLoginUser();
+        User user = (User) session.getAttribute("user");
         session.setAttribute("model", new UserResponse.UserDetailDTO(user));
         return "mypage/main";
     }
 
     // 이미지 변경
-    @PutMapping("/users/{id}/profile")
-    public String updateUsersProfile(@PathVariable(name = "id") Integer userId, @RequestBody UserRequest.ProfileUpdateDTO reqDTO) {
-        User user = getLoginUser();
-        userService.changeProfile(user, userId, reqDTO);
+    @PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, value = "/users/{id}/profile")
+    public String updateUsersProfile(@PathVariable(name = "id") Integer userId, @ModelAttribute UserRequest.ProfileUpdateDTO reqDTO) {
+        User user = (User) session.getAttribute("user");
+        User userPS = userService.changeProfile(user, userId, reqDTO);
+        session.setAttribute("user", userPS);
         return "redirect:/users";
     }
 
-    @PutMapping("/users/{id}/password")
-    public String updateUsersPassword(@PathVariable(name = "id") Integer userId, @RequestBody UserRequest.PasswordUpdateDTO reqDTO) {
-        User user = getLoginUser();
+    @PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, value = "/users/{id}/password")
+    public String updateUsersPassword(@PathVariable(name = "id") Integer userId, @ModelAttribute UserRequest.PasswordUpdateDTO reqDTO) {
+        User user = (User) session.getAttribute("user");
         userService.changePassword(user, userId, reqDTO);
         return "redirect:/users";
     }
 
     @DeleteMapping("/users/{id}")
     public String deleteUsers(@PathVariable(name = "id") Integer userId) {
-        User user = getLoginUser();
+        User user = (User) session.getAttribute("user");
         userService.delete(user, userId);
         return "redirect:/";
     }
 
-    @PostMapping("/users/check-username")
+    @PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, value = "/users/check-username")
     @ResponseBody
-    public Map<String, Boolean> checkUsername(@RequestBody UserRequest.UsernameDTO reqDTO) {
+    public Map<String, Boolean> checkUsername(@ModelAttribute UserRequest.UsernameDTO reqDTO) {
         return Map.of("duplicate", userService.isUsernameDuplicate(reqDTO));
-    }
 
-    private User getLoginUser() {
-        User user = (User) session.getAttribute("user");
-        if (user == null) throw new Exception401("로그인 후 이용부탁드립니다.");
-        return user;
     }
 }

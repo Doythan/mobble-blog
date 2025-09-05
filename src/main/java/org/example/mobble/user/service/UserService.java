@@ -19,31 +19,34 @@ public class UserService {
 
     public User findByUser(UserRequest.LoginDTO reqDTO) {
         User user = userRepository.findByUsername(reqDTO.getUsername())
-                .orElseThrow(() -> new Exception404(ErrorEnum.NOT_FOUND));
-        if (!user.getPassword().matches(reqDTO.getPassword())) throw new Exception401("비밀번호가 일치하지 않습니다.");
+                .orElseThrow(() -> new Exception403(ErrorEnum.NOT_FOUND_USER_TO_USERNAME));
+        if (!bCryptPasswordEncoder.matches(reqDTO.getPassword(), user.getPassword()))
+            throw new Exception401(ErrorEnum.FORBIDDEN_NO_MATCH_PASSWORD);
         return user;
     }
 
     @Transactional
     public void save(UserRequest.JoinDTO reqDTO) {
         User user = userRepository.findByUsername(reqDTO.getUsername()).orElse(null);
-        if (user != null) throw new Exception302(ErrorEnum.FOUND);
+        if (user != null) throw new Exception302(ErrorEnum.FOUND_USER_TO_USERNAME);
         String pw = bCryptPasswordEncoder.encode(reqDTO.getPassword());
         userRepository.save(new User(null, reqDTO.getUsername(), pw, reqDTO.getEmail(), null));
     }
 
     @Transactional
-    public void changeProfile(User user, Integer userId, UserRequest.ProfileUpdateDTO reqDTO) {
+    public User changeProfile(User user, Integer userId, UserRequest.ProfileUpdateDTO reqDTO) {
         checkPermissions(user, userId);
         User userPS = getUser(user.getId());
-        if (reqDTO == null || reqDTO.getProfileImage().isEmpty()) throw new Exception400(ErrorEnum.NOT_FOUND);
-        if (userPS == null) throw new Exception404(ErrorEnum.NOT_FOUND);
+        if (reqDTO == null || reqDTO.getProfileImage().isEmpty())
+            throw new Exception400(ErrorEnum.BAD_REQUEST_NO_EXISTS_FILE);
         userPS.updateProfileImage(reqDTO.getProfileImage());
+        return userPS;
     }
 
     @Transactional
     public void changePassword(User user, Integer userId, UserRequest.PasswordUpdateDTO reqDTO) {
-        if (reqDTO == null || reqDTO.getPassword().isEmpty()) throw new Exception400(ErrorEnum.BAD_REQUEST);
+        if (reqDTO == null || reqDTO.getPassword().isEmpty())
+            throw new Exception400(ErrorEnum.BAD_REQUEST_NO_EXISTS_PASSWORD);
         checkPermissions(user, userId);
         User userPS = getUser(user.getId());
         userPS.updatePassword(reqDTO.getPassword());
@@ -61,12 +64,12 @@ public class UserService {
     }
 
     private void checkPermissions(User user, Integer userId) {
-        if (!user.getId().equals(userId)) throw new Exception403(ErrorEnum.FORBIDDEN);
+        if (!user.getId().equals(userId)) throw new Exception403(ErrorEnum.FORBIDDEN_USER_TO_USER);
     }
 
     private User getUser(Integer userId) {
         return userRepository.findById(userId).orElseThrow(
-                () -> new Exception403(ErrorEnum.FORBIDDEN)
+                () -> new Exception404(ErrorEnum.NOT_FOUND_USER_TO_USERID)
         );
     }
 }

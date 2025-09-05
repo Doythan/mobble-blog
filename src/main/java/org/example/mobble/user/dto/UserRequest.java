@@ -2,9 +2,12 @@ package org.example.mobble.user.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
 public class UserRequest {
     @Data
+    @NoArgsConstructor
     public static class LoginDTO {
         private String username;
         private String password;
@@ -17,6 +20,7 @@ public class UserRequest {
     }
 
     @Data
+    @NoArgsConstructor
     public static class PasswordUpdateDTO {
         private String password;
 
@@ -27,6 +31,7 @@ public class UserRequest {
     }
 
     @Data
+    @NoArgsConstructor
     public static class ProfileUpdateDTO {
         private String profileImage;
 
@@ -37,6 +42,7 @@ public class UserRequest {
     }
 
     @Data
+    @NoArgsConstructor
     public static class UsernameDTO {
         private String username;
 
@@ -47,6 +53,7 @@ public class UserRequest {
     }
 
     @Data
+    @NoArgsConstructor
     public static class JoinDTO {
         private String email;
         private String username;
