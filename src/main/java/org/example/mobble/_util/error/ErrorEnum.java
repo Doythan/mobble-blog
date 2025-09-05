@@ -84,6 +84,10 @@ public enum ErrorEnum {
     FORBIDDEN_USER_AT_BOARD(403, "해당 게시글의 권한이 존재하지 않습니다."),
 
     /*
+     * 403 Forbidden - 권한 갖지 않은 유저의 신고 CRUD 요청
+     */
+    FORBIDDEN_USER_AT_REPORT(403, "해당 게시글의 권한이 존재하지 않습니다."),
+    /*
      * 404 Not Found - 특정 객체를 찾을 수 없음을 알리는 상태 코드
      */
     NOT_FOUND(404, "찾을 수 없음"),
@@ -102,6 +106,11 @@ public enum ErrorEnum {
      * 404 Not Found - 게시글을 찾을 수 없음
      */
     NOT_FOUND_BOARD(404, "게시글을 찾을 수 없습니다."),
+
+    /*
+     * 404 Not Found - 신고글을 찾을 수 없음
+     */
+    NOT_FOUND_REPORT(404, "신고글을 찾을 수 없습니다."),
 
     /*
      * 500 Internal Server Error - 알 수 없는 오류 발생 시 기본 메시지입니다.

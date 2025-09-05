@@ -5,7 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.mobble.board.domain.Board;
+import org.example.mobble.report.dto.ReportRequest;
 import org.example.mobble.user.domain.User;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.sql.Timestamp;
 
 @Data
 @NoArgsConstructor
@@ -27,6 +31,7 @@ public class Report {
     private User user;
 
     // 신고 사유
+    @Enumerated(EnumType.STRING)
     private ReportCase result;
 
     // 기타 신고 사유
@@ -34,6 +39,14 @@ public class Report {
 
     // 신고 내용
     private String content;
+
+    // 신고 상태
+    @Enumerated(EnumType.STRING)
+    private ReportStatus status;
+
+    //작성 시간
+    @CreationTimestamp
+    private Timestamp createdAt;
 
     @Builder
     public Report(Integer id, Board board, User user, ReportCase result, String resultEtc, String content) {
@@ -45,21 +58,19 @@ public class Report {
         this.content = content;
     }
 
-    // 신고 서비스에서 처리
-//    public Report(User user, Integer boardId, BoardRequest.BoardReportDTO reqDTO) {
-//        this.boardId = boardId;
-//        this.userId = user.getId();
-//        try {
-//            this.result = ReportCase.valueOf(reqDTO.getResult());
-//        } catch (IllegalArgumentException e) {
-//            this.result = ReportCase.ETC;
-//            this.resultEtc = reqDTO.getResult();
-//        }
-//        this.content = reqDTO.getContent();
-//
-//    }
     public void updateResultEtc(String resultEtc) {
         this.resultEtc = resultEtc;
+    }
+
+    public void updateStauts(ReportStatus status) {
+        this.status = status;
+    }
+
+    public void updateInfo(ReportRequest.ReportUpateDTO reqDTO) {
+
+        this.result =reqDTO.getResult();
+        this.resultEtc = reqDTO.getResultEtc();
+        this.content = reqDTO.getContent();
     }
 }
 

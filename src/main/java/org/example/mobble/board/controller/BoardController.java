@@ -79,10 +79,11 @@ public class BoardController {
         return "redirect:/boards";
     }
 
+
     @PostMapping("/{id}/report")
-    public String report(@PathVariable(name = "id") Integer boardId, @RequestBody BoardRequest.BoardReportDTO reqDTO) {
+    public String reportSave(@PathVariable(name = "id") Integer boardId, BoardRequest.ReportSaveDTO reqDTO) {
         User user = (User) session.getAttribute("user");
-        boardService.report(user, boardId, reqDTO);
+        BoardResponse.ReportSaveDTO resDTO = boardService.reportSave(user, boardId, reqDTO);
         return "redirect:/boards/" + boardId;
     }
 

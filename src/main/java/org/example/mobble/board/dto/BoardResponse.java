@@ -2,8 +2,11 @@ package org.example.mobble.board.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.example.mobble.board.domain.Board;
 import org.example.mobble.category.domain.Category;
+import org.example.mobble.report.domain.Report;
+import org.example.mobble.report.domain.ReportCase;
 import org.example.mobble.user.domain.User;
 
 import java.sql.Timestamp;
@@ -78,6 +81,26 @@ public class BoardResponse {
             this.updateAt = board.getUpdatedAt();
             this.profileImage = user.getProfileImage();
             this.isBookmark = isBookmark;
+        }
+    }
+
+    @Data
+    @NoArgsConstructor
+    public static class ReportSaveDTO {
+        Integer id;
+        ReportCase result;
+        String content;
+        String resultEtc;
+        Integer userId;
+        Integer boardId;
+
+        public ReportSaveDTO(Report report) {
+            this.id = report.getId();
+            this.result = report.getResult();
+            this.content = report.getContent();
+            this.resultEtc = report.getResultEtc();
+            this.userId = report.getUser().getId();
+            this.boardId = report.getBoard().getId();
         }
     }
 }
