@@ -25,7 +25,7 @@ public class Category {
     // 카테고리명
     private String category;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
     private List<Board> boards;
 
     @Builder

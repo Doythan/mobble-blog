@@ -48,11 +48,11 @@ public class Board {
     private Timestamp updatedAt;
 
     //연관 신고는 게시글이 삭제되면 자동 삭제 처리
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "board")
     private List<Report> reports;
 
     //연관 북마크는 게시글 삭제시 자동 삭제 처리
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "board")
     private List<Bookmark> bookmarks;
 
     @Builder
