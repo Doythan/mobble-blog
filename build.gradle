@@ -34,6 +34,12 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // ✅ Bean Validation (jakarta.validation + hibernate-validator)
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // ✅ AOP (GlobalValidationHandler @Aspect 작동용)
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
 }
 
 tasks.named('test') {

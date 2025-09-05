@@ -3,7 +3,7 @@ package org.example.mobble.board.dto;
 import lombok.Builder;
 import lombok.Data;
 import org.example.mobble.board.domain.Board;
-import org.example.mobble.category.Category;
+import org.example.mobble.category.domain.Category;
 import org.example.mobble.user.domain.User;
 
 import java.sql.Timestamp;

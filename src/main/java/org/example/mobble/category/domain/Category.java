@@ -1,4 +1,4 @@
-package org.example.mobble.category;
+package org.example.mobble.category.domain;
 
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -12,7 +12,10 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "category_tb")
+@Table(
+        name = "category_tb",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "category"})
+)
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,6 +23,7 @@ public class Category {
 
     // 만든 사람
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")  // FK 명시
     private User user;
 
     // 카테고리명

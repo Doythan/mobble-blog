@@ -3,7 +3,7 @@ package org.example.mobble.board.domain;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.example.mobble.board.dto.BoardResponse;
-import org.example.mobble.category.Category;
+import org.example.mobble.category.domain.Category;
 import org.example.mobble.user.domain.User;
 import org.springframework.stereotype.Repository;
 

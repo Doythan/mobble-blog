@@ -9,7 +9,7 @@ import org.example.mobble.board.domain.SearchOrderCase;
 import org.example.mobble.board.dto.BoardRequest;
 import org.example.mobble.board.dto.BoardResponse;
 import org.example.mobble.board.service.BoardService;
-import org.example.mobble.category.CategoryService;
+import org.example.mobble.category.service.CategoryService;
 import org.example.mobble.user.domain.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
