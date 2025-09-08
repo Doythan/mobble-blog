@@ -46,4 +46,10 @@ public class BoardRequest {
         String resultEtc;
 
     }
+
+    @Data
+    public static class MyFeedDTO {
+        private Integer page = 1;                // 기본값 1
+        private String order = "CREATED_AT_ASC"; // 기본값
+    }
 }

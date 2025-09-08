@@ -22,6 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static org.example.mobble._util.error.ErrorEnum.NOT_FOUND;
+
 @RequiredArgsConstructor
 @Service
 public class BoardService {
@@ -161,5 +163,13 @@ public class BoardService {
     @Transactional(readOnly = true)
     public List<BoardResponse.DTO> getPopularList(int size) {
         return getList(0, size, SearchOrderCase.VIEW_COUNT_DESC);
+    }
+
+
+    //마이 피드 list
+    public List<BoardResponse.DTO> getMyFeedList(int firstIndex, int size, SearchOrderCase order, User user) {
+
+        String orderBy = orderByToString(order);
+        return boardRepository.findAllByUserId(orderBy, firstIndex, size, user);
     }
 }

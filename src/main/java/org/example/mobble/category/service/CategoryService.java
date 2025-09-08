@@ -107,4 +107,8 @@ public class CategoryService {
     public List<String> getPopularList(Integer count) {
         return categoryRepository.getPopularList(count);
     }
+
+    public List<String> getMyFeedPopularList(Integer count ,User user) {
+        return categoryRepository.getMyFeedPopularList(count,user);
+    }
 }

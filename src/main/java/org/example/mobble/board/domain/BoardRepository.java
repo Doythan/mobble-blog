@@ -147,4 +147,13 @@ public class BoardRepository {
     }
 
 
+    public List<BoardResponse.DTO> findAllByUserId(String orderBy, int firstIndex, int maxResult, User user) {
+        String jpql = getBaseJpql(" where u.id = :userId ", orderBy);
+        return mapping(
+                em.createQuery(jpql, Object[].class)
+                        .setParameter("userId", user.getId())
+                        .setFirstResult(firstIndex)
+                        .setMaxResults(maxResult)
+                        .getResultList());
+    }
 }

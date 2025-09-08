@@ -1,9 +1,10 @@
 package org.example.mobble.board.controller;
 
 import org.example.mobble.board.dto.BoardResponse;
+import org.example.mobble.board.TestUtils;
 import org.example.mobble.user.domain.User;
 import org.example.mobble.user.domain.UserRepository;
-import org.hamcrest.Matchers;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,12 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpSession;
+
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+
 
 import static org.hamcrest.Matchers.matchesPattern;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -42,43 +46,49 @@ class BoardControllerTest {
     @Test
     @DisplayName("목록: 첫 페이지 OK")
     void list_ok() throws Exception {
+
+        // when
         MvcResult result = mockMvc.perform(get("/boards").session(session))
                 .andExpect(status().isOk())
                 .andExpect(view().name("board/list-page"))
-                .andExpect(request().attribute("model", Matchers.notNullValue()))
                 .andExpect(request().attribute("isFirst", true))
                 .andReturn();
 
-        BoardResponse.mainListDTO dto = (BoardResponse.mainListDTO) result.getRequest().getAttribute("model");
-        System.out.println(dto);
+        // then
+        TestUtils.printRequestAttributesAsJson(result);
+
         // isLast는 더미 개수/ PER_PAGE에 따라 달라짐 → 고정 검증은 생략
     }
 
     @Test
     @DisplayName("상세: 존재하는 게시글 OK")
     void detail_ok() throws Exception {
-        // 더미에 id=1 게시글이 있다고 가정
+        // when
         MvcResult result = mockMvc.perform(get("/boards/{id}", 1).session(session))
                 .andExpect(status().isOk())
                 .andExpect(view().name("board/detail-page"))
-                .andExpect(request().attribute("model", Matchers.notNullValue()))
                 .andReturn();
 
-        BoardResponse.DetailDTO dto = (BoardResponse.DetailDTO) result.getRequest().getAttribute("model");
-        System.out.println(dto);
+        // then
+        TestUtils.printRequestAttributesAsJson(result);
+
     }
 
     @Test
     @DisplayName("검색: 본문/제목 기본 검색 OK")
     void search_default_ok() throws Exception {
-        mockMvc.perform(get("/boards/search")
+        // when
+        MvcResult result = mockMvc.perform(get("/boards/search")
                         .param("keyword", "제목") // 기본 검색 (접두사 없이)
                         .param("order", "CREATED_AT_DESC")
                         .param("page", "1")
                         .session(session))
                 .andExpect(status().isOk())
                 .andExpect(view().name("board/list-page"))
-                .andExpect(request().attribute("model", Matchers.notNullValue()));
+                .andReturn();
+
+        // then
+        TestUtils.printRequestAttributesAsJson(result);;
     }
 
     @Test
@@ -114,18 +124,18 @@ class BoardControllerTest {
                 .andExpect(redirectedUrl("/boards/" + targetId.toString()));
     }
 
-//    @Test
-//    @DisplayName("신고: 리다이렉트 OK")
-//    void report_redirect_ok() throws Exception {
-//        mockMvc.perform(post("/boards/{id}/report", 1)
-//                                .param("result", "부적절한 작성자명")        // ReportCase 값 중 하나
-//                                .param("content", "스팸 신고")    // 신고 내용
-//                                .session(session)
-//                        // .with(csrf())
-//                )
-//                .andExpect(status().is3xxRedirection())
-//                .andExpect(redirectedUrl("/boards/1"));
-//    }
+    @Test
+    @DisplayName("신고: 리다이렉트 OK")
+    void report_redirect_ok() throws Exception {
+        mockMvc.perform(post("/boards/{id}/report", 1)
+                                .param("result", "부적절한 작성자명")        // ReportCase 값 중 하나
+                                .param("content", "스팸 신고")    // 신고 내용
+                                .session(session)
+                        // .with(csrf())
+                )
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/boards/1"));
+    }
 
     @Test
     @DisplayName("삭제: 리다이렉트 OK")
@@ -136,5 +146,23 @@ class BoardControllerTest {
                 )
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/boards"));
+    }
+
+    @Test
+    @DisplayName("myfeed 목록: 첫 페이지 OK")
+    void myfeed_list_ok() throws Exception {
+
+        //when
+        MvcResult result = mockMvc.perform(get("/boards/me")
+                        .param("order", "VIEW_COUNT_DESC")
+                        .param("page", "1")
+                        .session(session))
+                .andExpect(status().isOk())
+                .andExpect(view().name("board/myfeed-page"))
+                .andExpect(request().attribute("isFirst", true))
+                .andReturn();
+
+        // then
+        TestUtils.printRequestAttributesAsJson(result);
     }
 }
