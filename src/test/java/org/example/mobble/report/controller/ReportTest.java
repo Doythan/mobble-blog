@@ -97,17 +97,12 @@ public class ReportTest {
                 // when
                 ResultActions actions = mvc.perform(
                         get("/reports/{id}",reportId)
-                                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                                .contentType(MediaType.APPLICATION_JSON)
                                 .session(session)
                 );
                 // then
-                MvcResult result = actions.andExpect(status().isOk())
-                        .andReturn();
-
-                Map<String, Object> modelMap = result.getModelAndView().getModel();
-                Object model = modelMap.get("model");
-                System.out.println("=== model ===");
-                System.out.println(model);
+            String responseBody = actions.andReturn().getResponse().getContentAsString();
+            System.out.println("✅응답바디 : " + responseBody);
 
         }
 

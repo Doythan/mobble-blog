@@ -45,14 +45,14 @@ public class ReportController {
         return "mypage/report/list-page";
     }
 
-    //내 신고 보기
+    //내 신고 보기(모달)
+    @ResponseBody
     @GetMapping ("/reports/{id}")
-    public String getReport(@PathVariable(name = "id") Integer reportId,Model model) {
+    public ResponseEntity<?> getReport(@PathVariable(name = "id") Integer reportId,Model model) {
         User user = getLoginUser();
         //조회
         ReportResponse.ReportDetailDTO resDTO = reportService.getReport(reportId,user);
-        model.addAttribute("model",resDTO);
-        return "mypage/report/detail-page";
+        return Resp.ok(resDTO);
     }
 
     //내 신고 삭제
