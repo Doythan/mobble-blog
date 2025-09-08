@@ -80,7 +80,7 @@ public class CategoryService {
         }
 
         // 도메인 메서드가 없으므로 세터 사용 (@Data)
-        category.setCategory(normalized); // 더티체킹 반영
+        category.updateCategory(normalized); // 더티체킹 반영
         return category;
     }
 

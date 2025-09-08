@@ -89,6 +89,5 @@ public class UserController {
     @ResponseBody
     public Map<String, Boolean> checkUsername(@ModelAttribute UserRequest.UsernameDTO reqDTO) {
         return Map.of("duplicate", userService.isUsernameDuplicate(reqDTO));
-
     }
 }

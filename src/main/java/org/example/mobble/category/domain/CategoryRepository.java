@@ -72,5 +72,4 @@ public class CategoryRepository {
                 .setParameter("cid", categoryId)
                 .executeUpdate();
     }
-
 }

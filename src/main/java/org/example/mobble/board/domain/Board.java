@@ -2,7 +2,7 @@ package org.example.mobble.board.domain;
 
 import jakarta.persistence.*;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.mobble.board.dto.BoardRequest;
 import org.example.mobble.bookmark.domain.Bookmark;
@@ -16,7 +16,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
 @NoArgsConstructor
 @Entity
 @Table(name = "board_tb")
@@ -31,6 +31,7 @@ public class Board {
 
     // 글 쓴 사람
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
     // 카테고리
@@ -39,7 +40,7 @@ public class Board {
     private Category category;
 
     // 조회수
-    private Integer views;
+    private Integer views = 0;
 
     // 글 작성 시간
     @CreationTimestamp
@@ -58,16 +59,17 @@ public class Board {
     private List<Bookmark> bookmarks = new ArrayList<>();
 
     @Builder
-    public Board(Integer id, String title, String content, User user, Integer views, Category category, Timestamp createdAt, List<Report> reports, Timestamp updatedAt) {
+    public Board(Integer id, String title, String content, User user, Category category, Integer views, Timestamp createdAt, Timestamp updatedAt, List<Report> reports, List<Bookmark> bookmarks) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.user = user;
-        this.views = views;
         this.category = category;
+        this.views = views;
         this.createdAt = createdAt;
-        this.reports = reports;
         this.updatedAt = updatedAt;
+        this.reports = reports;
+        this.bookmarks = bookmarks;
     }
 
     public void update(BoardRequest.BoardUpdateDTO reqDTO) {
@@ -75,4 +77,9 @@ public class Board {
         this.content = reqDTO.getContent();
         this.updatedAt = new Timestamp(System.currentTimeMillis());
     }
+
+    public void viewsCounting() {
+        this.views++;
+    }
+
 }

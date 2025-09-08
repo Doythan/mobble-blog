@@ -11,13 +11,16 @@ public enum ReportCase {
     SPAM("도배/스팸"),
     ETC("기타");
 
-    private String reason;
+    private String result;
 
-    ReportCase(String reason) {
-        this.reason = reason;
+    ReportCase() {
+    }
+
+    ReportCase(String result) {
+        this.result = result;
     }
 
     public String getReason() {
-        return reason;
+        return result;
     }
 }

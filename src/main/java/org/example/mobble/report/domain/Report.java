@@ -2,7 +2,7 @@ package org.example.mobble.report.domain;
 
 import jakarta.persistence.*;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.mobble.board.domain.Board;
 import org.example.mobble.report.dto.ReportRequest;
@@ -11,7 +11,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
 
-@Data
+@Getter
 @NoArgsConstructor
 @Entity
 @Table(name = "report_tb")
@@ -24,10 +24,12 @@ public class Report {
 
     // 신고할 게시글
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id")
     private Board board;
 
     // 신고하는 유저
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
     // 신고 사유

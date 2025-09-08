@@ -47,6 +47,7 @@ public class GlobalExceptionHandler {
     // 404 Not Found
     @ExceptionHandler(Exception404.class)
     public ResponseEntity<String> ex404(Exception404 e) {
+        e.printStackTrace();
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .contentType(MediaType.TEXT_HTML)
                 .body(Script.back(e.getMessage()));
@@ -55,6 +56,7 @@ public class GlobalExceptionHandler {
     // Unknown Server Error
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> exUnknown(Exception e) {
+        e.printStackTrace();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .contentType(MediaType.TEXT_HTML)
                 .body(Script.back("관리자에게 문의해주세요."));

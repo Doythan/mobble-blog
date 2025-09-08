@@ -16,11 +16,13 @@ public class BoardResponse {
     @Data
     public static class mainListDTO {
         List<DTO> boardList;
+        List<DTO> popularList;
         List<String> categoryList;
 
         @Builder
-        public mainListDTO(List<DTO> boardList, List<String> categoryList) {
+        public mainListDTO(List<DTO> boardList, List<DTO> popularList, List<String> categoryList) {
             this.boardList = boardList;
+            this.popularList = popularList;
             this.categoryList = categoryList;
         }
     }

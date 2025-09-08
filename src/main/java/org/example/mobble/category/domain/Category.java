@@ -2,14 +2,14 @@ package org.example.mobble.category.domain;
 
 import jakarta.persistence.*;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.mobble.board.domain.Board;
 import org.example.mobble.user.domain.User;
 
 import java.util.List;
 
-@Data
+@Getter
 @NoArgsConstructor
 @Entity
 @Table(
@@ -29,7 +29,7 @@ public class Category {
     // 카테고리명
     private String category;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     private List<Board> boards;
 
     @Builder
@@ -39,4 +39,9 @@ public class Category {
         this.category = category;
         this.boards = boards;
     }
+
+    public void updateCategory(String category) {
+        this.category = category;
+    }
+
 }

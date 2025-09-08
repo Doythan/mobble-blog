@@ -1,14 +1,12 @@
 package org.example.mobble.bookmark.domain;
 
-import jakarta.transaction.Transactional;
 import org.example.mobble.board.domain.Board;
 import org.example.mobble.board.domain.BoardRepository;
 import org.example.mobble.board.dto.BoardResponse;
-import org.example.mobble.board.service.BoardService;
 import org.example.mobble.bookmark.dto.BookmarkResponse;
 import org.example.mobble.bookmark.service.BookmarkService;
-import org.example.mobble.category.Category;
-import org.example.mobble.category.CategoryRepository;
+import org.example.mobble.category.domain.Category;
+import org.example.mobble.category.domain.CategoryRepository;
 import org.example.mobble.user.domain.User;
 import org.example.mobble.user.domain.UserRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -21,7 +19,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-@Import({BookmarkRepository.class, BoardRepository.class, UserRepository.class,BookmarkService.class,CategoryRepository.class})
+@Import({BookmarkRepository.class, BoardRepository.class, UserRepository.class, BookmarkService.class, CategoryRepository.class})
 @DataJpaTest
 public class BookmarkRepositoryTest {
 
@@ -35,7 +33,7 @@ public class BookmarkRepositoryTest {
     private UserRepository userRepository;
 
     @Autowired
-    private BookmarkService bookmarkService ;
+    private BookmarkService bookmarkService;
 
     @Autowired
     private CategoryRepository categoryRepository;
@@ -67,6 +65,7 @@ public class BookmarkRepositoryTest {
                         () -> System.out.println(">>> 있는지 조회 했는데 북마크 없음") // 예상: 이 출력
                 );
     }
+
     // 북마크 있는지 조회 (true일떄)
     @Test
     public void findByBoardIdAndUserIdTRUE_test() {
@@ -222,7 +221,8 @@ public class BookmarkRepositoryTest {
             System.out.println("===== BookmarkDTO =====");
             System.out.println("BookmarkId: " + dto.getBookId());
             System.out.println("CreatedAt: " + dto.getCreateAt());
-            BoardResponse.DTO boardDTO = dto.getBoard(); if (boardDTO != null) {
+            BoardResponse.DTO boardDTO = dto.getBoard();
+            if (boardDTO != null) {
                 System.out.println("BoardId: " + boardDTO.getId());
                 System.out.println("Board Title: " + boardDTO.getTitle());
                 System.out.println("Board Content: " + boardDTO.getContent());
@@ -230,7 +230,8 @@ public class BookmarkRepositoryTest {
                 System.out.println("Board BookmarkCount: " + boardDTO.getBookmarkCount());
                 System.out.println("Board Category: " + boardDTO.getCategory());
                 System.out.println("Board CreatedAt: " + boardDTO.getCreateAt());
-                System.out.println("Board UpdatedAt: " + boardDTO.getUpdateAt()); }
+                System.out.println("Board UpdatedAt: " + boardDTO.getUpdateAt());
+            }
 
 
             System.out.println("======================");
