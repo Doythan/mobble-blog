@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{{#model.bookmarksList}}
+    <div>
+        <p>BookmarkId: {{bookId}}</p>
+        <p>BoardId: {{board.id}}</p>
+        <p>Board Title: {{board.title}}</p>
+        <p>Board Content: {{board.content}}</p>
+        <p>Board Views: {{board.views}}</p>
+        <p>Bookmark Count: {{board.bookmarkCount}}</p>
+        <p>Board Category: {{board.category}}</p>
+        <p>Board CreatedAt: {{board.createAt}}</p>
+        <p>Board Username: {{board.username}}</p>
+        <hr/>
+    </div>
+{{/model.bookmarksList}}
+
+</body>
+</html>

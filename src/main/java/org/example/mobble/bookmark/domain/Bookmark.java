@@ -40,5 +40,9 @@ public class Bookmark {
         this.board = board;
         this.user = user;
         this.createdAt = createdAt;
+
+        if (board != null) {
+            board.getBookmarks().add(this); // 연관관계 편의 메서드
+        }
     }
 }

@@ -13,6 +13,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -54,7 +55,7 @@ public class Board {
 
     //연관 북마크는 게시글 삭제시 자동 삭제 처리
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "board")
-    private List<Bookmark> bookmarks;
+    private List<Bookmark> bookmarks = new ArrayList<>();
 
     @Builder
     public Board(Integer id, String title, String content, User user, Integer views, Category category, Timestamp createdAt, List<Report> reports, Timestamp updatedAt) {

@@ -67,6 +67,15 @@ public class BoardRepository {
                         .getResultList());
     }
 
+    public List<BoardResponse.DTO> findAll(String whereClause,String orderBy, Integer firstIndex, Integer maxResult) {
+        String jpql = getBaseJpql(whereClause, orderBy);
+        return mapping(
+                em.createQuery(jpql, Object[].class)
+                        .setFirstResult(firstIndex)
+                        .setMaxResults(maxResult)
+                        .getResultList());
+    }
+
     public List<BoardResponse.DTO> findByTitleAndContent(String keyword, String orderBy, Integer firstIndex, Integer maxResult) {
         String jpql = getBaseJpql(" where (lower(b.title) like :q or lower(b.content) like :q) ", orderBy);
 

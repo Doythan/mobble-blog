@@ -5,6 +5,28 @@
     <title>Title</title>
 </head>
 <body>
+<form action="/boards/{{model.id}}/update-form" method="post">
+    <button class="btn btn-danger">수정</button>
+</form>
+<form action="/boards/{{model.id}}/delete" method="post">
+    <button class="btn btn-danger">삭제</button>
+</form>
+<form action="/bookmark/{{model.id}}" method="post">
+    <button class="btn btn-danger">북마크</button>
+</form>
+<h1>{{model.userId}}</h1>
+<h1>{{model.username}}</h1>
+<h1>{{model.title}}</h1>
+<h1>{{model.content}}</h1>
+<h1>조회수 : {{model.views}}</h1>
+<h1>{{model.id}}</h1>
+<h1>{{model.createAt}}</h1>
+<h1>{{model.updatedAt}}</h1>
+<h1>{{model.bookmark}}</h1>
+
+
+
+
 
 </body>
 </html>
