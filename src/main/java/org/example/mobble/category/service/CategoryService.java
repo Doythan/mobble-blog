@@ -8,6 +8,7 @@ import org.example.mobble._util.error.ex.Exception401;
 import org.example.mobble._util.error.ex.Exception404;
 import org.example.mobble.category.domain.Category;
 import org.example.mobble.category.domain.CategoryRepository;
+import org.example.mobble.category.dto.CategoryResponse;
 import org.example.mobble.user.domain.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -103,6 +104,19 @@ public class CategoryService {
 
         categoryRepository.deleteById(category.getId());
     }
+
+    @Transactional(readOnly = true)
+    public List<CategoryResponse.CategoryItemDTO> getMyCategoryItems(Integer userId) {
+        if (userId == null) throw new Exception400("userId가 없습니다.");
+        return categoryRepository.findAllByUserIdOrderByIdDesc(userId)
+                .stream()
+                .map(c -> CategoryResponse.CategoryItemDTO.builder()
+                        .id(c.getId())
+                        .category(c.getCategory())
+                        .build())
+                .toList();
+    }
+
 
     public List<String> getPopularList(Integer count) {
         return categoryRepository.getPopularList(count);

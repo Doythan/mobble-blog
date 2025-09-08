@@ -49,7 +49,7 @@ public class BoardResponse {
             this.content = board.getContent();
             this.views = board.getViews();
             this.bookmarkCount = bookmarkCount;
-            this.category = category.getCategory();
+            this.category = (category != null) ? category.getCategory() : null;
             this.createAt = board.getCreatedAt();
             this.updateAt = board.getUpdatedAt();
             this.image = image;
