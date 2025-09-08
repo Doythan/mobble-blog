@@ -1,32 +1,328 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8"/>
+    <title>피드 상세 - Mobble</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <!-- 공통 CSS -->
+    <link rel="stylesheet" href="/css/common.css"/>
+    <link rel="stylesheet" href="/css/header.css"/>
+    <link rel="stylesheet" href="/css/footer.css"/>
+    <link rel="stylesheet" href="/css/sidebar.css"/>
+    <!-- 상세 전용 CSS -->
+    <link rel="stylesheet" href="/css/board-detail.css"/>
+    <link rel="stylesheet" href="/css/board-detail.addon.css"/>
+    <link rel="stylesheet" href="/css/board-detail.report.css"/>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap"
+            rel="stylesheet"
+    />
 </head>
 <body>
-<form action="/boards/{{model.id}}/update-form" method="post">
-    <button class="btn btn-danger">수정</button>
-</form>
-<form action="/boards/{{model.id}}/delete" method="post">
-    <button class="btn btn-danger">삭제</button>
-</form>
-<form action="/bookmark/{{model.id}}" method="post">
-    <button class="btn btn-danger">북마크</button>
-</form>
-<h1>{{model.userId}}</h1>
-<h1>{{model.username}}</h1>
-<h1>{{model.title}}</h1>
-<h1>{{model.content}}</h1>
-<h1>조회수 : {{model.views}}</h1>
-<h1>{{model.id}}</h1>
-<h1>{{model.createAt}}</h1>
-<h1>{{model.updatedAt}}</h1>
-<h1>{{model.bookmark}}</h1>
+<!-- 전역 헤더 -->
+<header>
+    <div class="header-inner">
+        <div class="brand">
+            <button
+                    id="navToggle"
+                    class="nav-trigger hamburger"
+                    aria-controls="sidenav"
+                    aria-expanded="false"
+                    aria-label="사이드 메뉴 열기"
+            >
+                <span class="line"></span>
+            </button>
+            <a href="/" class="logo">Mobble</a>
+        </div>
+        <div class="search-box">
+            <form class="search" action="/search" method="get" role="search">
+                <input
+                        class="search-input"
+                        type="search"
+                        name="q"
+                        placeholder="검색어를 입력하세요"
+                        aria-label="사이트 검색"
+                />
+                <button
+                        class="btn-clear"
+                        type="button"
+                        aria-label="입력 지우기"
+                ></button>
+                <button class="btn-submit" type="submit" aria-label="검색"></button>
+            </form>
+        </div>
+        <button class="join-btn" type="button" onclick="location.href='/write'">
+            WriteBtn Area
+        </button>
+    </div>
+</header>
 
+<!-- header 아래, main 위(또는 body 맨 끝) -->
+<aside id="sidenav" class="sidenav" aria-hidden="true">
+    <nav class="sidenav-nav" aria-label="사이드 내비게이션">
+        <ul>
+            <li><a href="/board-list">Home</a></li>
+            <li><a href="/mypage">My Feed</a></li>
+            <li><a href="/bookmark">Bookmark</a></li>
+            <li><a href="/mypage">My Profile</a></li>
+        </ul>
+    </nav>
+</aside>
 
+<div id="sidenavOverlay" class="sidenav-overlay" hidden></div>
 
+<!-- 본문 -->
+<main class="post-wrap" role="main">
+    <p class="post-breadcrumb">피드</p>
 
+    <!-- 글 머리 -->
+    <div class="post-head">
+        <h1 class="post-title">
+            Lorem ipsum dolor sit amet consectetur. Vel volutpat rutrum phasellus
+            felis cursus quis non diam congue.
+        </h1>
+    </div>
 
+    <!-- ■ 제목 아래 서브 바: 좌(프로필/이름) · 우(작성일 + 북마크) -->
+    <div class="post-subbar" data-author="true">
+        <div class="sub-left">
+            <span class="avatar" aria-hidden="true">S</span>
+            <span class="name">ssar</span>
+        </div>
+        <div class="sub-right">
+            <!-- 초기 상태: 서버 값으로 true/false -->
+            <button
+                    class="btn-bookmark"
+                    type="button"
+                    aria-label="북마크"
+                    aria-pressed="false"
+                    data-bookmarked="false"
+                    data-board-id="1"
+                    data-create-url="/bookmark/1/save"
+                    data-delete-url="/bookmark/1/delete"
+            >
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                    <path
+                            d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.5"
+                    />
+                </svg>
+            </button>
+            <!-- 게시글 ID / 북마크 추가 POST / 북마크 삭제 DELETE -->
+        </div>
+    </div>
+
+    <!-- ■ 툴바(본문 위): 햄버거 메뉴 + 드롭다운 -->
+    <div class="post-toolbar" data-author="true">
+        <div class="tool-right">
+            <button
+                    class="post-menu-trigger"
+                    type="button"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    aria-controls="postMenu"
+            >
+                <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                >
+                    <circle cx="12" cy="5" r="2"/>
+                    <circle cx="12" cy="12" r="2"/>
+                    <circle cx="12" cy="19" r="2"/>
+                </svg>
+                <span class="sr-only">메뉴 열기</span>
+            </button>
+
+            <div id="postMenu" class="post-menu" role="menu" hidden>
+                <a
+                        class="post-menu-item"
+                        role="menuitem"
+                        href="/boards/1/update-form"
+                >게시글 수정</a
+                >
+                <button
+                        class="post-menu-item danger"
+                        role="menuitem"
+                        type="button"
+                        data-action="delete"
+                        data-delete-url="/boards/1/delete"
+                >
+                    게시글 삭제
+                </button>
+
+                <button type="button" class="post-menu-item" id="openReportModal">
+                    신고
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 커버 미디어(시안의 검은 박스) -->
+    <figure class="media" role="img" aria-label="커버 이미지 자리"></figure>
+
+    <!-- 본문 -->
+    <article class="post-body">
+        <h2>
+            Lorem ipsum dolor sit amet consectetur.<br/>Vel volutpat rutrum
+            phasellus felis cursus quis non diam congue.
+        </h2>
+
+        <p>
+            Lorem ipsum dolor sit amet consectetur. Metus facilisis et purus
+            luctus. A ac donec porta pulvinar ac. Lobortis sagittis magna risus
+            diam amet…
+        </p>
+
+        <div class="media wide" role="img" aria-label="본문 이미지 자리"></div>
+
+        <p>
+            A turpis lorem mi malesuada adipiscing. Tenor quis luctus pulvinar eu
+            orci a egestas neque…
+        </p>
+
+        <div class="media wide" role="img" aria-label="본문 이미지 자리"></div>
+
+        <p>
+            Tempus interdum aliquam accumsan eleifend dictum. Quis dui eu non
+            mauris pharetra sem pellentesque…
+        </p>
+
+        <div class="post-reaction">
+            <div class="counts">
+                <span>👁️ 3.8k</span>
+                <span>👍 106</span>
+            </div>
+        </div>
+    </article>
+
+    <div
+            id="lv-container"
+            data-id="city"
+            data-uid="MTAyMC82MDg4NC8zNzM1NA=="
+    ></div>
+</main>
+
+<div
+        id="confirmDelete"
+        class="post-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="md-title"
+        aria-describedby="md-desc"
+        hidden
+>
+    <div class="post-modal__backdrop" data-close="true"></div>
+    <div class="post-modal__dialog" role="document">
+        <h3 id="md-title" class="post-modal__title">게시글 삭제</h3>
+        <p id="md-desc" class="post-modal__desc">
+            게시글 삭제 시 데이터는 복구할 수 없습니다.<br/>
+            정말 삭제하시겠습니까?
+        </p>
+        <div class="post-modal__actions">
+            <button type="button" class="pm-btn pm-btn--ghost" data-close="true">
+                취소
+            </button>
+            <button
+                    type="button"
+                    class="pm-btn pm-btn--danger"
+                    id="confirmDeleteBtn"
+            >
+                삭제
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- 신고 모달 -->
+<div class="report-modal" id="reportModal" aria-hidden="true">
+    <div class="report-modal__backdrop" id="reportBackdrop"></div>
+    <div
+            class="report-modal__dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="reportTitle"
+    >
+        <form
+                id="reportForm"
+                action="/boards/1/report"
+                method="post"
+                novalidate
+        >
+            <div class="report-modal__body">
+                <section class="report-field">
+                    <h3 id="reportTitle" class="report-label">신고 사유</h3>
+                    <div class="report-select-wrap">
+                        <select
+                                name="result"
+                                id="reportReason"
+                                class="report-select"
+                                required
+                        >
+                            <option value="INAPPROPRIATE" selected>부적절한 내용</option>
+                            <option value="SPAM">광고/스팸</option>
+                            <option value="COPYRIGHT">저작권 침해</option>
+                            <option value="ETC">기타</option>
+                        </select>
+                        <span class="report-select-caret" aria-hidden="true">▾</span>
+                    </div>
+                    <input
+                            type="text"
+                            name="resultEtc"
+                            id="reportReasonEtc"
+                            class="report-input"
+                            placeholder="사유를 입력하세요."
+                            disabled
+                    />
+                </section>
+
+                <section class="report-field">
+                    <h3 class="report-label">신고 내용</h3>
+                    <textarea
+                            class="report-textarea"
+                            name="content"
+                            id="reportContent"
+                            placeholder="신고 내용을 입력하세요."
+                            required
+                    ></textarea>
+                </section>
+            </div>
+
+            <div class="report-modal__footer">
+                <!-- 왼쪽 그룹 -->
+                <div class="report-footer-left">
+                    <button type="button" class="report-btn report-btn--cancel">
+                        취소
+                    </button>
+                </div>
+
+                <!-- 오른쪽 그룹 -->
+                <div class="report-footer-right">
+                    <button type="submit" class="report-btn report-btn--submit">
+                        신고
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 전역 푸터 -->
+<footer>
+    <div class="footer-inner">© Footer Content</div>
+</footer>
+
+<script src="/js/sidebar.js" defer></script>
+<script src="/js/board-detail-bookmark.js" defer></script>
+<script src="/js/board-delete-modal.js" defer></script>
+<script src="/js/board-detail-owner-modal.js" defer></script>
+<script src="/js/board-report-modal.js" defer></script>
+<script src="/js/livere.js" defer></script>
+<script src="/js/search-clear.js" defer></script>
 </body>
 </html>

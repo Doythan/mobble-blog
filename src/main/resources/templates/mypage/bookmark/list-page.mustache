@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8"/>
+    <title>북마크 - Mobble</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <!-- 로고 폰트 -->
+    <link
+            href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap"
+            rel="stylesheet"
+    />
+
+    <!-- 공통 CSS -->
+    <link rel="stylesheet" href="/css/common.css"/>
+    <link rel="stylesheet" href="/css/header.css"/>
+    <link rel="stylesheet" href="/css/footer.css"/>
+    <link rel="stylesheet" href="/css/board-list.css"/>
+    <link rel="stylesheet" href="/css/sidebar.css"/>
+    <link rel="stylesheet" href="/css/mybookmark-list.css"/>
+</head>
+<body>
+<!-- Header -->
+<header>
+    <div class="header-inner">
+        <div class="brand">
+            <button
+                    id="navToggle"
+                    class="nav-trigger hamburger"
+                    aria-label="사이드 메뉴 열기"
+            >
+                <span class="line"></span>
+            </button>
+            <a href="/" class="logo">Mobble</a>
+        </div>
+
+        <div class="search-box">
+            <form class="search" action="/search" method="get" role="search">
+                <input
+                        class="search-input"
+                        type="search"
+                        name="q"
+                        placeholder="Search..."
+                        aria-label="검색어 입력"
+                />
+                <button
+                        class="btn-clear"
+                        type="button"
+                        aria-label="검색어 지우기"
+                ></button>
+                <button class="btn-submit" type="submit" aria-label="검색"></button>
+            </form>
+        </div>
+
+        <button class="join-btn" type="button" onclick="location.href='/write'">
+            WriteBtn Area
+        </button>
+    </div>
+</header>
+
+<!-- header 아래, main 위(또는 body 맨 끝) -->
+<aside id="sidenav" class="sidenav" aria-hidden="true">
+    <nav class="sidenav-nav" aria-label="사이드 내비게이션">
+        <ul>
+            <li><a href="/board-list">Home</a></li>
+            <li><a href="/mypage">My Feed</a></li>
+            <li><a href="/bookmark">Bookmark</a></li>
+            <li><a href="/mypage">My Profile</a></li>
+        </ul>
+    </nav>
+</aside>
+
+<div id="sidenavOverlay" class="sidenav-overlay" hidden></div>
+
+<!-- Main -->
+<main class="feed-container no-right">
+    <!-- 좌측 리스트 -->
+    <section class="feed-left">
+        <h2>북마크</h2>
+
+        <!-- 정렬 -->
+        <div class="feed-sorting">
+            <a href="#" class="is-active">최신</a>
+            <span class="sep">|</span>
+            <a href="#">조회수</a>
+            <span class="sep">|</span>
+            <a href="#">북마크</a>
+        </div>
+
+        <!-- 카드 1 -->
+        <article class="post-card">
+            <a class="post-link" href="/boards/10">
+                <div class="thumb"></div>
+                <div class="post-body">
+                    <div class="tags">FREE</div>
+                    <h3 class="title">북마크 글 제목1</h3>
+                    <p class="excerpt">
+                        Lorem ipsum dolor sit amet consectetur. Vel volutpat rutrum…
+                    </p>
+                    <div class="meta">
+                        <time datetime="2025-09-08">2025. 09. 08</time>
+                        <span>· 2.1k</span>
+                        <span>· 87</span>
+                    </div>
+                </div>
+            </a>
+        </article>
+
+        <!-- 카드 2 -->
+        <article class="post-card">
+            <a class="post-link" href="/boards/11">
+                <div class="thumb"></div>
+                <div class="post-body">
+                    <div class="tags">FREE</div>
+                    <h3 class="title">북마크 글 제목2</h3>
+                    <p class="excerpt">
+                        Lorem ipsum dolor sit amet consectetur. Vel volutpat rutrum…
+                    </p>
+                    <div class="meta">
+                        <time datetime="2025-09-07">2025. 09. 07</time>
+                        <span>· 1.5k</span>
+                        <span>· 63</span>
+                    </div>
+                </div>
+            </a>
+        </article>
+
+        <!-- 페이징 -->
+        <nav class="pagination" aria-label="페이지네이션">
+            <a href="#">prev</a>
+            <a href="#">next</a>
+        </nav>
+    </section>
+</main>
+
+<!-- Footer -->
+<footer>
+    <div class="footer-inner">© Footer Content</div>
+</footer>
+
+<!-- Script -->
+<script src="/js/sidebar.js" defer></script>
+<script src="/js/search-clear.js" defer></script>
+</body>
+</html>

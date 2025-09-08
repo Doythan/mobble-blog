@@ -1,0 +1,231 @@
+/* ===========================
+   Category Management (catmg-)
+   =========================== */
+
+/* 화면 중앙 배치 */
+.catmg-page {
+  min-height: calc(100vh - var(--appbar-h, 64px) - var(--footer-h, 40px));
+  display: grid;
+  place-items: center;
+  padding: 16px 12px;
+  background: transparent;
+}
+
+/* 제목과 카드 간격 최소화 */
+.catmg-wrap {
+  width: 1080px;
+}
+.catmg-title {
+  margin: 0 0 8px;
+  font-size: 24px;
+  font-weight: 800;
+  text-align: left;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Noto Sans KR", sans-serif;
+}
+
+/* 카드 컨테이너
+     - 가로: 최대 1080px, 작은 화면은 92vw
+     - 세로: 내부 콘텐츠에 맞게 자동
+     - grid: [리스트] [divider] [생성 입력] */
+.catmg-card {
+  width: min(1080px, 92vw);
+  background: #f6f7f9;
+  border: 1px solid #dadde2;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  padding: 20px 24px;
+
+  display: grid;
+  grid-template-rows: auto auto auto;
+  row-gap: 0;
+}
+
+/* 리스트 영역 */
+.catmg-rows {
+  display: grid;
+  gap: 12px;
+  margin: 0 0 8px;
+}
+.catmg-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  border: 1px solid #e2e6eb;
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+.catmg-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.catmg-chip {
+  display: inline-block;
+  padding: 6px 10px;
+  border: 1px solid #cfd5dd;
+  border-radius: 8px;
+  background: #f7f8fa;
+  font-size: 14px;
+  line-height: 1;
+}
+.catmg-count {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* 수정/삭제 아이콘 버튼 */
+.catmg-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.catmg-icon-btn {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #555;
+  transition: background 0.2s, color 0.2s;
+}
+.catmg-icon-btn:hover {
+  background: #f0f0f0;
+  color: #111;
+}
+.catmg-icon-btn i {
+  font-size: 16px;
+  pointer-events: none;
+}
+.catmg-icon-btn.is-disabled,
+.catmg-icon-btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* divider: 생성 입력 바로 위 */
+.catmg-divider {
+  height: 1px;
+  background: #dfe3e9;
+  margin: 8px 0 6px;
+}
+
+/* 생성 입력 (카드 하단) */
+.catmg-create {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.catmg-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid #cfd5dd;
+  border-radius: 8px;
+  outline: none;
+}
+.catmg-input:focus {
+  border-color: #9bb6ff;
+  box-shadow: 0 0 0 3px rgba(155, 182, 255, 0.25);
+}
+.catmg-btn {
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: 1px solid #cfe0ff;
+  background: #e7f0ff;
+  font-weight: 700;
+  cursor: pointer;
+}
+.catmg-btn--ghost {
+  background: #fff;
+  border-color: #d2d7de;
+}
+.catmg-btn--danger {
+  background: #ffe7e7;
+  border-color: #ffc6c6;
+  color: #b42318;
+}
+
+/* ===========================
+     삭제 모달 (새 디자인)
+     =========================== */
+.catmg-modal.is-hidden {
+  display: none;
+}
+.catmg-modal__backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+}
+.catmg-modal__panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(420px, 92vw);
+  background: #fff;
+  border: none;
+  border-radius: 18px;
+  padding: 24px 22px 20px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+.catmg-modal__title {
+  margin: 0 0 10px;
+  font-size: 18px;
+  font-weight: 800;
+  text-align: center;
+}
+.catmg-modal__desc {
+  margin: 0 0 20px;
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.45;
+  text-align: center;
+}
+.catmg-modal__actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+/* 취소 버튼 (텍스트) */
+.catmg-btn--ghost {
+  border: none;
+  background: transparent;
+  padding: 8px 10px;
+  color: #111;
+  font-weight: 600;
+}
+.catmg-btn--ghost:hover {
+  text-decoration: underline;
+}
+/* 삭제 버튼 (붉은 pill) */
+.catmg-btn--danger {
+  border: none;
+  background: #ea5455;
+  color: #fff;
+  padding: 10px 18px;
+  font-weight: 700;
+  border-radius: 999px;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.06) inset;
+}
+.catmg-btn--danger:hover {
+  background: #de3f40;
+}
+.catmg-btn--danger:active {
+  background: #c93636;
+}
+/* 포커스 */
+.catmg-modal__panel :is(button, [href], input):focus {
+  outline: 2px solid rgba(234, 84, 85, 0.35);
+  outline-offset: 2px;
+  border-radius: 6px;
+}

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>내 카테고리 - Mobble</title>
+
+    <!-- 공통 CSS -->
+    <link
+            href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap"
+            rel="stylesheet"
+    />
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="/css/common.css"/>
+    <link rel="stylesheet" href="/css/header.css"/>
+    <link rel="stylesheet" href="/css/footer.css"/>
+    <link rel="stylesheet" href="/css/sidebar.css"/>
+    <!-- 카테고리 관리 전용 CSS -->
+    <link rel="stylesheet" href="/css/category-list.css"/>
+</head>
+<body>
+<!-- 헤더 -->
+<header>
+    <div class="header-inner">
+        <!-- 왼쪽: 햄버거 + 로고 -->
+        <div class="brand">
+            <button
+                    id="navToggle"
+                    class="nav-trigger hamburger"
+                    aria-controls="sidenav"
+                    aria-expanded="false"
+                    aria-label="사이드 메뉴 열기"
+            >
+                <span class="line"></span>
+            </button>
+            <a href="/" class="logo">Mobble</a>
+        </div>
+
+        <!-- 가운데: 검색 (있다면) -->
+        <div class="search-box">
+            <form class="search" action="/search" method="get" role="search">
+                <input
+                        class="search-input"
+                        type="search"
+                        name="q"
+                        placeholder="검색어를 입력하세요"
+                        aria-label="사이트 검색"
+                />
+                <button
+                        class="btn-clear"
+                        type="button"
+                        aria-label="입력 지우기"
+                ></button>
+                <button class="btn-submit" type="submit" aria-label="검색"></button>
+            </form>
+        </div>
+
+        <!-- 오른쪽: 글쓰기/가입 버튼 -->
+        <button class="join-btn" onclick="location.href='/write'">
+            WriteBtn Area
+        </button>
+    </div>
+</header>
+
+<!-- header 아래, main 위(또는 body 맨 끝) -->
+<aside id="sidenav" class="sidenav" aria-hidden="true">
+    <nav class="sidenav-nav" aria-label="사이드 내비게이션">
+        <ul>
+            <li><a href="/board-list">Home</a></li>
+            <li><a href="/mypage">My Feed</a></li>
+            <li><a href="/bookmark">Bookmark</a></li>
+            <li><a href="/mypage">My Profile</a></li>
+        </ul>
+    </nav>
+</aside>
+
+<div id="sidenavOverlay" class="sidenav-overlay" hidden></div>
+
+<main class="catmg-page" role="main" aria-labelledby="categoryHeading">
+    <div class="catmg-wrap">
+        <!-- Pretendard 폰트가 적용된 제목 -->
+        <h2 id="categoryHeading" class="catmg-title">Category</h2>
+
+        <section class="catmg-card" aria-labelledby="categoryHeading">
+            <!-- 카테고리 리스트 -->
+            <div class="catmg-rows" id="categoryList">
+                <!-- 예시 항목 (JS에서 동적 생성/렌더링) -->
+                <div class="catmg-row" data-id="1">
+                    <div class="catmg-left">
+                        <span class="catmg-chip">자바</span>
+                        <span class="catmg-count">(3개 게시물)</span>
+                    </div>
+                    <!-- 액션 영역 -->
+                    <div class="catmg-actions">
+                        <!-- 수정 아이콘 버튼 -->
+                        <button class="catmg-icon-btn js-edit" aria-label="수정">
+                            <i class="fa-solid fa-pen"></i>
+                        </button>
+
+                        <!-- 삭제 아이콘 버튼 -->
+                        <button class="catmg-icon-btn js-delete" aria-label="삭제">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- divider + 생성 영역 -->
+            <div class="catmg-divider" aria-hidden="true"></div>
+
+            <form class="catmg-create" onsubmit="return false">
+                <input
+                        id="newCategoryInput"
+                        class="catmg-input"
+                        type="text"
+                        placeholder="새 카테고리 이름"
+                        maxlength="40"
+                />
+                <button
+                        id="createCategoryBtn"
+                        class="catmg-btn catmg-btn--primary"
+                        type="button"
+                >
+                    생성
+                </button>
+            </form>
+        </section>
+    </div>
+</main>
+
+<!-- 삭제 확인 모달 -->
+<div
+        id="deleteModal"
+        class="catmg-modal is-hidden"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="deleteModalTitle"
+>
+    <div class="catmg-modal__backdrop" data-close="true"></div>
+    <div class="catmg-modal__panel" role="document">
+        <h3 id="deleteModalTitle" class="catmg-modal__title">카테고리 삭제</h3>
+        <p class="catmg-modal__desc">
+            정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.
+        </p>
+        <div class="catmg-modal__actions">
+            <button
+                    class="catmg-btn catmg-btn--ghost"
+                    type="button"
+                    data-close="true"
+            >
+                취소
+            </button>
+            <button
+                    id="confirmDeleteBtn"
+                    class="catmg-btn catmg-btn--danger"
+                    type="button"
+            >
+                삭제
+            </button>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="footer-inner">© Footer Content</div>
+</footer>
+
+<!-- JS -->
+<script src="/js/category-list.js"></script>
+<script src="/js/search-clear.js"></script>
+<script src="/js/sidebar.js"></script>
+</body>
+</html>

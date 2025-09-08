@@ -1,0 +1,233 @@
+/* ============ My Page 전용 ============ */
+:root {
+  --mp-card-radius: 12px;
+  --mp-border: #dcdcdc;
+  --mp-primary: #3ba7ff; /* 하늘색 */
+  --mp-primary-dark: #1f8df6;
+  --mp-accent: #e74c3c; /* 로그아웃 버튼 색 */
+  --mp-text: #111;
+  --mp-muted: #666;
+}
+
+.mp-container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: calc(var(--appbar-h) + 28px) 20px 80px;
+}
+.mp-title {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 18px;
+}
+
+.mp-card {
+  border: 1px solid var(--mp-border);
+  border-radius: var(--mp-card-radius);
+  background: #fff;
+  padding: 18px 22px;
+  margin-bottom: 16px;
+}
+.mp-card__title {
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+.mp-card__body {
+}
+
+/* 버튼 */
+.mp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 10px;
+  border: 1px solid #111;
+  background: #111;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+.mp-btn--dark {
+  /* 기본 검정 버튼 */
+  background: #111;
+  color: #fff;
+  border-color: #111;
+}
+.mp-btn--ghost {
+  /* 모달 취소 */
+  background: #fff;
+  color: #111;
+  border-color: #111;
+}
+.mp-btn--primary {
+  /* 🔵 비번 변경 버튼 */
+  background: var(--mp-primary);
+  border-color: var(--mp-primary);
+  color: #fff;
+}
+.mp-btn--primary:hover {
+  background: var(--mp-primary-dark);
+  border-color: var(--mp-primary-dark);
+}
+.mp-btn--accent {
+  /* 로그아웃 버튼 */
+  background: var(--mp-accent);
+  border-color: var(--mp-accent);
+  color: #fff;
+}
+.mp-btn--accent:hover {
+  filter: brightness(0.95);
+}
+
+/* 아바타 */
+.mp-avatar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.mp-avatar {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: #000;
+  display: inline-grid;
+  place-items: center;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid #111;
+}
+.mp-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.mp-help {
+  font-size: 12px;
+  color: #888;
+}
+
+/* ===== 모달(애니메이션 없이 즉시 표시) — 새 디자인 반영 ===== */
+.mp-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 4000;
+  display: none;
+}
+.mp-modal[aria-hidden="false"] {
+  display: block;
+}
+.mp-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+/* 기존 테두리형에서 → 둥근 카드 + 중앙 정렬 텍스트 + 축소된 폭 */
+.mp-modal__dialog {
+  position: relative;
+  max-width: 420px;
+  margin: 48px auto;
+  background: #fff;
+  border: none; /* 테두리 제거 */
+  border-radius: 18px; /* 더 둥글게 */
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.2);
+  padding: 24px 22px 20px;
+  text-align: center; /* 중앙 정렬 */
+}
+
+.mp-modal__body {
+  padding: 0; /* 상단 패딩은 dialog에서 처리 */
+}
+
+.mp-modal__title {
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+.mp-modal__desc {
+  font-size: 14px;
+  color: var(--mp-muted);
+  margin-bottom: 20px;
+  line-height: 1.45;
+}
+
+/* 푸터: 가운데 정렬, 간격 확대 */
+.mp-modal__footer {
+  display: flex;
+  justify-content: center; /* 중앙 정렬 */
+  align-items: center;
+  gap: 20px;
+  padding: 8px 0 0;
+}
+
+/* 취소: 텍스트 버튼 느낌으로 */
+.mp-btn--ghost {
+  background: transparent;
+  border: none;
+  color: var(--mp-text);
+  font-weight: 600;
+  padding: 8px 10px;
+}
+.mp-btn--ghost:hover {
+  text-decoration: underline;
+}
+
+/* 로그아웃/위험 동작: pill 형태로 강조 (기존 색 변수 사용) */
+.mp-btn--accent {
+  border: none;
+  background: var(--mp-accent);
+  color: #fff;
+  padding: 10px 18px;
+  font-weight: 700;
+  border-radius: 999px; /* pill */
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.06) inset;
+}
+.mp-btn--accent:hover {
+  filter: brightness(0.95);
+}
+.mp-btn--accent:active {
+  filter: brightness(0.9);
+}
+
+/* 포커스 접근성 */
+.mp-modal__dialog :is(button, [href], input):focus {
+  outline: 2px solid color-mix(in srgb, var(--mp-accent) 35%, transparent);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* 입력 */
+.mp-field {
+  display: block;
+  margin: 12px 0;
+}
+.mp-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.mp-input {
+  width: 100%;
+  height: 44px;
+  padding: 0 12px;
+  border: 1.5px solid #111;
+  border-radius: 10px;
+  outline: none;
+}
+.mp-input:focus {
+  box-shadow: 0 0 0 3px rgba(59, 167, 255, 0.2);
+  border-color: var(--mp-primary);
+}
+
+@media (max-width: 560px) {
+  .mp-modal__dialog {
+    margin: 20px 12px;
+  }
+  .mp-btn {
+    height: 38px;
+  }
+}

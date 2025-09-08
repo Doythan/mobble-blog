@@ -1,10 +1,212 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8"/>
+    <title>내 신고 - Mobble</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <!-- 로고 폰트 -->
+    <link
+            href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap"
+            rel="stylesheet"
+    />
+
+    <!-- 공통 CSS (예시 경로) -->
+    <link rel="stylesheet" href="/css/common.css"/>
+    <link rel="stylesheet" href="/css/header.css"/>
+    <link rel="stylesheet" href="/css/footer.css"/>
+    <link rel="stylesheet" href="/css/sidebar.css"/>
+
+    <link rel="stylesheet" href="/css/myreport.css"/>
 </head>
 <body>
+<!-- Header -->
+<header>
+    <div class="header-inner">
+        <div class="brand">
+            <button
+                    id="navToggle"
+                    class="nav-trigger hamburger"
+                    aria-label="사이드 메뉴 열기"
+            >
+                <span class="line"></span>
+            </button>
+            <a href="/" class="logo">Mobble</a>
+        </div>
 
+        <div class="search-box">
+            <form class="search" action="/search" method="get" role="search">
+                <input
+                        class="search-input"
+                        type="search"
+                        name="q"
+                        placeholder="Search..."
+                        aria-label="검색어 입력"
+                />
+                <button
+                        class="btn-clear"
+                        type="button"
+                        aria-label="검색어 지우기"
+                ></button>
+                <button class="btn-submit" type="submit" aria-label="검색"></button>
+            </form>
+        </div>
+
+        <button class="join-btn" type="button" onclick="location.href='/write'">
+            WriteBtn Area
+        </button>
+    </div>
+</header>
+
+<!-- header 아래, main 위(또는 body 맨 끝) -->
+<aside id="sidenav" class="sidenav" aria-hidden="true">
+    <nav class="sidenav-nav" aria-label="사이드 내비게이션">
+        <ul>
+            <li><a href="/board-list">Home</a></li>
+            <li><a href="/mypage">My Feed</a></li>
+            <li><a href="/bookmark">Bookmark</a></li>
+            <li><a href="/mypage">My Profile</a></li>
+        </ul>
+    </nav>
+</aside>
+
+<div id="sidenavOverlay" class="sidenav-overlay" hidden></div>
+
+<!-- Reports List Page (공통 헤더/사이드바 아래 본문 영역) -->
+<main class="rpts-page" role="main" aria-labelledby="rptsHeading">
+    <div class="rpts-inner">
+        <h2 id="rptsHeading" class="rpts-title">My Reports</h2>
+
+        <section class="rpts-card" aria-label="신고 내역 목록">
+            <div class="rpts-table">
+                <table>
+                    <thead>
+                    <tr>
+                        <th style="width: 80px">ID</th>
+                        <th style="width: 28%">신고 글 제목</th>
+                        <th style="width: 16%">신고 사유</th>
+                        <th>신고 내용</th>
+                        <th style="width: 110px">진행도</th>
+                    </tr>
+                    </thead>
+                    <tbody id="rptsTbody">
+                    <!-- JS에서 렌더링 -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+</main>
+
+<!-- 상세 모달 -->
+<div
+        id="rptsDetailModal"
+        class="rpts-modal is-hidden"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="rptsDetailTitle"
+>
+    <div class="rpts-modal__backdrop" data-close="true"></div>
+    <div class="rpts-modal__panel" role="document">
+        <h3 id="rptsDetailTitle" class="rpts-modal__title">신고 상세</h3>
+
+        <form class="rpts-form" id="rptsDetailForm" onsubmit="return false">
+            <label class="rpts-label" for="rptsTitle">신고 글 제목</label>
+            <input id="rptsTitle" class="rpts-input" type="text" readonly/>
+
+            <label class="rpts-label" for="rptsReason">신고 사유</label>
+            <select id="rptsReason" class="rpts-input">
+                <option value="부적절한 내용">부적절한 내용</option>
+                <option value="스팸/광고">스팸/광고</option>
+                <option value="욕설/혐오 표현">욕설/혐오 표현</option>
+                <option value="기타">기타</option>
+            </select>
+
+            <!-- 선택된 사유를 텍스트로 표시만 하고 싶다면 아래 disabled 입력을 쓰세요.
+          <input class="rpts-input" type="text" value="부적절한 내용" disabled />
+          -->
+
+            <label class="rpts-label" for="rptsContent">신고 내용</label>
+            <textarea
+                    id="rptsContent"
+                    class="rpts-textarea"
+                    rows="8"
+                    placeholder="신고 사유에 대한 상세 내용을 작성해주세요."
+            ></textarea>
+
+            <div class="rpts-actions">
+                <button
+                        type="button"
+                        class="rpts-btn rpts-btn--ghost"
+                        data-close="true"
+                >
+                    닫기
+                </button>
+                <div class="rpts-actions__right">
+                    <button
+                            type="button"
+                            id="rptsDeleteBtn"
+                            class="rpts-btn rpts-btn--danger"
+                    >
+                        삭제
+                    </button>
+                    <button
+                            type="submit"
+                            id="rptsSaveBtn"
+                            class="rpts-btn rpts-btn--primary"
+                            disabled
+                    >
+                        수정
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 삭제 확인 모달 -->
+<div
+        id="rptsConfirmModal"
+        class="rpts-modal is-hidden"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="rptsConfirmTitle"
+>
+    <div class="rpts-modal__backdrop" data-close="true"></div>
+    <div class="rpts-modal__panel rpts-modal--confirm" role="document">
+        <h3 id="rptsConfirmTitle" class="rpts-modal__title">신고 삭제</h3>
+        <p class="rpts-modal__desc">
+            삭제 시 데이터는 복구할 수 없습니다.<br/>정말 삭제하시겠습니까?
+        </p>
+        <div class="rpts-modal__actions">
+            <button
+                    class="rpts-btn rpts-btn--ghost"
+                    type="button"
+                    data-close="true"
+            >
+                취소
+            </button>
+            <button
+                    id="rptsConfirmDeleteBtn"
+                    class="rpts-btn rpts-btn--danger"
+                    type="button"
+            >
+                삭제
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- 전용 JS -->
+<script src="/assets/js/reports.js"></script>
+
+<footer>
+    <div class="footer-inner">© Footer Content</div>
+</footer>
+
+<!-- 규칙 스크립트 -->
+<script src="/js/sidebar.js" defer></script>
+<script src="/js/search-clear.js" defer></script>
+<script src="/js/myreport-modal.js" defer></script>
 </body>
 </html>

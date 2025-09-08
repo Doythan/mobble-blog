@@ -9,20 +9,74 @@
     <link rel="stylesheet" href="/css/common.css"/>
     <link rel="stylesheet" href="/css/header.css"/>
     <link rel="stylesheet" href="/css/footer.css"/>
+    <link rel="stylesheet" href="/css/sidebar.css"/>
 
     <!-- 글 리스트 전용 CSS -->
     <link rel="stylesheet" href="/css/board-list.css"/>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet">
+    <link
+            href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap"
+            rel="stylesheet"
+    />
 </head>
 <body>
 <!-- 헤더 -->
 <header>
     <div class="header-inner">
-        <a href="/" class="logo">Mobble</a>
-        <div class="search-box">SearchBox Area</div>
-        <button class="join-btn">WriteBtn Area</button>
+        <!-- 왼쪽: 햄버거 + 로고 -->
+        <div class="brand">
+            <button
+                    id="navToggle"
+                    class="nav-trigger hamburger"
+                    aria-controls="sidenav"
+                    aria-expanded="false"
+                    aria-label="사이드 메뉴 열기"
+            >
+                <span class="line"></span>
+            </button>
+            <a href="/" class="logo">Mobble</a>
+        </div>
+
+        <!-- 가운데: 검색 (있다면) -->
+        <div class="search-box">
+            <form class="search" action="/search" method="get" role="search">
+                <input
+                        class="search-input"
+                        type="search"
+                        name="q"
+                        placeholder="검색어를 입력하세요"
+                        aria-label="사이트 검색"
+                />
+                <button
+                        class="btn-clear"
+                        type="button"
+                        aria-label="입력 지우기"
+                ></button>
+                <button class="btn-submit" type="submit" aria-label="검색"></button>
+            </form>
+        </div>
+
+        <!-- 오른쪽: 글쓰기/가입 버튼 -->
+        <button class="join-btn" onclick="location.href='/write'">
+            WriteBtn Area
+        </button>
     </div>
 </header>
+
+<!-- header 아래, main 위(또는 body 맨 끝) -->
+<aside id="sidenav" class="sidenav" aria-hidden="true">
+    <nav class="sidenav-nav" aria-label="사이드 내비게이션">
+        <ul>
+            <li><a href="/board-list">Home</a></li>
+            <li><a href="/mypage">My Feed</a></li>
+            <li><a href="/bookmark">Bookmark</a></li>
+            <li><a href="/mypage">My Profile</a></li>
+            <li><a href="/mypage">My Category</a></li>
+            <li><a href="/mypage">My </a></li>
+        </ul>
+    </nav>
+</aside>
+
+<div id="sidenavOverlay" class="sidenav-overlay" hidden></div>
 
 <main class="feed-container">
     <!-- 좌측 피드 -->
@@ -33,38 +87,44 @@
             <a href="#">최신순</a> | <a href="#">인기순</a>
         </div>
 
-        <!-- 글 카드 반복 -->
+        <!-- 글 카드 1 -->
         <article class="post-card">
-            <div class="thumb"></div>
-            <div class="post-body">
-                <div class="tags">#태그 #태그 #태그</div>
-                <h4 class="title">제목1</h4>
-                <p class="excerpt">
-                    Lorem ipsum dolor sit amet consectetur. Vel volutpat rutrum phasellus felis
-                    cursus quis non diam congue.
-                </p>
-                <div class="meta">
-                    <span>2025.09.04</span>
-                    <span>💬 28</span>
-                    <span>👍 106</span>
+            <a class="post-link" href="/post/123">
+                <div class="thumb" aria-hidden="true"></div>
+                <div class="post-body">
+                    <div class="tags">#태그 #태그 #태그</div>
+                    <h4 class="title">제목1</h4>
+                    <p class="excerpt">
+                        Lorem ipsum dolor sit amet consectetur. Vel volutpat rutrum
+                        phasellus felis cursus quis non diam congue.
+                    </p>
+                    <div class="meta">
+                        <span>2025.09.04</span>
+                        <span>💬 28</span>
+                        <span>👍 106</span>
+                    </div>
                 </div>
-            </div>
+            </a>
         </article>
 
+        <!-- 글 카드 2 -->
         <article class="post-card">
-            <div class="thumb"></div>
-            <div class="post-body">
-                <div class="tags">#태그 #태그 #태그</div>
-                <h4 class="title">제목2</h4>
-                <p class="excerpt">
-                    Lorem ipsum dolor sit amet consectetur. Ut fermentum ut nunc sed.
-                </p>
-                <div class="meta">
-                    <span>2025.09.04</span>
-                    <span>💬 14</span>
-                    <span>👍 57</span>
+            <a class="post-link" href="/post/124">
+                <div class="thumb" aria-hidden="true"></div>
+                <div class="post-body">
+                    <div class="tags">#태그 #태그 #태그</div>
+                    <h4 class="title">제목2</h4>
+                    <p class="excerpt">
+                        Lorem ipsum dolor sit amet consectetur. Ut fermentum ut nunc
+                        sed.
+                    </p>
+                    <div class="meta">
+                        <span>2025.09.04</span>
+                        <span>💬 14</span>
+                        <span>👍 57</span>
+                    </div>
                 </div>
-            </div>
+            </a>
         </article>
 
         <!-- 페이징 -->
@@ -79,28 +139,28 @@
         <h3>인기글</h3>
         <ul class="popular-list">
             <li class="popular-item">
-                <div class="thumb small"></div>
-                <div class="info">
-                    <span class="author">ssar</span>
-                    <h4 class="title">제목1</h4>
-                    <div class="meta">
-                        <span>2025.09.04</span>
-                        <span>💬 28</span>
-                        <span>👍 106</span>
+                <a class="popular-link" href="/boards/1">
+                    <div class="thumb small" aria-hidden="true"></div>
+                    <div class="info">
+                        <span class="author">ssar</span>
+                        <h4 class="title">제목1</h4>
+                        <div class="meta">
+                            <span>2025.09.04</span><span>💬 28</span><span>👍 106</span>
+                        </div>
                     </div>
-                </div>
+                </a>
             </li>
             <li class="popular-item">
-                <div class="thumb small"></div>
-                <div class="info">
-                    <span class="author">cos</span>
-                    <h4 class="title">제목2</h4>
-                    <div class="meta">
-                        <span>2025.09.04</span>
-                        <span>💬 12</span>
-                        <span>👍 80</span>
+                <a class="popular-link" href="/boards/1">
+                    <div class="thumb small" aria-hidden="true"></div>
+                    <div class="info">
+                        <span class="author">cos</span>
+                        <h4 class="title">제목2</h4>
+                        <div class="meta">
+                            <span>2025.09.04</span><span>💬 12</span><span>👍 80</span>
+                        </div>
                     </div>
-                </div>
+                </a>
             </li>
         </ul>
     </aside>
@@ -110,5 +170,8 @@
 <footer>
     <div class="footer-inner">© Footer Content</div>
 </footer>
+
+<script src="/js/sidebar.js" defer></script>
+<script src="/js/search-clear.js" defer></script>
 </body>
 </html>

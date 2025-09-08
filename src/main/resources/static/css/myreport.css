@@ -1,0 +1,255 @@
+/* ===========================
+   Reports Page (rpts-)
+   =========================== */
+
+/* 레이아웃 */
+.rpts-page {
+  padding: 16px 12px;
+}
+.rpts-inner {
+  width: min(1080px, 92vw);
+  margin: 0 auto;
+}
+.rpts-title {
+  margin: 12px 0 14px;
+  font-size: 26px;
+  font-weight: 800;
+}
+
+/* 카드 */
+.rpts-card {
+  border: 1px solid #dfe3e9;
+  border-radius: 12px;
+  background: #fff;
+  padding: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+/* ---------- 테이블: 정렬/스크롤/헤더 sticky ---------- */
+/* 스크롤은 래퍼에, 표는 한 테이블로 유지 → 열 정렬 정확 */
+.rpts-table {
+  border: 1px solid #e4e8ee;
+  border-radius: 10px;
+  overflow: auto; /* 스크롤 여기서 */
+  max-height: 520px; /* 필요 시 조정 */
+}
+
+.rpts-table table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed; /* 열 폭 고정으로 헤더/본문 일치 */
+  background: #fff;
+}
+
+/* 헤더 회색 + sticky + 충분한 z-index */
+.rpts-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 5; /* 스크롤 중에도 본문 위 */
+  background: #f3f5f9; /* 회색 헤더 */
+  font-size: 14px;
+  text-align: left;
+  color: #111;
+  border-bottom: 1px solid #e4e8ee;
+  padding: 12px;
+}
+
+/* 본문 행 */
+.rpts-table tbody tr {
+  border-bottom: 1px solid #eef1f5;
+  cursor: pointer;
+}
+.rpts-table tbody tr:hover {
+  background: #f9fbff;
+}
+
+.rpts-table td {
+  padding: 12px;
+  font-size: 14px;
+  color: #222;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 진행도 색상 */
+.rpts-status {
+  font-weight: 700;
+}
+.rpts-status--wait {
+  color: #6b7280;
+}
+.rpts-status--prog {
+  color: #2563eb;
+}
+.rpts-status--done {
+  color: #16a34a;
+}
+
+/* ---------- 상세 모달 ---------- */
+/* 모달 스택을 최상단으로 끌어올려 sticky thead보다 항상 위 */
+.rpts-modal.is-hidden {
+  display: none;
+}
+.rpts-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+} /* ← 추가 */
+
+.rpts-modal__backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 5000; /* thead보다 확실히 위 */
+}
+
+.rpts-modal__panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(720px, 94vw);
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.2);
+  z-index: 5001; /* 백드롭 위 */
+}
+
+/* 제목/폼 */
+.rpts-modal__title {
+  margin: 18px 22px 8px;
+  font-size: 18px;
+  font-weight: 800;
+}
+.rpts-form {
+  padding: 0 22px 16px;
+}
+.rpts-label {
+  display: block;
+  margin: 14px 0 8px;
+  font-weight: 800;
+  font-size: 15px;
+}
+
+.rpts-input,
+.rpts-textarea,
+.rpts-select {
+  width: 100%;
+  border: 1.5px solid #111;
+  border-radius: 10px;
+  padding: 10px 12px;
+  outline: none;
+  font-size: 15px;
+}
+.rpts-input[readonly] {
+  background: #f8f8f8;
+  color: #333;
+}
+.rpts-textarea {
+  resize: vertical;
+  min-height: 160px;
+}
+
+.rpts-input:focus,
+.rpts-textarea:focus,
+.rpts-select:focus {
+  box-shadow: 0 0 0 3px rgba(59, 167, 255, 0.2);
+  border-color: #3ba7ff;
+}
+
+.rpts-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+  padding-bottom: 10px;
+}
+.rpts-actions__right {
+  display: flex;
+  gap: 10px;
+}
+
+/* 버튼 */
+.rpts-btn {
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 10px;
+  border: 1px solid #111;
+  background: #111;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+.rpts-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.rpts-btn--ghost {
+  background: #fff;
+  color: #111;
+  border-color: #111;
+}
+.rpts-btn--primary {
+  background: #3ba7ff;
+  border-color: #3ba7ff;
+}
+.rpts-btn--primary:hover {
+  background: #1f8df6;
+  border-color: #1f8df6;
+}
+.rpts-btn--danger {
+  background: #e74c3c;
+  border-color: #e74c3c;
+}
+.rpts-btn--danger:hover {
+  filter: brightness(0.95);
+}
+
+/* ---------- 삭제 확인 모달(작은 카드) ---------- */
+.rpts-modal--confirm {
+  width: min(420px, 92vw);
+  border: none;
+  border-radius: 18px;
+  padding: 24px 22px 20px;
+  text-align: center;
+}
+.rpts-modal__desc {
+  margin: 0 0 18px;
+  color: #666;
+  font-size: 14px;
+  line-height: 1.45;
+}
+.rpts-modal__actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.rpts-modal__actions .rpts-btn--ghost {
+  background: transparent;
+  border: none;
+  color: #111;
+  font-weight: 600;
+  padding: 8px 10px;
+}
+.rpts-modal__actions .rpts-btn--ghost:hover {
+  text-decoration: underline;
+}
+.rpts-modal__actions .rpts-btn--danger {
+  border: none;
+  border-radius: 999px;
+  padding: 10px 18px;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.06) inset;
+}
+
+/* 포커스 표시 */
+.rpts-modal__panel :is(button, [href], input, select, textarea):focus {
+  outline: 2px solid rgba(59, 167, 255, 0.35);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
