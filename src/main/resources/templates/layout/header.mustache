@@ -1,10 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<header>
+    <div class="header-inner">
+        <!-- 왼쪽: 햄버거 + 로고 -->
+        <div class="brand">
+            <button
+                    id="navToggle"
+                    class="nav-trigger hamburger"
+                    aria-controls="sidenav"
+                    aria-expanded="false"
+                    aria-label="사이드 메뉴 열기"
+            >
+                <span class="line"></span>
+            </button>
+            <a href="/" class="logo">Mobble</a>
+        </div>
 
-</body>
-</html>
+        <!-- 가운데: 검색 (있다면) -->
+        <div class="search-box">
+            <form class="search" action="/search" method="get" role="search">
+                <input
+                        class="search-input"
+                        type="search"
+                        name="q"
+                        placeholder="검색어를 입력하세요"
+                        aria-label="사이트 검색"
+                />
+                <button
+                        class="btn-clear"
+                        type="button"
+                        aria-label="입력 지우기"
+                ></button>
+                <button class="btn-submit" type="submit" aria-label="검색"></button>
+            </form>
+        </div>
+
+        <!-- 오른쪽: 글쓰기/가입 버튼 -->
+        <button class="join-btn" onclick="location.href='/write'">
+            WriteBtn Area
+        </button>
+    </div>
+</header>

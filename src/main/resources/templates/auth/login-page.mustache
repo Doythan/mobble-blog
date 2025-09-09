@@ -1,70 +1,70 @@
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
+<head>
+    <meta charset="UTF-8"/>
     <title>로그인</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="/css/common.css" />
-    <link rel="stylesheet" href="/css/header.css" />
-    <link rel="stylesheet" href="/css/footer.css" />
-    <link rel="stylesheet" href="/css/auth.css" />
-    <link rel="stylesheet" href="/css/login.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/css/common.css"/>
+    <link rel="stylesheet" href="/css/header.css"/>
+    <link rel="stylesheet" href="/css/footer.css"/>
+    <link rel="stylesheet" href="/css/auth.css"/>
+    <link rel="stylesheet" href="/css/login.css"/>
     <link
-      href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap"
-      rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap"
+            rel="stylesheet"
     />
-  </head>
-  <body>
-    <header>
-      <div class="header-inner">
-        <a href="/" class="logo">Mobble</a>
+</head>
+<body>
+<header>
+    <div class="header-inner">
+        <a href="/login-form" class="logo">Mobble</a>
         <button class="join-btn" onclick="location.href='/join-form'">
-          JoinBtn Area
+            JoinBtn Area
         </button>
-      </div>
-    </header>
+    </div>
+</header>
 
-    <main>
-      <div class="auth-content">
+<main>
+    <div class="auth-content">
         <section class="auth-left">
-          <h1>
-            로그인하여 당신의 스토리를<br />
-            공유해 보세요.
-          </h1>
-          <p>모두와 함께하는 블로그, Mobble입니다.</p>
+            <h1>
+                로그인하여 당신의 스토리를<br/>
+                공유해 보세요.
+            </h1>
+            <p>모두와 함께하는 블로그, Mobble입니다.</p>
         </section>
 
         <aside class="auth-right">
-          <h3>로그인</h3>
-          <form class="auth-form" action="/login" method="post">
-            <div class="form-group">
-              <input
-                type="text"
-                name="username"
-                placeholder="아이디"
-                required
-              />
+            <h3>로그인</h3>
+            <form class="auth-form" action="/login" method="post">
+                <div class="form-group">
+                    <input
+                            type="text"
+                            name="username"
+                            placeholder="아이디"
+                            required
+                    />
+                </div>
+                <div class="form-group">
+                    <input
+                            type="password"
+                            name="password"
+                            placeholder="비밀번호"
+                            required
+                    />
+                </div>
+                <button type="submit" class="auth-submit">로그인</button>
+            </form>
+            <br/>
+            <div class="auth-subtext">
+                아직 계정이 없으신가요? <a href="/join-form">회원가입</a>
             </div>
-            <div class="form-group">
-              <input
-                type="password"
-                name="password"
-                placeholder="비밀번호"
-                required
-              />
-            </div>
-            <button type="submit" class="auth-submit">로그인</button>
-          </form>
-          <br />
-          <div class="auth-subtext">
-            아직 계정이 없으신가요? <a href="/join-form">회원가입</a>
-          </div>
         </aside>
-      </div>
-    </main>
+    </div>
+</main>
 
-    <footer>
-      <div class="footer-inner">© Footer Content</div>
-    </footer>
-  </body>
+<footer>
+    <div class="footer-inner">© Footer Content</div>
+</footer>
+</body>
 </html>

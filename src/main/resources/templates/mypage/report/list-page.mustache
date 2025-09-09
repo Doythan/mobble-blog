@@ -21,56 +21,9 @@
 </head>
 <body>
 <!-- Header -->
-<header>
-    <div class="header-inner">
-        <div class="brand">
-            <button
-                    id="navToggle"
-                    class="nav-trigger hamburger"
-                    aria-label="사이드 메뉴 열기"
-            >
-                <span class="line"></span>
-            </button>
-            <a href="/" class="logo">Mobble</a>
-        </div>
+{{> layout/header}}
 
-        <div class="search-box">
-            <form class="search" action="/search" method="get" role="search">
-                <input
-                        class="search-input"
-                        type="search"
-                        name="q"
-                        placeholder="Search..."
-                        aria-label="검색어 입력"
-                />
-                <button
-                        class="btn-clear"
-                        type="button"
-                        aria-label="검색어 지우기"
-                ></button>
-                <button class="btn-submit" type="submit" aria-label="검색"></button>
-            </form>
-        </div>
-
-        <button class="join-btn" type="button" onclick="location.href='/write'">
-            WriteBtn Area
-        </button>
-    </div>
-</header>
-
-<!-- header 아래, main 위(또는 body 맨 끝) -->
-<aside id="sidenav" class="sidenav" aria-hidden="true">
-    <nav class="sidenav-nav" aria-label="사이드 내비게이션">
-        <ul>
-            <li><a href="/board-list">Home</a></li>
-            <li><a href="/mypage">My Feed</a></li>
-            <li><a href="/bookmark">Bookmark</a></li>
-            <li><a href="/mypage">My Profile</a></li>
-        </ul>
-    </nav>
-</aside>
-
-<div id="sidenavOverlay" class="sidenav-overlay" hidden></div>
+{{> layout/footer}}
 
 <!-- Reports List Page (공통 헤더/사이드바 아래 본문 영역) -->
 <main class="rpts-page" role="main" aria-labelledby="rptsHeading">
@@ -200,9 +153,7 @@
 <!-- 전용 JS -->
 <script src="/assets/js/reports.js"></script>
 
-<footer>
-    <div class="footer-inner">© Footer Content</div>
-</footer>
+{{> layout/footer}}
 
 <!-- 규칙 스크립트 -->
 <script src="/js/sidebar.js" defer></script>

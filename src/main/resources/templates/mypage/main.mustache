@@ -20,61 +20,9 @@
 </head>
 <body>
 <!-- 헤더 -->
-<header>
-    <div class="header-inner">
-        <!-- 왼쪽: 햄버거 + 로고 -->
-        <div class="brand">
-            <button
-                    id="navToggle"
-                    class="nav-trigger hamburger"
-                    aria-controls="sidenav"
-                    aria-expanded="false"
-                    aria-label="사이드 메뉴 열기"
-            >
-                <span class="line"></span>
-            </button>
-            <a href="/" class="logo">Mobble</a>
-        </div>
+{{> layout/header}}
 
-        <!-- 가운데: 검색 (있다면) -->
-        <div class="search-box">
-            <form class="search" action="/search" method="get" role="search">
-                <input
-                        class="search-input"
-                        type="search"
-                        name="q"
-                        placeholder="검색어를 입력하세요"
-                        aria-label="사이트 검색"
-                />
-                <button
-                        class="btn-clear"
-                        type="button"
-                        aria-label="입력 지우기"
-                ></button>
-                <button class="btn-submit" type="submit" aria-label="검색"></button>
-            </form>
-        </div>
-
-        <!-- 오른쪽: 글쓰기/가입 버튼 -->
-        <button class="join-btn" onclick="location.href='/write'">
-            WriteBtn Area
-        </button>
-    </div>
-</header>
-
-<!-- header 아래, main 위(또는 body 맨 끝) -->
-<aside id="sidenav" class="sidenav" aria-hidden="true">
-    <nav class="sidenav-nav" aria-label="사이드 내비게이션">
-        <ul>
-            <li><a href="/board-list">Home</a></li>
-            <li><a href="/mypage">My Feed</a></li>
-            <li><a href="/bookmark">Bookmark</a></li>
-            <li><a href="/mypage">My Profile</a></li>
-        </ul>
-    </nav>
-</aside>
-
-<div id="sidenavOverlay" class="sidenav-overlay" hidden></div>
+{{> layout/sidebar}}
 <!-- ===== 본문 ===== -->
 <main class="mp-container" role="main">
     <h1 class="mp-title">My Profile</h1>
@@ -220,9 +168,7 @@
 </div>
 
 <!-- 푸터 -->
-<footer>
-    <div class="footer-inner">© Footer Content</div>
-</footer>
+{{> layout/footer}}
 
 <!-- 공통 스크립트 -->
 <script src="/js/sidebar.js" defer></script>

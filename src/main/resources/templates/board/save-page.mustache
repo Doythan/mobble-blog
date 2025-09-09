@@ -26,29 +26,7 @@
     />
 </head>
 <body>
-<header>
-    <div class="header-inner">
-        <div class="brand">
-            <button
-                    id="navToggle"
-                    class="nav-trigger hamburger"
-                    aria-label="사이드 메뉴 열기"
-            >
-                <span class="line"></span>
-            </button>
-            <a href="/" class="logo">Mobble</a>
-        </div>
-        <div class="search-box"><!-- 글쓰기 화면이라 검색창 미노출 --></div>
-        <div class="header-actions">
-            <button class="btn-publish" type="button" id="btnPublish">
-                Publish
-            </button>
-            <button class="avatar-btn" type="button" aria-label="내 프로필">
-                P
-            </button>
-        </div>
-    </div>
-</header>
+{{> layout/header}}
 
 <main class="write-wrap">
     <form id="writeForm" action="/boards" method="post">
@@ -97,9 +75,7 @@
     </form>
 </main>
 
-<footer>
-    <div class="footer-inner">© Footer Content</div>
-</footer>
+{{> layout/footer}}
 
 <!-- 사이드바 스크립트(규칙 2) -->
 <script src="/js/sidebar.js" defer></script>
