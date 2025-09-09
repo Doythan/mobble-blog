@@ -1,10 +1,132 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>신고글 관리</title>
+    <!-- 공통 -->
+    <link rel="stylesheet" href="/css/common.css"/>
+    <link rel="stylesheet" href="/css/header.css"/>
+    <link rel="stylesheet" href="/css/sidebar.css"/>
+    <link rel="stylesheet" href="/css/footer.css"/>
+    <!-- 전용 -->
+    <link rel="stylesheet" href="/css/admin-report.css"/>
 </head>
 <body>
+<!-- 상단 헤더 -->
+<header class="rmg-header">
+    <div class="rmg-header__right">
+        <span class="rmg-username">ssar 님</span>
+        <button class="rmg-logout-btn">로그아웃</button>
+    </div>
+</header>
+<main class="rmg-page" role="main" aria-labelledby="rmgHeading">
+    <div class="rmg-inner">
+        <h2 id="rmgHeading" class="rmg-title">신고글 관리</h2>
 
+        <section class="rmg-card" aria-label="신고글 목록">
+            <div class="rmg-table">
+                <table>
+                    <thead>
+                    <tr>
+                        <th style="width: 72px">Id</th>
+                        <th style="width: 72px">게시물ID</th>
+                        <th>글 제목</th>
+                        <th style="width: 120px">게시자</th>
+                        <th style="width: 120px">신고자</th>
+                        <th style="width: 120px">신고 사유</th>
+                        <th style="width: 120px">신고 상태</th>
+                        <th style="width: 140px">신고일</th>
+                    </tr>
+                    </thead>
+                    <tbody id="rmgTbody"></tbody>
+                </table>
+            </div>
+            <p class="rmg-help">목록의 항목을 클릭하면 관리 모달이 열립니다.</p>
+        </section>
+    </div>
+</main>
+
+<!-- 관리 모달 -->
+<div
+        id="rmgModal"
+        class="rmg-modal is-hidden"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="rmgModalTitle"
+>
+    <div class="rmg-modal__backdrop" data-close="true"></div>
+
+    <div class="rmg-modal__panel" role="document">
+        <h3 id="rmgModalTitle" class="rmg-modal__title">신고글 관리</h3>
+
+        <form id="rmgForm" class="rmg-form" onsubmit="return false">
+            <label class="rmg-label" for="rmgTitle">신고 글 제목</label>
+            <input id="rmgTitle" class="rmg-input" type="text" readonly/>
+
+            <label class="rmg-label" for="rmgReportedAt">신고일</label>
+            <input id="rmgReportedAt" class="rmg-input" type="date"/>
+
+            <label class="rmg-label" for="rmgAuthor">글 게시자</label>
+            <input id="rmgAuthor" class="rmg-input" type="text"/>
+
+            <label class="rmg-label" for="rmgReporter">신고자</label>
+            <input id="rmgReporter" class="rmg-input" type="text"/>
+
+            <label class="rmg-label" for="rmgReason">신고 사유</label>
+            <select id="rmgReason" class="rmg-input">
+                <option value="홍보글">홍보글</option>
+                <option value="스팸/광고">스팸/광고</option>
+                <option value="욕설/혐오 표현">욕설/혐오 표현</option>
+                <option value="부적절한 내용">부적절한 내용</option>
+                <option value="기타">기타</option>
+            </select>
+
+            <!-- 신규: 기타 사유 입력 (선택) -->
+            <label class="rmg-label" for="rmgReasonExtra">기타 사유</label>
+            <textarea
+                    id="rmgReasonExtra"
+                    class="rmg-textarea"
+                    rows="4"
+            ></textarea>
+
+            <label class="rmg-label" for="rmgContent">신고 내용</label>
+            <textarea
+                    id="rmgContent"
+                    class="rmg-textarea"
+                    rows="6"
+                    placeholder="상세 내용을 입력하세요."
+            ></textarea>
+
+            <label class="rmg-label" for="rmgStatus">신고 상태</label>
+            <select id="rmgStatus" class="rmg-input">
+                <option value="처리 전">처리 전</option>
+                <option value="처리 중">처리 중</option>
+                <option value="처리 완료">처리 완료</option>
+            </select>
+
+            <div class="rmg-actions">
+                <button
+                        type="button"
+                        class="rmg-btn rmg-btn--ghost"
+                        data-close="true"
+                >
+                    취소
+                </button>
+                <button
+                        type="submit"
+                        id="rmgApplyBtn"
+                        class="rmg-btn rmg-btn--primary"
+                        disabled
+                >
+                    적용
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="/js/admin-report-modal.js"></script>
+<script src="/js/admin-logout.js"></script>
 </body>
 </html>
