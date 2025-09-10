@@ -35,45 +35,40 @@
         <section class="catmg-card" aria-labelledby="categoryHeading">
             <!-- 카테고리 리스트 -->
             <div class="catmg-rows" id="categoryList">
+                {{#model}}
                 <!-- 예시 항목 (JS에서 동적 생성/렌더링) -->
-                <div class="catmg-row" data-id="1">
+                <div class="catmg-row" data-id="{{id}}">
                     <div class="catmg-left">
-                        <span class="catmg-chip">자바</span>
-                        <span class="catmg-count">(3개 게시물)</span>
+                        <span class="catmg-chip">{{category}}</span>
+                        <span class="catmg-count">(2개 게시물)</span>
                     </div>
                     <!-- 액션 영역 -->
                     <div class="catmg-actions">
                         <!-- 수정 아이콘 버튼 -->
-                        <button class="catmg-icon-btn js-edit" aria-label="수정">
+                        <button class="catmg-icon-btn js-edit" type="button" aria-label="수정" title="수정">
                             <i class="fa-solid fa-pen"></i>
                         </button>
-
                         <!-- 삭제 아이콘 버튼 -->
-                        <button class="catmg-icon-btn js-delete" aria-label="삭제">
+                        <button class="catmg-icon-btn js-delete" type="button" data-id="{{id}}" aria-label="삭제" title="삭제">
                             <i class="fa-solid fa-trash"></i>
                         </button>
                     </div>
                 </div>
+                {{/model}}
             </div>
-
             <!-- divider + 생성 영역 -->
             <div class="catmg-divider" aria-hidden="true"></div>
 
-            <form class="catmg-create" onsubmit="return false">
+            <form class="catmg-create" action="/mypage/categories" method="post">
                 <input
                         id="newCategoryInput"
                         class="catmg-input"
                         type="text"
+                        name="category"
                         placeholder="새 카테고리 이름"
                         maxlength="40"
                 />
-                <button
-                        id="createCategoryBtn"
-                        class="catmg-btn catmg-btn--primary"
-                        type="button"
-                >
-                    생성
-                </button>
+                <button id="createCategoryBtn" class="catmg-btn catmg-btn--primary" type="button">생성</button>
             </form>
         </section>
     </div>
@@ -90,9 +85,7 @@
     <div class="catmg-modal__backdrop" data-close="true"></div>
     <div class="catmg-modal__panel" role="document">
         <h3 id="deleteModalTitle" class="catmg-modal__title">카테고리 삭제</h3>
-        <p class="catmg-modal__desc">
-            정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.
-        </p>
+        <p class="catmg-modal__desc">정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.</p>
         <div class="catmg-modal__actions">
             <button
                     class="catmg-btn catmg-btn--ghost"
@@ -112,7 +105,10 @@
     </div>
 </div>
 
-{{> layout/footer}}
+<footer>
+    <div class="footer-inner">© Footer Content</div>
+    <form id="deleteForm" action="" method="post" style="display:none;"></form>
+</footer>
 
 <!-- JS -->
 <script src="/js/category-list.js"></script>

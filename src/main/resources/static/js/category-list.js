@@ -6,14 +6,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
 
   let deleteTarget = null;
+  let deleteTargetId = null;
 
   /* ---------- 생성 ---------- */
   createCategoryBtn.addEventListener("click", () => {
     const name = newCategoryInput.value.trim();
-    if (!name) return;
-    categoryList.appendChild(makeRow(name, "(0개 게시물)"));
-    newCategoryInput.value = "";
-  });
+    if (!name) { newCategoryInput.focus(); return; }
+    // 서버로 POST 전송 → 컨트롤러가 저장 후 같은 뷰 렌더링
+    newCategoryInput.form?.submit();
+    });
 
   /* ---------- 리스트 내 이벤트 위임 ---------- */
   categoryList.addEventListener("click", (e) => {
@@ -28,7 +29,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 삭제 요청
     if (e.target.closest(".js-delete")) {
-      deleteTarget = row;
+      deleteTargetId = row.dataset.id; // ← 서버로 보낼 ID 저장
+      if (!deleteTargetId) return;
       deleteModal.classList.remove("is-hidden");
       return;
     }
@@ -55,9 +57,15 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   confirmDeleteBtn.addEventListener("click", () => {
-    if (deleteTarget) deleteTarget.remove();
-    deleteTarget = null;
-    deleteModal.classList.add("is-hidden");
+    if (!deleteTargetId) {
+      deleteModal.classList.add("is-hidden");
+      return;
+    }
+    const form = document.createElement("form");
+    form.method = "post";
+    form.action = `/mypage/categories/${deleteTargetId}/delete`;
+    document.body.appendChild(form);
+    form.submit(); // 서버 처리 후 같은 뷰 재렌더링
   });
 
   /* ================= helpers ================= */
@@ -146,21 +154,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function saveInlineEdit(row) {
     const input = row.querySelector(".catmg-left input");
-    const newName =
-      (input?.value || "").trim() || row.dataset.originalName || "이름없음";
-    const countText = row.dataset.originalCount || "(0개 게시물)";
+    const newName = (input?.value || "").trim();
+    const id = row.dataset.id;
 
-    // 왼쪽 영역만 다시 표시
-    const newLeft = makeLeft(newName, countText);
-    row.querySelector(".catmg-left").replaceWith(newLeft);
+    if (!id) return;                 // 안전장치
+    if (!newName) { input?.focus(); return; }
 
-    // 액션 아이콘 다시 활성화 (스타일은 그대로 유지됨)
-    setRowActionsDisabled(row, false);
+    // 중복 클릭 방지(선택)
+    setRowActionsDisabled(row, true);
 
-    // 데이터 정리
-    delete row.dataset.originalName;
-    delete row.dataset.originalCount;
+    // 동적 폼 생성 → POST /{id}/rename 로 전송 (SSR 라운드트립)
+    const form = document.createElement("form");
+    form.method = "post";
+    form.action = `/mypage/categories/${id}/rename`;
+
+    // DTO 필드명과 동일해야 바인딩됨
+    const hidden = document.createElement("input");
+    hidden.type = "hidden";
+    hidden.name = "category";
+    hidden.value = newName;
+    form.appendChild(hidden);
+
+    // Spring Security CSRF 사용 시 (메타 태그가 있을 때만 추가)
+    const tokenMeta = document.querySelector('meta[name="_csrf"]');
+    const paramMeta = document.querySelector('meta[name="_csrf_parameter"]');
+    if (tokenMeta && paramMeta) {
+      const csrf = document.createElement("input");
+      csrf.type = "hidden";
+      csrf.name = paramMeta.content;   // 보통 "_csrf"
+      csrf.value = tokenMeta.content;  // 토큰 값
+      form.appendChild(csrf);
+    }
+
+    document.body.appendChild(form);
+    form.submit();  // 컨트롤러에서 redirect:/mypage/categories → 최신 상태로 재렌더링
   }
+
 
   function cancelInlineEdit(row) {
     const originalName = row.dataset.originalName || "이름없음";

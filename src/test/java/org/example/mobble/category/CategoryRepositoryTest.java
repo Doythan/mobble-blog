@@ -50,7 +50,7 @@ public class CategoryRepositoryTest {
 
         // then
         assertThat(c.getId()).isNotNull();
-        assertThat(categoryRepository.findByUserIdAndCategory(1, "Dev")).isPresent();
+        assertThat(categoryRepository.findByUserIdAndCategory(user.getId(), "Dev")).isPresent();
     }
 
     // 특정 유저가 동일 이름의 카테고리를 가지고 있는지 존재여부 체크 검증
@@ -62,8 +62,8 @@ public class CategoryRepositoryTest {
         em.flush();
 
         // then
-        assertThat(categoryRepository.existsByUserIdAndCategory(1, "Dev")).isTrue();
-        assertThat(categoryRepository.existsByUserIdAndCategory(1, "Ops")).isFalse();
+        assertThat(categoryRepository.existsByUserIdAndCategory(user.getId(), "Dev")).isTrue();
+        assertThat(categoryRepository.existsByUserIdAndCategory(user.getId(), "Ops")).isFalse();
     }
 
     // (userId, category) 유니크 제약이 실제로 동작해 예외를 발생시키는지 검증
@@ -109,7 +109,7 @@ public class CategoryRepositoryTest {
         em.flush(); em.clear();
 
         // when
-        List<Category> categories = categoryRepository.findAllByUserIdOrderByIdDesc(2);
+        List<Category> categories = categoryRepository.findAllByUserIdOrderByIdDesc(user.getId());
 
         // then
         assertThat(categories).hasSize(2);
@@ -120,17 +120,18 @@ public class CategoryRepositoryTest {
     @Test
     void existsByUserIdAndCategory_returnsTrue_whenDuplicateExists() {
         // given
-        User user = newUser("user2");
+        User user = newUser("user2");        // 반드시 '영속'되도록! (em.persist 또는 repo.save)
         Category c = Category.builder().user(user).category("Dev").build();
         categoryRepository.save(c);
         em.flush(); em.clear();
 
         // when
-        boolean exists = categoryRepository.existsByUserIdAndCategory(1, "Dev");
+        boolean exists = categoryRepository.existsByUserIdAndCategory(user.getId(), "Dev");
 
         // then
         assertThat(exists).isTrue();
     }
+
 
     // PK로 삭제가 정상 동작하는지 검증 (삭제 후 findById가 empty여야 함)
     @Test
