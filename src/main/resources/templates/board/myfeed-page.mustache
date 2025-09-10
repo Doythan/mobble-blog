@@ -26,6 +26,9 @@
 <main class="feed-container no-right">
     <section class="feed-left">
         <h2>내 피드</h2>
+        <div class="feed-sorting">
+            <a href="#">최신순</a> | <a href="#">조회수순</a> | <a href="#">북마크순</a>
+        </div>
 
         <article class="post-card">
             <a class="post-link" href="/boards/1">
@@ -86,5 +89,8 @@
 
 <!-- 푸터 -->
 {{> layout/footer}}
+
+<script src="/js/sidebar.js" defer></script>
+<script src="/js/search-clear.js" defer></script>
 </body>
 </html>

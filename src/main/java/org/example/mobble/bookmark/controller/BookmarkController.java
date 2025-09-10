@@ -26,7 +26,7 @@ public class BookmarkController {
     public ResponseEntity<?> bookmarkInsert(@PathVariable("boardId") Integer boardId) {
         User user = getLoginUser();
 
-        BookmarkResponse.BookmarkSaveDTO respDTO = bookmarkService.bookmarkSave(boardId,user.getId());
+        BookmarkResponse.BookmarkSaveDTO respDTO = bookmarkService.bookmarkSave(boardId, user.getId());
         return Resp.ok(respDTO);
     }
 
@@ -35,7 +35,7 @@ public class BookmarkController {
     public ResponseEntity<?> bookmarkDelete(@PathVariable("boardId") Integer boardId) {
         User user = getLoginUser();
 
-        bookmarkService.bookmarkDelete(boardId,user.getId());
+        bookmarkService.bookmarkDelete(boardId, user.getId());
         return Resp.ok(null);
     }
 
@@ -45,7 +45,7 @@ public class BookmarkController {
         User user = getLoginUser();
         BookmarkResponse.BookmarkListDTO respDTO = bookmarkService.bookmarkList(user.getId());
         request.setAttribute("model", respDTO);
-        return "mypage/main"; // bookmark 페이지로 이동
+        return "mypage/bookmark/list-page"; // bookmark 페이지로 이동
     }
 
     private User getLoginUser() {
