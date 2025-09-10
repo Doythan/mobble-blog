@@ -1,27 +1,142 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Main</title>
+    <meta charset="UTF-8"/>
+    <title>Mobble</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <!-- 공통 CSS (수정 금지) -->
+    <link rel="stylesheet" href="/css/common.css"/>
+    <link rel="stylesheet" href="/css/header.css"/>
+    <link rel="stylesheet" href="/css/footer.css"/>
+    <!-- 페이지 전용 CSS -->
+    <link rel="stylesheet" href="/css/index.css"/>
+    <!-- 헤더 폰트 동일화 -->
+    <link
+            href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap"
+            rel="stylesheet"
+    />
 </head>
 <body>
-<h1>라이브리 테스트</h1>
+<!-- 로그인 페이지와 동일한 헤더 마크업/클래스 사용 -->
+<header>
+    <div class="header-inner">
+        <a href="/" class="logo">Mobble</a>
+        <!-- 동일 클래스(.join-btn) 재사용, 이동만 로그인 화면으로 -->
+        <button
+                class="join-btn"
+                onclick="location.href='/login-form'"
+                aria-label="로그인으로 이동"
+        >
+            로그인
+        </button>
+    </div>
+</header>
 
-<!-- 라이브리 시티 -->
-<div id="lv-container" data-id="city" data-uid="MTAyMC82MDg4NC8zNzM1NA=="></div>
-<script>
-    (function (d, s) {
-        var j, e = d.getElementsByTagName(s)[0];
-        if (typeof LivereTower === 'function') {
-            return;
-        }
-        j = d.createElement(s);
-        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
-        j.async = true;
-        e.parentNode.insertBefore(j, e);
-    })(document, 'script');
-</script>
-<noscript>라이브리 댓글 작성을 위해 JavaScript를 활성화 해주세요</noscript>
+<main>
+    <div class="landing container">
+        <!-- Hero -->
+        <section class="hero" aria-labelledby="hero-title">
+            <div class="hero__text">
+                <h1 id="hero-title">
+                    기록이 습관이 되는 곳, <span class="accent">Mobble</span>
+                </h1>
+                <p class="hero__lead">
+                    개발과 일상의 순간들을 간편하게 남기고, 다시 꺼내보기 쉬운 구조로
+                    정리해 보세요. Mobble이 여러분의 스토리를 환영합니다.
+                </p>
+                <div class="hero__actions">
+                    <a class="cta-primary" href="/login-form">Mobble 로그인</a>
+                </div>
+            </div>
+            <div class="hero__media" aria-hidden="true">
+                <!-- TODO: 이 div 대신 실제 이미지로 교체하세요.
+                     <img src="/assets/hero.jpg" alt="Mobble 블로그 대표 이미지"> -->
+                <div class="media-box"></div>
+            </div>
+        </section>
+
+        <!-- Features: 좌/우 번갈아 배치되는 카드 -->
+        <section class="features" aria-label="Mobble 소개">
+            <!-- 1 -->
+            <article class="feature">
+                <div class="feature__inner">
+                    <div class="feature__text">
+                        <h2>빠르고 간편한 작성</h2>
+                        <p>
+                            <strong>마크다운 스타일</strong>을 활용해 더 정돈된 글을
+                            작성해 보세요. 코드, 목록, 인용까지 깔끔하게 표현되고, 필요한
+                            포맷만 간결하게 담을 수 있어요.
+                        </p>
+                    </div>
+                    <div class="feature__media" aria-hidden="true">
+                        <!-- TODO: 이미지 교체 위치 -->
+                        <div class="media-box"></div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 2 (반전) -->
+            <article class="feature">
+                <div class="feature__inner">
+                    <div class="feature__text">
+                        <h2>마음에 드는 글은 북마크</h2>
+                        <p>
+                            인상 깊었던 글은 <strong>북마크</strong>에 저장해 두세요.
+                            필요한 순간, 언제든 빠르게 찾아볼 수 있습니다.
+                        </p>
+                    </div>
+                    <div class="feature__media" aria-hidden="true">
+                        <!-- TODO: 이미지 교체 위치 -->
+                        <div class="media-box"></div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 3 -->
+            <article class="feature">
+                <div class="feature__inner">
+                    <div class="feature__text">
+                        <h2>카테고리로 주제 정리</h2>
+                        <p>
+                            다양한 주제를 <strong>카테고리</strong>로 분류해 보세요. 글의
+                            흐름과 탐색성이 좋아져, 나중에 다시 보기에도 편해집니다.
+                        </p>
+                    </div>
+                    <div class="feature__media" aria-hidden="true">
+                        <!-- TODO: 이미지 교체 위치 -->
+                        <div class="media-box"></div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 4 (반전) -->
+            <article class="feature">
+                <div class="feature__inner">
+                    <div class="feature__text">
+                        <h2>당신의 이야기를 공유</h2>
+                        <p>
+                            Mobble에서는 <strong>당신을 기다리고</strong> 있습니다. 일상의
+                            생각부터 기술적 인사이트까지, 지금 바로 당신의 스토리를
+                            들려주세요.
+                        </p>
+                        <div class="feature__actions">
+                            <a class="cta-primary" href="/login-form">지금 로그인</a>
+                        </div>
+                    </div>
+                    <div class="feature__media" aria-hidden="true">
+                        <!-- TODO: 이미지 교체 위치 -->
+                        <div class="media-box"></div>
+                    </div>
+                </div>
+            </article>
+        </section>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-inner">© <span id="year"></span> Mobble</div>
+</footer>
+
+<script src="/js/footer.js" defer></script>
 </body>
 </html>
