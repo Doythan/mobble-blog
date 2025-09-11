@@ -43,9 +43,11 @@ public class BoardController {
     // 모든 게시물 목록 찾기
     @GetMapping
     public String getBoardsList(HttpServletRequest request, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "CREATED_AT_DESC") String order) {
+        User user = (User) session.getAttribute("user");
+        System.out.println("[LOGIN] sessionId=" + session.getId() + ", user=" + user.getUsername());
         List<BoardResponse.DTO> boardDTOList = boardService.getList(getFirstIndex(page), PER_PAGE + 1, safeOrder(order));
         boardDTOList = applyPagingFlags(request, boardDTOList, page);
-        BoardResponse.mainListDTO resDTO = getMainList(boardDTOList,null);
+        BoardResponse.mainListDTO resDTO = getMainList(boardDTOList, null);
         request.setAttribute("model", resDTO);
         return "board/list-page";
     }
@@ -93,9 +95,9 @@ public class BoardController {
     @GetMapping("/me")
     public String getMyFeedList(HttpServletRequest request, BoardRequest.MyFeedDTO reqDTO) {
         User user = (User) session.getAttribute("user");
-        List<BoardResponse.DTO> boardDTOList = boardService.getMyFeedList(getFirstIndex(reqDTO.getPage()), PER_PAGE + 1,safeOrder(reqDTO.getOrder()),user);
+        List<BoardResponse.DTO> boardDTOList = boardService.getMyFeedList(getFirstIndex(reqDTO.getPage()), PER_PAGE + 1, safeOrder(reqDTO.getOrder()), user);
         boardDTOList = applyPagingFlags(request, boardDTOList, reqDTO.getPage());
-        BoardResponse.mainListDTO resDTO = getMainList(boardDTOList,user);
+        BoardResponse.mainListDTO resDTO = getMainList(boardDTOList, user);
         request.setAttribute("model", resDTO);
         return "board/myfeed-page";
     }
@@ -108,7 +110,7 @@ public class BoardController {
     public String findList(HttpServletRequest request, @RequestParam String keyword, @RequestParam(defaultValue = "CREATED_AT_DESC") String order, @RequestParam(defaultValue = "1") Integer page) {
         List<BoardResponse.DTO> boardDTOList = boardService.findBy(keyword, safeOrder(order), getFirstIndex(page), PER_PAGE + 1);
         boardDTOList = applyPagingFlags(request, boardDTOList, page);
-        BoardResponse.mainListDTO resDTO = getMainList(boardDTOList,null);
+        BoardResponse.mainListDTO resDTO = getMainList(boardDTOList, null);
         request.setAttribute("model", resDTO);
         return "board/list-page";
     }
@@ -148,10 +150,11 @@ public class BoardController {
         return rows;
     }
 
-    private BoardResponse.mainListDTO getMainList(List<BoardResponse.DTO> boardDTOList , User user) {
+    private BoardResponse.mainListDTO getMainList(List<BoardResponse.DTO> boardDTOList, User user) {
         int getSize = 3;
 
-        List<BoardResponse.DTO> popularList = boardService.getPopularList(getSize);List<String> categoryList;
+        List<BoardResponse.DTO> popularList = boardService.getPopularList(getSize);
+        List<String> categoryList;
         if (user == null) {
             categoryList = categoryService.getPopularList(3);
         } else {

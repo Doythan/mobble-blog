@@ -6,6 +6,7 @@ import org.example.mobble._util.error.ErrorEnum;
 import org.example.mobble._util.error.ex.Exception400;
 import org.example.mobble._util.error.ex.Exception403;
 import org.example.mobble._util.error.ex.Exception404;
+import org.example.mobble._util.util.HtmlUtil;
 import org.example.mobble.board.domain.Board;
 import org.example.mobble.board.domain.BoardRepository;
 import org.example.mobble.board.domain.SearchOrderCase;
@@ -21,8 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
-import static org.example.mobble._util.error.ErrorEnum.NOT_FOUND;
 
 @RequiredArgsConstructor
 @Service
@@ -61,10 +60,12 @@ public class BoardService {
                             .build()
             );
         }
+
+        String safeHtml = HtmlUtil.HtmlSanitizer.sanitize(reqDTO.getContent());
         Board board =
                 Board.builder()
                         .title(reqDTO.getTitle())
-                        .content(reqDTO.getContent())
+                        .content(safeHtml)
                         .user(user)
                         .category(category)
                         .build();

@@ -37,6 +37,7 @@ public class UserController {
     public String login(@ModelAttribute UserRequest.LoginDTO reqDTO) {
         User user = userService.findByUser(reqDTO);
         session.setAttribute("user", user);
+        System.out.println("[LOGIN] sessionId=" + session.getId() + ", user=" + user.getUsername());
         return "redirect:/boards";
     }
 
