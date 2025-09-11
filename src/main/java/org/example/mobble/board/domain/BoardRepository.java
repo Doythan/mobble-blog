@@ -23,7 +23,7 @@ public class BoardRepository {
     public Optional<Board> findById(Integer boardId) {
         return Optional.ofNullable(em.find(Board.class, boardId));
     }
-    
+
     public Optional<BoardResponse.DetailDTO> findByIdDetail(Integer boardId) {
         List<Object[]> rows = em.createQuery("""
                         select b, u, c,
@@ -31,7 +31,7 @@ public class BoardRepository {
                                count(distinct bm2) as myCount
                         from Board b
                         left join b.bookmarks bm
-                        left join b.bookmarks bm2
+                        left join b.bookmarks bm2 on bm2.user.id = :userId and bm2.board.id = b.id
                         left join b.category c
                         left join b.user u
                         where b.id = :boardId

@@ -10,6 +10,7 @@ import org.example.mobble.report.domain.ReportCase;
 import org.example.mobble.user.domain.User;
 
 import java.sql.Timestamp;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class BoardResponse {
@@ -18,12 +19,38 @@ public class BoardResponse {
         List<DTO> boardList;
         List<DTO> popularList;
         List<String> categoryList;
+        PageDTO pageDTO;
+
+        @Data
+        public static class PageDTO {
+            Integer page;
+            Boolean isFirst;
+            Boolean isLast;
+            Integer prev;
+            Integer next;
+            String queryString;
+
+            @Builder
+            public PageDTO(Integer page, Boolean isFirst, Boolean isLast, String order) {
+                this.page = page;
+                this.isFirst = isFirst;
+                this.isLast = isLast;
+                this.prev = !isFirst ? page - 1 : page;
+                this.next = !isLast ? page + 1 : page;
+                if (order == null) {
+                    this.queryString = "";
+                } else {
+                    this.queryString = "&order=" + order;
+                }
+            }
+        }
 
         @Builder
-        public mainListDTO(List<DTO> boardList, List<DTO> popularList, List<String> categoryList) {
+        public mainListDTO(List<DTO> boardList, List<DTO> popularList, List<String> categoryList, PageDTO pageDTO) {
             this.boardList = boardList;
             this.popularList = popularList;
             this.categoryList = categoryList;
+            this.pageDTO = pageDTO;
         }
     }
 
@@ -37,8 +64,8 @@ public class BoardResponse {
         Integer views;
         Integer bookmarkCount;
         String category;
-        Timestamp createAt;
-        Timestamp updateAt;
+        String createAt;
+        String updateAt;
         String image;
 
         @Builder
@@ -50,8 +77,12 @@ public class BoardResponse {
             this.views = board.getViews();
             this.bookmarkCount = bookmarkCount;
             this.category = (category != null) ? category.getCategory() : null;
-            this.createAt = board.getCreatedAt();
-            this.updateAt = board.getUpdatedAt();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            Timestamp updatedAt = board.getUpdatedAt();
+            this.createAt = board.getCreatedAt().toLocalDateTime().format(formatter);
+            if (updatedAt != null) {
+                this.updateAt = updatedAt.toLocalDateTime().format(formatter);
+            }
             this.image = image;
         }
     }
