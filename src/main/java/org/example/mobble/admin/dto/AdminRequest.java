@@ -8,5 +8,12 @@ public class AdminRequest {
     public class ReportUpateDTO{
 
     private ReportStatus status;
-}
+    }
+
+    @Data
+    public class LoginDTO {
+        private String authId;
+        private String authPw;
+    }
+
 }

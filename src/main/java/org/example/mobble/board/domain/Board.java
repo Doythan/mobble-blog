@@ -69,7 +69,7 @@ public class Board {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.reports = reports;
-        this.bookmarks = bookmarks;
+        this.bookmarks = bookmarks != null ? bookmarks : new ArrayList<>();
     }
 
     public void update(BoardRequest.BoardUpdateDTO reqDTO) {

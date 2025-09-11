@@ -81,7 +81,10 @@ public enum ErrorEnum {
     /*
      * 403 Forbidden - 권한 갖지 않은 유저의 CRUD 요청
      */
-    FORBIDDEN_USER_AT_BOARD(403, "해당 게시글의 권한이 존재하지 않습니다."),
+    FORBIDDEN_USER_AT_BOARD(403, "해당 게시글의 권한이 존재하지 않습니다."),/*
+     * 403 Forbidden - 권한 갖지 않은 유저의 CRUD 요청
+     */
+    FORBIDDEN_NOT_ADMIN(403, "ADMIN 권한이 없습니다."),
 
     /*
      * 403 Forbidden - 권한 갖지 않은 유저의 신고 CRUD 요청

@@ -35,6 +35,7 @@ public class UserService {
                         .username(reqDTO.getUsername())
                         .email(reqDTO.getEmail())
                         .password(pw)
+                        .role("user")
                         .build()
         );
     }

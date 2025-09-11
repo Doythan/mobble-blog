@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     logoutBtn.addEventListener("click", () => {
       // TODO: 실제 로그아웃 처리
       alert("로그아웃 되었습니다.");
-      window.location.href = "/admin/login";
+      window.location.href = "/admin/login-form";
     });
   }
 });

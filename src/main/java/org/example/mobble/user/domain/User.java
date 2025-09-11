@@ -34,6 +34,9 @@ public class User {
 
     private String profileImage;
 
+    // 유저인지 관리자인지
+    private String role;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Board> boards;
 
@@ -49,12 +52,13 @@ public class User {
     // reCAPTCHA 추가? : 봇 생성 방지용
 
     @Builder
-    public User(Integer id, String username, String password, String email, String profileImage) {
+    public User(Integer id, String username, String password, String email, String profileImage,String role) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.email = email;
         this.profileImage = profileImage;
+        this.role = role;
     }
 
     public void updateProfileImage(String profileImage) {

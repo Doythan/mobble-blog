@@ -71,6 +71,7 @@ public class BookmarkRepositoryTest {
     public void findByBoardIdAndUserIdTRUE_test() {
         User testUser = User.builder()
                 .username("tester")
+                .role("user")
                 .build();
         userRepository.save(testUser);
 

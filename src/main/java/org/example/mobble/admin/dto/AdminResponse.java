@@ -61,4 +61,9 @@ public class AdminResponse {
             this.boardTitle = report.getBoard().getTitle();
         }
     }
+
+    @Data
+    public class LoginDTO {
+        private String username;
+    }
 }
