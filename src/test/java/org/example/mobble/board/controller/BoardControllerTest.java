@@ -5,6 +5,7 @@ import org.example.mobble.board.TestUtils;
 import org.example.mobble.user.domain.User;
 import org.example.mobble.user.domain.UserRepository;
 
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 
-import static org.hamcrest.Matchers.matchesPattern;
+import java.sql.Timestamp;
+
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -65,11 +68,23 @@ class BoardControllerTest {
     void detail_ok() throws Exception {
         // when
         MvcResult result = mockMvc.perform(get("/boards/{id}", 1).session(session))
-                .andExpect(status().isOk())
-                .andExpect(view().name("board/detail-page"))
-                .andReturn();
 
-        // then
+       //then
+        .andExpect(status().isOk())
+        .andExpect(view().name("board/detail-page"))
+        .andExpect(request().attribute("model", hasProperty("id", Matchers.is(1))))
+        .andExpect(request().attribute("model", hasProperty("username", Matchers.is("ssar"))))
+        .andExpect(request().attribute("model", hasProperty("title", Matchers.is("제목1"))))
+        .andExpect(request().attribute("model", hasProperty("content", Matchers.is("내용1"))))
+        .andExpect(request().attribute("model", hasProperty("views", Matchers.is(1))))
+        .andExpect(request().attribute("model", hasProperty("bookmarkCount", Matchers.is(2))))
+        .andExpect(request().attribute("model", hasProperty("category", Matchers.is("java"))))
+        .andExpect(request().attribute("model", hasProperty("createAt", instanceOf(Timestamp.class))))
+        .andExpect(request().attribute("model", hasProperty("isBookmark", Matchers.is(true))))
+        .andExpect(request().attribute("model", hasProperty("displayDate", Matchers.is("2025-09-11"))))
+        .andReturn();
+
+        // 실제 확인
         TestUtils.printRequestAttributesAsJson(result);
 
     }
@@ -128,7 +143,7 @@ class BoardControllerTest {
     @DisplayName("신고: 리다이렉트 OK")
     void report_redirect_ok() throws Exception {
         mockMvc.perform(post("/boards/{id}/report", 1)
-                                .param("result", "부적절한 작성자명")        // ReportCase 값 중 하나
+                                .param("result", "ADVERTISING_BOARD_CONTENT")        // ReportCase 값 중 하나
                                 .param("content", "스팸 신고")    // 신고 내용
                                 .session(session)
                         // .with(csrf())

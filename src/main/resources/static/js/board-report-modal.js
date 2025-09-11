@@ -22,6 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
     $modal.setAttribute("aria-hidden", "false");
     lockScroll();
     setTimeout(() => $reason?.focus(), 0);
+    syncEtcField()
   }
 
   function closeModal() {

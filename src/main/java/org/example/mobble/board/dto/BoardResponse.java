@@ -101,6 +101,10 @@ public class BoardResponse {
         String profileImage;
         Boolean isBookmark;
 
+        // yyyy-mm-dd 변경 + 최종 표시할 날짜 (생성 or 수정)
+        // 수정 일이 있으면 수정 일자로 표기
+        String displayDate;
+
         @Builder
         public DetailDTO(Board board, User user, Category category, Integer bookmarkCount, Boolean isBookmark) {
             this.id = board.getId();
@@ -114,6 +118,10 @@ public class BoardResponse {
             this.updateAt = board.getUpdatedAt();
             this.profileImage = user.getProfileImage();
             this.isBookmark = isBookmark;
+
+            // ---- 날짜 처리 로직 ----
+            Timestamp base = (board.getUpdatedAt() != null) ? board.getUpdatedAt() : board.getCreatedAt();
+            this.displayDate = base.toLocalDateTime().toLocalDate().toString(); // yyyy-MM-dd
         }
     }
 

@@ -1,5 +1,7 @@
 package org.example.mobble.report.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.mobble._util.error.ex.Exception401;
@@ -28,7 +30,7 @@ public class ReportController {
     //신고 수정 form 가기 (모달)
     @ResponseBody
     @GetMapping ("/reports/{id}/update-form")
-    public ResponseEntity<?>  updateForm(@PathVariable(name = "id") Integer reportId,Model model) {
+    public ResponseEntity<?>  updateForm(@PathVariable(name = "id") Integer reportId) {
         User user = getLoginUser();
         //조회
         ReportResponse.ReportDetailDTO resDTO = reportService.getReport(reportId,user);
@@ -37,18 +39,19 @@ public class ReportController {
 
     //내 신고 리스트
     @GetMapping ("/reports")
-    public String getReportList(Model model) {
+    public String getReportList(Model model) throws JsonProcessingException {
         User user = getLoginUser();
         //조회
         List<ReportResponse.ReportDTO> resDTO = reportService.getList(user);
-        model.addAttribute("model",resDTO);
+
+        model.addAttribute("reportsJson", new ObjectMapper().writeValueAsString(resDTO));
         return "mypage/report/list-page";
     }
 
     //내 신고 보기(모달)
     @ResponseBody
     @GetMapping ("/reports/{id}")
-    public ResponseEntity<?> getReport(@PathVariable(name = "id") Integer reportId,Model model) {
+    public ResponseEntity<?> getReport(@PathVariable(name = "id") Integer reportId) {
         User user = getLoginUser();
         //조회
         ReportResponse.ReportDetailDTO resDTO = reportService.getReport(reportId,user);
@@ -56,21 +59,24 @@ public class ReportController {
     }
 
     //내 신고 삭제
+    @ResponseBody
     @PostMapping ("/reports/{id}/delete")
-    public String delete(@PathVariable(name = "id") Integer reportId) {
+    public ResponseEntity<?> delete(@PathVariable(name = "id") Integer reportId) {
         User user = getLoginUser();
         //삭제
         reportService.delete(reportId,user);
-        return "redirect:/reports";
+        return Resp.ok(null);
     }
 
     //내 신고 수정
+    @ResponseBody
     @PostMapping ("/reports/{id}/update")
-    public String update(@PathVariable(name = "id") Integer reportId,ReportRequest.ReportUpateDTO reqDTO) {
+    public ResponseEntity<?> update(@PathVariable(name = "id") Integer reportId,
+                                    @RequestBody ReportRequest.ReportUpateDTO reqDTO) {
         User user = getLoginUser();
         //수정
         ReportResponse.ReportUpateDTO resDTO = reportService.update(reportId,user,reqDTO);
-        return "redirect:/reports";
+        return Resp.ok(resDTO);
     }
 
     //서비스 이용자 확인 절차

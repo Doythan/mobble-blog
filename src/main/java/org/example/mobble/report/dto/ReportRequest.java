@@ -7,7 +7,7 @@ import org.example.mobble.report.domain.ReportStatus;
 public class ReportRequest {
 
     @Data
-    public class ReportUpateDTO{
+    public static  class ReportUpateDTO{
 
         private ReportCase result;
         private String resultEtc;
