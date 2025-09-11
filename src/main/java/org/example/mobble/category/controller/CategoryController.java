@@ -26,7 +26,7 @@ public class CategoryController {
     public String categoriesPage(HttpServletRequest request) {
         User sessionUser = (User) session.getAttribute("user");
         if (sessionUser == null) throw new Exception401("로그인이 필요합니다.");
-        request.setAttribute("model", categoryService.getCategoriesByUser(sessionUser.getId()));
+        request.setAttribute("model", categoryService.getCategoriesWithCount(sessionUser.getId()));
         return "mypage/category/category-page";
     }
 

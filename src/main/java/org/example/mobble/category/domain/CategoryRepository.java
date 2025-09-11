@@ -2,6 +2,7 @@ package org.example.mobble.category.domain;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.example.mobble.category.dto.CategoryResponse;
 import org.example.mobble.user.domain.User;
 import org.springframework.stereotype.Repository;
 
@@ -81,4 +82,29 @@ public class CategoryRepository {
                 .setMaxResults(maxResult)
                 .getResultList();
     }
+
+    public List<CategoryResponse.CategoryItemWithCountDTO> findItemsWithCountByUserId(Integer userId) {
+        List<Object[]> rows = em.createQuery(
+                        "select c.id, c.category, count(b.id) " +
+                                "from Category c " +
+                                "left join Board b on b.category.id = c.id " +
+                                "where c.user.id = :userId " +
+                                "group by c.id, c.category " +
+                                "order by c.id desc",
+                        Object[].class
+                )
+                .setParameter("userId", userId)
+                .getResultList();
+
+        return rows.stream()
+                .map(r -> CategoryResponse.CategoryItemWithCountDTO.builder()
+                        .id((Integer) r[0])
+                        .category((String) r[1])
+                        .boardCount((Long) r[2]) // COUNT는 Long
+                        .build())
+                .toList();
+    }
+
+
+
 }

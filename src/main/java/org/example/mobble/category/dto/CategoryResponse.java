@@ -45,4 +45,19 @@ public class CategoryResponse {
             this.category = category;
         }
     }
+
+    // 마이페이지: 카테고리 목록 + 게시글 수
+    @Data
+    public static class CategoryItemWithCountDTO {
+        Integer id;
+        String category;
+        Long boardCount;
+
+        @Builder
+        public CategoryItemWithCountDTO(Integer id, String category, Long boardCount) {
+            this.id = id;
+            this.category = category;
+            this.boardCount = boardCount;
+        }
+    }
 }

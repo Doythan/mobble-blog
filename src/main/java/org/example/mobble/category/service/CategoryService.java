@@ -25,11 +25,18 @@ public class CategoryService {
     @PersistenceContext
     private EntityManager em;
 
-    // 특정 유저의 카테고리 목록 조회
+    // 특정 유저의 카테고리 목록 조회, (현재는 사용하는 곳 없음)
     @Transactional(readOnly = true)
     public List<Category> getCategoriesByUser(Integer userId) {
         if (userId == null) throw new Exception400("userId가 없습니다.");
         return categoryRepository.findAllByUserIdOrderByIdDesc(userId);
+    }
+
+    // 특정 유저의 카테고리 목록 + count 포함
+    @Transactional(readOnly = true)
+    public List<CategoryResponse.CategoryItemWithCountDTO> getCategoriesWithCount(Integer userId) {
+        if (userId == null) throw new Exception400("userId가 없습니다.");
+        return categoryRepository.findItemsWithCountByUserId(userId);
     }
 
     // 카테고리 추가
