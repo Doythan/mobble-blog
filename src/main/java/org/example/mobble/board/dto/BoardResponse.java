@@ -39,6 +39,9 @@ public class BoardResponse {
                 this.next = !isLast ? page + 1 : page;
                 this.queryString = "?order=" + order;
                 if (keyword != null && !keyword.equals("")) {
+                    if (keyword.contains("#")) {
+                        keyword = keyword.replace("#", "%23");
+                    }
                     this.queryString = "/search" + this.queryString + "&keyword=" + keyword;
                 }
             }

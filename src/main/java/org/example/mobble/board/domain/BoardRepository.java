@@ -5,13 +5,13 @@ import lombok.RequiredArgsConstructor;
 import org.example.mobble.board.dto.BoardResponse;
 import org.example.mobble.category.domain.Category;
 import org.example.mobble.user.domain.User;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-@Repository
+@Component
 public class BoardRepository {
     private final EntityManager em;
 
