@@ -27,6 +27,8 @@ public class Board {
     // 테이블 설정 후 추가
 
     private String title;
+
+    @Lob
     private String content;
 
     // 글 쓴 사람
@@ -50,6 +52,9 @@ public class Board {
     @UpdateTimestamp
     private Timestamp updatedAt;
 
+
+    private String thumbnailUrl;
+
     //연관 신고는 게시글이 삭제되면 자동 삭제 처리
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "board")
     private List<Report> reports;
@@ -59,7 +64,7 @@ public class Board {
     private List<Bookmark> bookmarks = new ArrayList<>();
 
     @Builder
-    public Board(Integer id, String title, String content, User user, Category category, Integer views, Timestamp createdAt, Timestamp updatedAt, List<Report> reports, List<Bookmark> bookmarks) {
+    public Board(Integer id, String title, String content, User user, Category category, Integer views, Timestamp createdAt, Timestamp updatedAt, List<Report> reports, List<Bookmark> bookmarks, String thumbnailUrl) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -70,12 +75,19 @@ public class Board {
         this.updatedAt = updatedAt;
         this.reports = reports;
         this.bookmarks = bookmarks != null ? bookmarks : new ArrayList<>();
+        this.thumbnailUrl = thumbnailUrl;
     }
 
-    public void update(BoardRequest.BoardUpdateDTO reqDTO) {
+    public void saveThumbnail(String finalHtml, String thumbnailUrl) {
+        this.content = finalHtml;
+        this.thumbnailUrl = thumbnailUrl;
+    }
+
+    public void update(BoardRequest.BoardUpdateDTO reqDTO, String thumbnailUrl) {
         this.title = reqDTO.getTitle();
         this.content = reqDTO.getContent();
         this.updatedAt = new Timestamp(System.currentTimeMillis());
+        this.thumbnailUrl = thumbnailUrl;
     }
 
     public void viewsCounting() {

@@ -78,7 +78,10 @@ public class BoardRepository {
     }
 
     public List<BoardResponse.DTO> findByTitleAndContent(String keyword, String orderBy, Integer firstIndex, Integer maxResult) {
-        String jpql = getBaseJpql(" where (lower(b.title) like :q or lower(b.content) like :q) ", orderBy);
+        String where = " where ( lower(b.title) like :q " +
+                " or lower(cast(b.content as string)) like :q ) ";
+
+        String jpql = getBaseJpql(where, orderBy);
 
         return mapping(getObjArrListWithParam(keyword, jpql, firstIndex, maxResult));
     }

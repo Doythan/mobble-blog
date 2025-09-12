@@ -25,7 +25,9 @@ public class HtmlUtil {
                 // 허용 속성 (이미지에 한정)
                 .addAttributes("img", "src", "width", "height", "alt")
                 // 프로토콜 제한: data 만 명시 (상대경로는 프로토콜이 없으므로 통과)
-                .addProtocols("img", "src", "data");
+                .addProtocols("img", "src", "data")
+                .addAttributes("img", "style") // width/float 등 인라인 스타일 보존
+                .addAttributes("p", "style");   // text-align 보존
 
         /**
          * HTML을 Jsoup로 살균하고, 추가적으로 외부 리소스 가능성 정리:

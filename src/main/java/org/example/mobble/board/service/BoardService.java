@@ -7,6 +7,7 @@ import org.example.mobble._util.error.ex.Exception400;
 import org.example.mobble._util.error.ex.Exception403;
 import org.example.mobble._util.error.ex.Exception404;
 import org.example.mobble._util.util.HtmlUtil;
+import org.example.mobble._util.util.ImgUtil;
 import org.example.mobble.board.domain.Board;
 import org.example.mobble.board.domain.BoardRepository;
 import org.example.mobble.board.domain.SearchOrderCase;
@@ -21,6 +22,8 @@ import org.example.mobble.user.domain.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -62,14 +65,34 @@ public class BoardService {
         }
 
         String safeHtml = HtmlUtil.HtmlSanitizer.sanitize(reqDTO.getContent());
+
         Board board =
                 Board.builder()
                         .title(reqDTO.getTitle())
-                        .content(safeHtml)
+                        .content("")
                         .user(user)
                         .category(category)
                         .build();
-        return boardRepository.save(board);
+
+        board = boardRepository.save(board);
+
+        ImgUtil.Result r;
+        try {
+            r = ImgUtil.replaceDataUrlsWithSavedFiles(
+                    safeHtml,
+                    user.getUsername(),
+                    /* 저장 전엔 ID가 없을 수 있으니, 임시 0 or 저장 후에 재치환 전략 중 택1 */
+                    board.getId(),
+                    LocalDateTime.now()
+            );
+        } catch (IOException e) {
+            throw new RuntimeException("이미지 저장 실패", e);
+        }
+
+        // boardId를 얻은 후 사진 새로 저장, html 및 이미지 갱신
+        board.saveThumbnail(r.html(), r.firstImageUrl());
+
+        return board;
     }
 
     @Transactional
@@ -81,7 +104,29 @@ public class BoardService {
         Board boardPS = findById(boardId);
         // 권한 체크 (403)
         checkPermissions(boardPS, user);
-        boardPS.update(reqDTO);
+
+        // 0) 기존 이미지 삭제
+        ImgUtil.deleteAllImagesForPost(user.getUsername(), boardId);
+
+
+        // HTML 정화
+        String safeHtml = HtmlUtil.HtmlSanitizer.sanitize(reqDTO.getContent());
+
+        // 2) dataURL → 파일 저장 & src 교체 (이번에는 boardId가 있으니 네이밍 완벽)
+        ImgUtil.Result r;
+        try {
+            r = ImgUtil.replaceDataUrlsWithSavedFiles(
+                    safeHtml,
+                    user.getUsername(),
+                    boardId,
+                    LocalDateTime.now()
+            );
+        } catch (IOException e) {
+            throw new RuntimeException("이미지 저장 실패", e);
+        }
+
+        reqDTO.setContent(r.firstImageUrl());
+        boardPS.update(reqDTO, r.firstImageUrl());
 
         return boardPS;
     }
