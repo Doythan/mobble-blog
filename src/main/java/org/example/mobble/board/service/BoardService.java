@@ -34,9 +34,9 @@ public class BoardService {
     private final ReportRepository reportRepository;
 
     @Transactional(readOnly = true)
-    public List<BoardResponse.DTO> getList(int firstIndex, int size, SearchOrderCase order) {
+    public List<BoardResponse.DTO> getList(User user, int firstIndex, int size, SearchOrderCase order) {
         String orderBy = orderByToString(order);
-        return boardRepository.findAll(orderBy, firstIndex, size);
+        return boardRepository.findAll(user.getId(), orderBy, firstIndex, size);
     }
 
     @Transactional(readOnly = true)
@@ -169,7 +169,7 @@ public class BoardService {
     }
 
     @Transactional(readOnly = true)
-    public List<BoardResponse.DTO> findBy(String keyword, SearchOrderCase order, Integer firstIndex, Integer size) {
+    public List<BoardResponse.DTO> findBy(User user, String keyword, SearchOrderCase order, Integer firstIndex, Integer size) {
         String orderBy = orderByToString(order);
         String q = keyword == null ? "" : keyword.trim();
         if (q.isEmpty()) throw new Exception400(ErrorEnum.BAD_REQUEST_NO_EXISTS_KEYWORD);
@@ -178,9 +178,9 @@ public class BoardService {
             throw new Exception400(ErrorEnum.BAD_REQUEST_ONLY_PREFIX);
         q = (searchKey == '#' || searchKey == '@') ? q.substring(1) : q;
         return switch (searchKey) {
-            case '#' -> boardRepository.findByCategory(q, orderBy, firstIndex, size);
-            case '@' -> boardRepository.findByUsername(q, orderBy, firstIndex, size);
-            default -> boardRepository.findByTitleAndContent(q, orderBy, firstIndex, size);
+            case '#' -> boardRepository.findByCategory(user.getId(), q, orderBy, firstIndex, size);
+            case '@' -> boardRepository.findByUsername(user.getId(), q, orderBy, firstIndex, size);
+            default -> boardRepository.findByTitleAndContent(user.getId(), q, orderBy, firstIndex, size);
         };
     }
 
@@ -208,8 +208,8 @@ public class BoardService {
     }
 
     @Transactional(readOnly = true)
-    public List<BoardResponse.DTO> getPopularList(int size) {
-        return getList(0, size, SearchOrderCase.VIEW_COUNT_DESC);
+    public List<BoardResponse.DTO> getPopularList(User user, int size) {
+        return getList(user, 0, size, SearchOrderCase.VIEW_COUNT_DESC);
     }
 
 

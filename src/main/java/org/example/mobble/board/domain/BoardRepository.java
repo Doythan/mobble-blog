@@ -60,41 +60,33 @@ public class BoardRepository {
     /*                             search board list part
      * ----------------------------------------------------------------------------------
      */
-    public List<BoardResponse.DTO> findAll(String orderBy, Integer firstIndex, Integer maxResult) {
+    public List<BoardResponse.DTO> findAll(Integer userId, String orderBy, Integer firstIndex, Integer maxResult) {
         String jpql = getBaseJpql(null, orderBy);
         return mapping(
                 em.createQuery(jpql, Object[].class)
+                        .setParameter("userId", userId)
                         .setFirstResult(firstIndex)
                         .setMaxResults(maxResult)
                         .getResultList());
     }
 
-    public List<BoardResponse.DTO> findAll(String whereClause, String orderBy, Integer firstIndex, Integer maxResult) {
-        String jpql = getBaseJpql(whereClause, orderBy);
-        return mapping(
-                em.createQuery(jpql, Object[].class)
-                        .setFirstResult(firstIndex)
-                        .setMaxResults(maxResult)
-                        .getResultList());
-    }
-
-    public List<BoardResponse.DTO> findByTitleAndContent(String keyword, String orderBy, Integer firstIndex, Integer maxResult) {
+    public List<BoardResponse.DTO> findByTitleAndContent(Integer userId, String keyword, String orderBy, Integer firstIndex, Integer maxResult) {
         String where = " where ( lower(b.title) like :q " +
                 " or lower(cast(b.content as string)) like :q ) ";
 
         String jpql = getBaseJpql(where, orderBy);
 
-        return mapping(getObjArrListWithParam(keyword, jpql, firstIndex, maxResult));
+        return mapping(getObjArrListWithParam(userId, keyword, jpql, firstIndex, maxResult));
     }
 
-    public List<BoardResponse.DTO> findByCategory(String keyword, String orderBy, Integer firstIndex, Integer maxResult) {
+    public List<BoardResponse.DTO> findByCategory(Integer userId, String keyword, String orderBy, Integer firstIndex, Integer maxResult) {
         String jpql = getBaseJpql(" where lower(c.category) like :q ", orderBy);
-        return mapping(getObjArrListWithParam(keyword, jpql, firstIndex, maxResult));
+        return mapping(getObjArrListWithParam(userId, keyword, jpql, firstIndex, maxResult));
     }
 
-    public List<BoardResponse.DTO> findByUsername(String keyword, String orderBy, Integer firstIndex, Integer maxResult) {
+    public List<BoardResponse.DTO> findByUsername(Integer userId, String keyword, String orderBy, Integer firstIndex, Integer maxResult) {
         String jpql = getBaseJpql(" where lower(u.username) like :q ", orderBy);
-        return mapping(getObjArrListWithParam(keyword, jpql, firstIndex, maxResult));
+        return mapping(getObjArrListWithParam(userId, keyword, jpql, firstIndex, maxResult));
     }
 
     /* ------------------------ private logic part ------------------------ */
@@ -102,9 +94,10 @@ public class BoardRepository {
     private String getBaseJpql(String whereClause, String orderByClause) {
         String where = (whereClause == null || whereClause.isBlank()) ? "" : whereClause;
         return """
-                select b, u, c, count(bm)
+                select b, u, c, count(bm), count(distinct bm2) as myCount
                 from Board b
                 left join Bookmark bm on bm.board.id = b.id
+                left join b.bookmarks bm2 on bm2.user.id = :userId and bm2.board.id = b.id
                 left join Category c on c.id = b.category.id
                 left join User u on u.id = b.user.id
                 """ + where +
@@ -130,21 +123,23 @@ public class BoardRepository {
                     User u = (User) row[1];
                     Category c = (Category) row[2];
                     Long cnt = (Long) row[3];
-
+                    Boolean myBookmark = ((Number) row[4]).intValue() > 0;
                     return BoardResponse.DTO.builder()
                             .board(b)
                             .user(u)
                             .category(c)
                             .bookmarkCount(cnt != null ? cnt.intValue() : 0)
+                            .isBookmark(myBookmark)
                             .image(null)
                             .build();
                 })
                 .toList();
     }
 
-    private List<Object[]> getObjArrListWithParam(String keyword, String jpql, Integer firstResult, Integer maxResult) {
+    private List<Object[]> getObjArrListWithParam(Integer userId, String keyword, String jpql, Integer firstResult, Integer maxResult) {
         return em.createQuery(jpql, Object[].class)
                 .setParameter("q", "%" + keyword + "%")
+                .setParameter("userId", userId)
                 .setFirstResult(firstResult)
                 .setMaxResults(maxResult)
                 .getResultList();

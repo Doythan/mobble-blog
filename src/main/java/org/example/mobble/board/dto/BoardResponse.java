@@ -62,19 +62,21 @@ public class BoardResponse {
         String content;
         Integer views;
         Integer bookmarkCount;
+        Boolean isBookmark;
         String category;
         String createAt;
         String updateAt;
         String image;
 
         @Builder
-        public DTO(Board board, User user, Category category, Integer bookmarkCount, String image) {
+        public DTO(Board board, User user, Category category, Integer bookmarkCount, String image, Boolean isBookmark) {
             this.id = board.getId();
             this.username = user.getUsername();
             this.title = board.getTitle();
             this.content = board.getContent();
             this.views = board.getViews();
             this.bookmarkCount = bookmarkCount;
+            this.isBookmark = isBookmark;
             this.category = (category != null) ? category.getCategory() : null;
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             Timestamp updatedAt = board.getUpdatedAt();
