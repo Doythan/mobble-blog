@@ -24,66 +24,63 @@
 
 <!-- Main -->
 <main class="feed-container no-right">
-    <section class="feed-left">
-        <h2>내 피드</h2>
-        <div class="feed-sorting">
-            <a href="#">최신순</a> | <a href="#">조회수순</a> | <a href="#">북마크순</a>
-        </div>
+    {{#model}}
+        <section class="feed-left">
+            <h2>내 피드</h2>
+            <div class="feed-sorting">
+                <a href="/boards/me?order=CREATED_AT_DESC&page=1">최신순</a> | <a
+                    href="/boards/me?order=VIEW_COUNT_DESC&page=1">조회수순</a>
+                | <a
+                    href="/boards/me?order=BOOKMARK_COUNT_DESC&page=1">북마크순</a>
+            </div>
+            {{#boardList}}
+                <article class="post-card">
+                    <a class="post-link" href="/boards/{{id}}">
+                        <div class="thumb">
+                            {{#image}}<img src="{{image}}" alt="thumbnail"/>{{/image}}
+                        </div>
+                        <div class="post-body">
+                            <div class="tags">{{category}}</div>
+                            <h3 class="title">{{title}}</h3>
+                            <div class="tags">{{username}}</div>
+                            <p class="excerpt">{{content}}</p>
+                            <div class="meta">
+                                <time datetime="{{createAt}}">{{createAt}}</time>
+                                <span>· {{views}}</span>
+                                <span>· {{bookmarkCount}}</span>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+            {{/boardList}}
+            <!--            <article class="post-card">-->
+            <!--                <a class="post-link" href="/boards/1">-->
+            <!--                    <div class="thumb"></div>-->
+            <!--                    <div class="post-body">-->
+            <!--                        <div class="tags">FREE</div>-->
+            <!--                        <h3 class="title">제목1</h3>-->
+            <!--                        <p class="excerpt">Lorem ipsum dolor sit amet consectetur…</p>-->
+            <!--                        <div class="meta">-->
+            <!--                            <time datetime="2025-08-28">2025. 08. 28</time>-->
+            <!--                            <span>· 3.2k</span>-->
+            <!--                            <span>· 108</span>-->
+            <!--                        </div>-->
+            <!--                    </div>-->
+            <!--                </a>-->
+            <!--            </article>-->
 
-        <article class="post-card">
-            <a class="post-link" href="/boards/1">
-                <div class="thumb"></div>
-                <div class="post-body">
-                    <div class="tags">FREE</div>
-                    <h3 class="title">제목1</h3>
-                    <p class="excerpt">Lorem ipsum dolor sit amet consectetur…</p>
-                    <div class="meta">
-                        <time datetime="2025-08-28">2025. 08. 28</time>
-                        <span>· 3.2k</span>
-                        <span>· 108</span>
-                    </div>
-                </div>
-            </a>
-        </article>
-
-        <article class="post-card">
-            <a class="post-link" href="/boards/1">
-                <div class="thumb"></div>
-                <div class="post-body">
-                    <div class="tags">FREE</div>
-                    <h3 class="title">제목1</h3>
-                    <p class="excerpt">Lorem ipsum dolor sit amet consectetur…</p>
-                    <div class="meta">
-                        <time datetime="2025-08-28">2025. 08. 28</time>
-                        <span>· 3.2k</span>
-                        <span>· 108</span>
-                    </div>
-                </div>
-            </a>
-        </article>
-
-        <article class="post-card">
-            <a class="post-link" href="/boards/1">
-                <div class="thumb"></div>
-                <div class="post-body">
-                    <div class="tags">FREE</div>
-                    <h3 class="title">제목1</h3>
-                    <p class="excerpt">Lorem ipsum dolor sit amet consectetur…</p>
-                    <div class="meta">
-                        <time datetime="2025-08-28">2025. 08. 28</time>
-                        <span>· 3.2k</span>
-                        <span>· 108</span>
-                    </div>
-                </div>
-            </a>
-        </article>
-
-        <nav class="pagination" aria-label="페이지네이션">
-            <a href="#">prev</a>
-            <a href="#">next</a>
-        </nav>
-    </section>
-
+            <nav class="pagination" aria-label="페이지네이션">
+                {{#pageDTO}}
+                    {{^isFirst}}
+                        <a href="/boards/me{{queryString}}&page={{prev}}">&lt;prev</a>
+                    {{/isFirst}}
+                    {{^isLast}}
+                        <a href="/boards/me{{queryString}}&page={{next}}">next&gt;</a>
+                    {{/isLast}}
+                {{/pageDTO}}
+            </nav>
+        </section>
+    {{/model}}
     <!-- ✅ 인기글 aside 완전 삭제 -->
 </main>
 

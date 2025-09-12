@@ -24,7 +24,7 @@ public class BoardRepository {
         return Optional.ofNullable(em.find(Board.class, boardId));
     }
 
-    public Optional<BoardResponse.DetailDTO> findByIdDetail(Integer boardId,User user) {
+    public Optional<BoardResponse.DetailDTO> findByIdDetail(Integer userId, Integer boardId) {
         List<Object[]> rows = em.createQuery("""
                         select b, u, c,
                                count(distinct bm),
@@ -38,7 +38,7 @@ public class BoardRepository {
                         group by b, u, c
                         """, Object[].class)
                 .setParameter("boardId", boardId)
-                .setParameter("userId", user.getId())
+                .setParameter("userId", userId)
                 .getResultList();
 
         return rows.stream().findFirst().map(result ->

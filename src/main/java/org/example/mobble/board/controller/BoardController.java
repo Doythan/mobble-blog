@@ -46,7 +46,7 @@ public class BoardController {
         User user = (User) session.getAttribute("user");
         System.out.println("[LOGIN] sessionId=" + session.getId() + ", user=" + user.getUsername());
         List<BoardResponse.DTO> boardDTOList = boardService.getList(getFirstIndex(page), PER_PAGE + 1, safeOrder(order));
-        BoardResponse.mainListDTO resDTO = getMainList(boardDTOList, page, order, null);
+        BoardResponse.mainListDTO resDTO = getMainList(boardDTOList, page, order, null, null);
         request.setAttribute("model", resDTO);
         return "board/list-page";
     }
@@ -54,7 +54,7 @@ public class BoardController {
     @GetMapping("/{id}")
     public String getBoard(HttpServletRequest request, @PathVariable(name = "id") Integer boardId) {
         User user = (User) session.getAttribute("user");
-        BoardResponse.DetailDTO model = boardService.getBoardDetail(boardId,user);
+        BoardResponse.DetailDTO model = boardService.getBoardDetail(boardId, user);
         request.setAttribute("model", model);
         return "board/detail-page";
     }
@@ -95,7 +95,7 @@ public class BoardController {
     public String getMyFeedList(HttpServletRequest request, BoardRequest.MyFeedDTO reqDTO) {
         User user = (User) session.getAttribute("user");
         List<BoardResponse.DTO> boardDTOList = boardService.getMyFeedList(getFirstIndex(reqDTO.getPage()), PER_PAGE + 1, safeOrder(reqDTO.getOrder()), user);
-        BoardResponse.mainListDTO resDTO = getMainList(boardDTOList, reqDTO.getPage(), reqDTO.getOrder(), user);
+        BoardResponse.mainListDTO resDTO = getMainList(boardDTOList, reqDTO.getPage(), reqDTO.getOrder(), null, user);
         request.setAttribute("model", resDTO);
         return "board/myfeed-page";
     }
@@ -107,7 +107,7 @@ public class BoardController {
     @GetMapping("/search")
     public String findList(HttpServletRequest request, @RequestParam String keyword, @RequestParam(defaultValue = "CREATED_AT_DESC") String order, @RequestParam(defaultValue = "1") Integer page) {
         List<BoardResponse.DTO> boardDTOList = boardService.findBy(keyword, safeOrder(order), getFirstIndex(page), PER_PAGE + 1);
-        BoardResponse.mainListDTO resDTO = getMainList(boardDTOList, page, order, null);
+        BoardResponse.mainListDTO resDTO = getMainList(boardDTOList, page, order, keyword, null);
         request.setAttribute("model", resDTO);
         return "board/list-page";
     }
@@ -139,7 +139,7 @@ public class BoardController {
      * request에 page, nextPage, prevPage도 함께 심습니다.
      */
 
-    private BoardResponse.mainListDTO getMainList(List<BoardResponse.DTO> boardDTOList, Integer page, String order, User user) {
+    private BoardResponse.mainListDTO getMainList(List<BoardResponse.DTO> boardDTOList, Integer page, String order, String keyword, User user) {
         int getSize = 3;
         List<BoardResponse.DTO> popularList = boardService.getPopularList(getSize);
         List<String> categoryList;
@@ -148,7 +148,7 @@ public class BoardController {
         } else {
             categoryList = categoryService.getMyFeedPopularList(3, user);
         }
-        BoardResponse.mainListDTO.PageDTO pageDTO = getPageDTO(boardDTOList, page, order);
+        BoardResponse.mainListDTO.PageDTO pageDTO = getPageDTO(boardDTOList, page, order, keyword);
         boardDTOList = !pageDTO.getIsLast() ? boardDTOList.subList(0, PER_PAGE) : boardDTOList;
         return BoardResponse.mainListDTO
                 .builder()
@@ -159,13 +159,14 @@ public class BoardController {
                 .build();
     }
 
-    private BoardResponse.mainListDTO.PageDTO getPageDTO(List<BoardResponse.DTO> boardDTOList, Integer page, String order) {
+    private BoardResponse.mainListDTO.PageDTO getPageDTO(List<BoardResponse.DTO> boardDTOList, Integer page, String order, String keyword) {
         boolean isFirst = page <= 1;
         boolean isLast = boardDTOList.size() <= PER_PAGE;
         return BoardResponse.mainListDTO.PageDTO.builder()
                 .isFirst(isFirst)
                 .isLast(isLast)
                 .page(page)
+                .keyword(keyword)
                 .order(safeOrder(order).name())
                 .build();
     }

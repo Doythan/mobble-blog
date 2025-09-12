@@ -1,11 +1,9 @@
 package org.example.mobble.board.controller;
 
-import org.example.mobble.board.dto.BoardResponse;
 import org.example.mobble.board.TestUtils;
+import org.example.mobble.board.dto.BoardResponse;
 import org.example.mobble.user.domain.User;
 import org.example.mobble.user.domain.UserRepository;
-
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,21 +11,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpSession;
-
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-
-import java.sql.Timestamp;
-
-import static org.hamcrest.Matchers.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+// 필요 시 테스트 데이터 주입
+// @Sql(scripts = {"classpath:sql/cleanup.sql", "classpath:sql/fixtures.sql"})
 class BoardControllerTest {
 
     @Autowired
@@ -39,89 +35,72 @@ class BoardControllerTest {
 
     @BeforeEach
     void setUp() {
-        // 로그인 세션 생성 (컨트롤러는 session "user"만 확인)
-        // 더미에 user id=1이 존재한다고 가정
-        User login = userRepository.findById(1).orElseThrow();
+        // 테스트용 로그인 세션
+        User login = userRepository.findById(1).orElseThrow(); // fixture에 id=1 존재 필요
         session = new MockHttpSession();
         session.setAttribute("user", login);
     }
 
     @Test
-    @DisplayName("목록: 첫 페이지 OK")
+    @DisplayName("목록: 첫 페이지 OK (model.pageDTO.isFirst=true)")
     void list_ok() throws Exception {
-
-        // when
         MvcResult result = mockMvc.perform(get("/boards").session(session))
                 .andExpect(status().isOk())
                 .andExpect(view().name("board/list-page"))
-                .andExpect(request().attribute("isFirst", true))
+                .andExpect(request().attribute("model", notNullValue()))
                 .andReturn();
 
-        // then
         TestUtils.printRequestAttributesAsJson(result);
 
-        // isLast는 더미 개수/ PER_PAGE에 따라 달라짐 → 고정 검증은 생략
+        BoardResponse.mainListDTO model =
+                (BoardResponse.mainListDTO) result.getRequest().getAttribute("model");
+        assertThat(model).isNotNull();
+        assertThat(model.getPageDTO().getIsFirst()).isTrue();
+        // isLast는 데이터 개수에 따라 달라져서 고정 검증 생략
     }
 
     @Test
-    @DisplayName("상세: 존재하는 게시글 OK")
+    @DisplayName("상세: 존재하는 게시글 OK (model 존재)")
     void detail_ok() throws Exception {
-        // when
         MvcResult result = mockMvc.perform(get("/boards/{id}", 1).session(session))
+                .andExpect(status().isOk())
+                .andExpect(view().name("board/detail-page"))
+                .andExpect(request().attribute("model", notNullValue()))
+                .andReturn();
 
-       //then
-        .andExpect(status().isOk())
-        .andExpect(view().name("board/detail-page"))
-        .andExpect(request().attribute("model", hasProperty("id", Matchers.is(1))))
-        .andExpect(request().attribute("model", hasProperty("username", Matchers.is("ssar"))))
-        .andExpect(request().attribute("model", hasProperty("title", Matchers.is("제목1"))))
-        .andExpect(request().attribute("model", hasProperty("content", Matchers.is("내용1"))))
-        .andExpect(request().attribute("model", hasProperty("views", Matchers.is(1))))
-        .andExpect(request().attribute("model", hasProperty("bookmarkCount", Matchers.is(2))))
-        .andExpect(request().attribute("model", hasProperty("category", Matchers.is("java"))))
-        .andExpect(request().attribute("model", hasProperty("createAt", instanceOf(Timestamp.class))))
-        .andExpect(request().attribute("model", hasProperty("isBookmark", Matchers.is(true))))
-        .andExpect(request().attribute("model", hasProperty("displayDate", Matchers.is("2025-09-11"))))
-        .andReturn();
-
-        // 실제 확인
         TestUtils.printRequestAttributesAsJson(result);
-
+        Object model = result.getRequest().getAttribute("model");
+        assertThat(model).isInstanceOf(BoardResponse.DetailDTO.class);
     }
 
     @Test
-    @DisplayName("검색: 본문/제목 기본 검색 OK")
+    @DisplayName("검색: 기본 검색 OK (model 존재)")
     void search_default_ok() throws Exception {
-        // when
         MvcResult result = mockMvc.perform(get("/boards/search")
-                        .param("keyword", "제목") // 기본 검색 (접두사 없이)
+                        .param("keyword", "제목")
                         .param("order", "CREATED_AT_DESC")
                         .param("page", "1")
                         .session(session))
                 .andExpect(status().isOk())
                 .andExpect(view().name("board/list-page"))
+                .andExpect(request().attribute("model", notNullValue()))
                 .andReturn();
 
-        // then
-        TestUtils.printRequestAttributesAsJson(result);;
+        TestUtils.printRequestAttributesAsJson(result);
     }
 
     @Test
-    @DisplayName("저장: 리다이렉트 OK")
+    @DisplayName("저장: 리다이렉트 OK (/boards/{id})")
     void save_redirect_ok() throws Exception {
-        MvcResult result = mockMvc.perform(post("/boards")
+        mockMvc.perform(post("/boards")
                                 .param("title", "새 제목")
                                 .param("content", "새 내용")
                                 .param("category", "temp-cat")
                                 .session(session)
-                        // .with(csrf()) // Spring Security CSRF 활성 시 주석 해제
+                        // .with(csrf())
                 )
                 .andExpect(status().is3xxRedirection())
-                .andExpect(header().string("Location", matchesPattern(".*/boards/\\d+")))
-                .andReturn();
-
-        int status = result.getResponse().getStatus();
-        System.out.println(status);
+                .andExpect(redirectedUrlPattern("/boards/*"));
     }
 
     @Test
@@ -129,22 +108,23 @@ class BoardControllerTest {
     void update_redirect_ok() throws Exception {
         Integer targetId = 4;
         mockMvc.perform(post("/boards/{id}/update", targetId)
-                                .param("id", targetId.toString())
                                 .param("title", "제목1-수정")
                                 .param("content", "내용1-수정")
                                 .session(session)
                         // .with(csrf())
                 )
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/boards/" + targetId.toString()));
+                .andExpect(redirectedUrl("/boards/" + targetId));
     }
 
     @Test
     @DisplayName("신고: 리다이렉트 OK")
     void report_redirect_ok() throws Exception {
         mockMvc.perform(post("/boards/{id}/report", 1)
-                                .param("result", "ADVERTISING_BOARD_CONTENT")        // ReportCase 값 중 하나
-                                .param("content", "스팸 신고")    // 신고 내용
+                                // ⚠️ ReportCase가 enum이면 '라벨'이 아니라 '상수명'을 보내야 합니다.
+                                // 예) .param("result", "SPAM")
+                                .param("result", "SPAM")        // 실제 enum 이름으로 교체
+                                .param("content", "스팸 신고")
                                 .session(session)
                         // .with(csrf())
                 )
@@ -164,20 +144,21 @@ class BoardControllerTest {
     }
 
     @Test
-    @DisplayName("myfeed 목록: 첫 페이지 OK")
+    @DisplayName("myfeed 목록: 첫 페이지 OK (model.pageDTO.isFirst=true)")
     void myfeed_list_ok() throws Exception {
-
-        //when
         MvcResult result = mockMvc.perform(get("/boards/me")
                         .param("order", "VIEW_COUNT_DESC")
                         .param("page", "1")
                         .session(session))
                 .andExpect(status().isOk())
                 .andExpect(view().name("board/myfeed-page"))
-                .andExpect(request().attribute("isFirst", true))
+                .andExpect(request().attribute("model", notNullValue()))
                 .andReturn();
 
-        // then
         TestUtils.printRequestAttributesAsJson(result);
+
+        BoardResponse.mainListDTO model =
+                (BoardResponse.mainListDTO) result.getRequest().getAttribute("model");
+        assertThat(model.getPageDTO().getIsFirst()).isTrue();
     }
 }

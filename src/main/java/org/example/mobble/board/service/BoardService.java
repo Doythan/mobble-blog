@@ -41,7 +41,7 @@ public class BoardService {
 
     @Transactional(readOnly = true)
     public BoardResponse.DetailDTO getBoardDetail(Integer boardId, User user) {
-        return boardRepository.findByIdDetail(boardId,user).orElseThrow(
+        return boardRepository.findByIdDetail(boardId, user.getId()).orElseThrow(
                 () -> new Exception404(ErrorEnum.NOT_FOUND_BOARD)
         );
     }
@@ -49,7 +49,7 @@ public class BoardService {
     @Transactional(readOnly = true)
     public BoardResponse.DetailDTO getUpdateBoardDetail(Integer boardId, User user) {
         checkPermissions(findById(boardId), user);
-        return getBoardDetail(boardId,user);
+        return getBoardDetail(boardId, user);
     }
 
     @Transactional
@@ -72,6 +72,7 @@ public class BoardService {
                         .content("")
                         .user(user)
                         .category(category)
+                        .views(0)
                         .build();
 
         board = boardRepository.save(board);
