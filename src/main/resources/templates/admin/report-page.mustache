@@ -75,11 +75,14 @@
 
             <label class="rmg-label" for="rmgReason">신고 사유</label>
             <select id="rmgReason" class="rmg-input">
-                <option value="홍보글">홍보글</option>
-                <option value="스팸/광고">스팸/광고</option>
-                <option value="욕설/혐오 표현">욕설/혐오 표현</option>
-                <option value="부적절한 내용">부적절한 내용</option>
-                <option value="기타">기타</option>
+                <option value="INAPPROPRIATE_AUTHOR_NAME">부적절한 작성자명</option>
+                <option value="INAPPROPRIATE_BOARD_CONTENT">부적절한 글 내용</option>
+                <option value="ADVERTISING_BOARD_CONTENT">광고성 글 내용</option>
+                <option value="COPYRIGHT_VIOLATION">저작권 침해</option>
+                <option value="PERSONAL_INFORMATION">개인정보 노출</option>
+                <option value="ABUSIVE_LANGUAGE">욕설/비방</option>
+                <option value="SPAM">도배/스팸</option>
+                <option value="ETC">기타</option>
             </select>
 
             <!-- 신규: 기타 사유 입력 (선택) -->
@@ -100,9 +103,9 @@
 
             <label class="rmg-label" for="rmgStatus">신고 상태</label>
             <select id="rmgStatus" class="rmg-input">
-                <option value="처리 전">처리 전</option>
-                <option value="처리 중">처리 중</option>
-                <option value="처리 완료">처리 완료</option>
+                <option value="PENDING">처리 전</option>
+                <option value="PROCESSING">처리 중</option>
+                <option value="COMPLETED">처리 완료</option>
             </select>
 
             <div class="rmg-actions">
@@ -125,7 +128,8 @@
         </form>
     </div>
 </div>
-
+<!--json data-->
+<div id="reports-data" data-json='{{{reportsJson}}}'></div>
 {{> layout/footer}}
 
 <script src="/js/footer.js" defer></script>

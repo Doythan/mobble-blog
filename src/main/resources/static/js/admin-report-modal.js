@@ -26,180 +26,90 @@ document.addEventListener("DOMContentLoaded", () => {
   let original = null;
 
   // 예시 데이터
-  let rows = [
-    {
-      id: 1,
-      postId: 5,
-      title: "테스트 글 A",
-      author: "ssar",
-      reporter: "cos",
-      reason: "홍보글",
-      reasonExtra: "",
-      content: "...",
-      status: "처리 전",
-      date: "2025-08-07",
-    },
-    {
-      id: 2,
-      postId: 5,
-      title: "테스트 글 B",
-      author: "ssar",
-      reporter: "cos",
-      reason: "기타",
-      reasonExtra: "추가 설명",
-      content: "...",
-      status: "처리 중",
-      date: "2025-08-07",
-    },
-    {
-      id: 3,
-      postId: 5,
-      title: "테스트 글 C",
-      author: "ssar",
-      reporter: "cos",
-      reason: "부적절한 내용",
-      reasonExtra: "",
-      content: "...",
-      status: "처리 완료",
-      date: "2025-08-07",
-    },
-    {
-      id: 4,
-      postId: 5,
-      title: "테스트 글 A",
-      author: "ssar",
-      reporter: "cos",
-      reason: "홍보글",
-      reasonExtra: "",
-      content: "...",
-      status: "처리 전",
-      date: "2025-08-07",
-    },
-    {
-      id: 5,
-      postId: 5,
-      title: "테스트 글 A",
-      author: "ssar",
-      reporter: "cos",
-      reason: "홍보글",
-      reasonExtra: "",
-      content: "...",
-      status: "처리 전",
-      date: "2025-08-07",
-    },
-    {
-      id: 6,
-      postId: 5,
-      title: "테스트 글 A",
-      author: "ssar",
-      reporter: "cos",
-      reason: "홍보글",
-      reasonExtra: "",
-      content: "...",
-      status: "처리 전",
-      date: "2025-08-07",
-    },
-    {
-      id: 7,
-      postId: 5,
-      title: "테스트 글 A",
-      author: "ssar",
-      reporter: "cos",
-      reason: "홍보글",
-      reasonExtra: "",
-      content: "...",
-      status: "처리 전",
-      date: "2025-08-07",
-    },
-    {
-      id: 8,
-      postId: 5,
-      title: "테스트 글 A",
-      author: "ssar",
-      reporter: "cos",
-      reason: "홍보글",
-      reasonExtra: "",
-      content: "...",
-      status: "처리 전",
-      date: "2025-08-07",
-    },
-    {
-      id: 9,
-      postId: 5,
-      title: "테스트 글 A",
-      author: "ssar",
-      reporter: "cos",
-      reason: "홍보글",
-      reasonExtra: "",
-      content: "...",
-      status: "처리 전",
-      date: "2025-08-07",
-    },
-    {
-      id: 10,
-      postId: 5,
-      title: "테스트 글 A",
-      author: "ssar",
-      reporter: "cos",
-      reason: "홍보글",
-      reasonExtra: "",
-      content: "...",
-      status: "처리 전",
-      date: "2025-08-07",
-    },
-    {
-      id: 11,
-      postId: 5,
-      title: "테스트 글 A",
-      author: "ssar",
-      reporter: "cos",
-      reason: "홍보글",
-      reasonExtra: "",
-      content: "...",
-      status: "처리 전",
-      date: "2025-08-07",
-    },
-    {
-      id: 12,
-      postId: 5,
-      title: "테스트 글 A",
-      author: "ssar",
-      reporter: "cos",
-      reason: "홍보글",
-      reasonExtra: "",
-      content: "...",
-      status: "처리 전",
-      date: "2025-08-07",
-    },
-  ];
+  const dataEl = document.getElementById("reports-data");
+  let rows = JSON.parse(dataEl.dataset.json);
+  console.log(rows);
+
+  function escapeHtml(s) {
+    return String(s)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+  }
+  /* ---------- reason,status 매핑 ---------- */
+  const REASON_MAP = {
+    INAPPROPRIATE_AUTHOR_NAME: "부적절한 작성자명",
+    INAPPROPRIATE_BOARD_CONTENT: "부적절한 글 내용",
+    ADVERTISING_BOARD_CONTENT: "광고성 글 내용",
+    COPYRIGHT_VIOLATION: "저작권 침해",
+    PERSONAL_INFORMATION: "개인정보 노출",
+    ABUSIVE_LANGUAGE: "욕설/비방",
+    SPAM: "도배/스팸",
+    ETC: "기타",
+  };
+
+  const STATUS_LABELS = {
+    PENDING: "처리 전",
+    PROCESSING: "처리 중",
+    COMPLETED: "처리 완료",
+  };
 
   function statusClass(s) {
-    return s === "처리 완료"
+    return s === "COMPLETED"
       ? "rmg-status rmg-status--d"
-      : s === "처리 중"
+      : s === "PROCESSING"
       ? "rmg-status rmg-status--p"
       : "rmg-status rmg-status--w";
   }
 
+  function pickReasonText(r) {
+    const raw = r.result ?? "";
+    return REASON_MAP[raw] ?? raw;
+  }
+
+  function setReasonBack(r, newReasonText) {
+    const code =
+        Object.entries(REASON_MAP).find(
+            ([, label]) => label === newReasonText
+        )?.[0] ?? newReasonText;
+
+    r.result = code;
+    return code;// 핵심 필드 하나만 갱신
+  }
+
   function render() {
     tbody.innerHTML = rows
-      .map(
-        (r) => `
+        .map((r) => {
+          const reasonTxt = pickReasonText(r); // Enum → 한글 변환
+          const statusCode = r.status ?? "PENDING"; // 서버 ENUM 값
+          const statusText = STATUS_LABELS[statusCode] ?? statusCode; // 한글 변환
+
+          return `
         <tr data-id="${r.id}" tabindex="0">
           <td>${r.id}</td>
-          <td>${r.postId}</td>
-          <td title="${esc(r.title)}">${esc(r.title)}</td>
-          <td>${esc(r.author)}</td>
-          <td>${esc(r.reporter)}</td>
-          <td>${esc(r.reason)}</td>
-          <td><span class="${statusClass(r.status)}">${esc(
-          r.status
-        )}</span></td>
-          <td>${esc(r.date)}</td>
+          <td>${r.boardId}</td>
+          <td title="${escapeHtml(r.boardTitle ?? "")}">
+            ${escapeHtml(r.boardTitle ?? "")}
+          </td>
+          <td>${escapeHtml(r.reportedUsername ?? "-")}</td>
+          <td>${escapeHtml(r.reportingUsername ?? "-")}</td>
+          <td title="${escapeHtml(reasonTxt)}">
+            ${escapeHtml(reasonTxt || "-")}
+          </td>
+          <td>
+            <span class="${statusClass(statusCode)}">
+              ${escapeHtml(statusText)}
+            </span>
+          </td>
+          <td>
+            ${r.createdAt ? new Date(r.createdAt).toLocaleDateString() : "-"}
+          </td>
         </tr>
-      `
-      )
-      .join("");
+      `;
+        })
+        .join("");
   }
   render();
 
@@ -221,18 +131,23 @@ document.addEventListener("DOMContentLoaded", () => {
     const row = rows.find((r) => r.id === id);
     if (!row) return;
     currentId = id;
+    console.log(row.boardTitle);
+    console.log(row.result);
 
     // 값 바인딩
-    titleEl.value = row.title || "";
-    reportedAtEl.value = row.date || "";
-    authorEl.value = row.author || "";
-    reporterEl.value = row.reporter || "";
-    ensureOption(reasonEl, row.reason);
-    reasonEl.value = row.reason || "기타";
-    reasonExtraEl.value = row.reasonExtra || "";
+    titleEl.value = row.boardTitle || "";
+    reportedAtEl.value = row.createdAt
+        ? new Date(row.createdAt).toISOString().split("T")[0]
+        : "";
+    authorEl.value = row.reportedUsername || "";
+    reporterEl.value = row.reportingUsername || "";
+
+    ensureOption(reasonEl, row.result, "reason");
+    reasonEl.value = row.result || "ETC";   // <-- 영문 ENUM 넣기
+    reasonExtraEl.value = row.resultEtc || "";
     contentEl.value = row.content || "";
-    ensureOption(statusEl, row.status);
-    statusEl.value = row.status || "처리 전";
+    ensureOption(statusEl, row.status, "status")
+    statusEl.value = row.status|| "처리 전";
 
     // ===== 읽기전용 스타일 설정 (disabled 없이) =====
     [
@@ -253,7 +168,7 @@ document.addEventListener("DOMContentLoaded", () => {
     reasonEl.classList.add("rmg-readonly");
 
     // 기타 사유 강조/비활성 색상
-    if (reasonEl.value === "기타") {
+    if (reasonEl.value === "ETC") {
       reasonExtraEl.classList.remove("rmg-disabled");
     } else {
       reasonExtraEl.classList.add("rmg-disabled");
@@ -287,42 +202,65 @@ document.addEventListener("DOMContentLoaded", () => {
       hide(modal);
   });
 
-  // 적용(상태만 저장)
-  form.addEventListener("submit", (e) => {
+// 적용(상태만 저장)
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
     if (applyBtn.disabled || currentId == null) return;
+
     const idx = rows.findIndex((r) => r.id === currentId);
-    if (idx >= 0) {
-      rows[idx].status = statusEl.value;
+    if (idx < 0) return;
+
+    const newStatus = statusEl.value;
+
+    try {
+      // ✅ REST API 호출 (예: /admin/reports/{id}/status)
+      const res = await fetch(`/admin/reports/${currentId}/update`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
+
+      if (!res.ok) {
+        throw new Error("서버 상태 업데이트 실패");
+      }
+      const updated = await res.json();
+      console.log("updated : "+updated)
+      // 성공 시 프론트 데이터 갱신
+      rows[idx].status = newStatus;
       render();
+      hide(modal);
+    } catch (err) {
+      alert("상태 저장 중 오류: " + err.message);
     }
-    hide(modal);
   });
 
-  /* helpers */
-  function ensureOption(select, value) {
+  //enum 한글 변경 로직
+  function ensureOption(select, value, type = "reason") {
     if (!value) return;
-    const ok = Array.from(select.options).some((o) => o.value === value);
-    if (!ok) {
+
+    const map = type === "status" ? STATUS_LABELS : REASON_MAP;
+    const label = map[value] ?? value;
+
+    // 같은 value가 없으면 새로 추가
+    const option = Array.from(select.options).find((o) => o.value === value);
+    if (!option) {
       const o = document.createElement("option");
-      o.value = value;
-      o.textContent = value;
+      o.value = value;      // ENUM 그대로
+      o.textContent = label; // 화면에 보일 한글
       select.appendChild(o);
+    } else {
+      // 이미 있으면 label을 최신 한글로 보장
+      option.textContent = label;
     }
   }
+
   function show(m) {
     m.classList.remove("is-hidden");
   }
   function hide(m) {
     m.classList.add("is-hidden");
-  }
-  function esc(s) {
-    return String(s)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#39;");
   }
 
   function focusTrap(modal) {

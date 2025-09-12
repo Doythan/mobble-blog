@@ -19,8 +19,11 @@ public class AdminResponse {
         private ReportStatus status; //신고 처리 상태
         private String reportingUsername; // 신고자
         private String reportedUsername; // 게시글 작성자
+        private Integer boardId;
         private String boardTitle; //게시물 제목
         private Timestamp createdAt; //생성일자
+        private String content;
+        private String  resultEtc;
 
 
         public ReportDTO(Board board, Report report) {
@@ -29,8 +32,11 @@ public class AdminResponse {
             this.status = report.getStatus();
             this.reportingUsername = report.getUser().getUsername();
             this.reportedUsername = board.getUser().getUsername();
+            this.boardId = board.getId();
             this.boardTitle = board.getTitle();
              this.createdAt = report.getCreatedAt();
+             this.content = report.getContent();
+             this.resultEtc = report.getResultEtc();
         }
     }
 

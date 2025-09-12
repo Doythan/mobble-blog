@@ -1,5 +1,7 @@
 package org.example.mobble.admin.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.mobble._util.error.ex.Exception401;
@@ -30,17 +32,19 @@ public class AdminController {
 
     //관리자 전체 신고 리스트
     @GetMapping("/admin/reports")
-    public String getAdminReportList(Model model) {
+    public String getAdminReportList(Model model) throws JsonProcessingException {
         List<AdminResponse.ReportDTO> resDTO = adminService.getList();
-        model.addAttribute("model", resDTO);
+        model.addAttribute("reportsJson", new ObjectMapper().writeValueAsString(resDTO));
         return "admin/report-page";
     }
 
     //관리자 상태 변경
+    @ResponseBody
     @PostMapping("/admin/reports/{id}/update")
-    public String statusUpdate(@PathVariable(name = "id") Integer reportId, AdminRequest.ReportUpateDTO reqDTO) {
+    public ResponseEntity<?> statusUpdate(@PathVariable(name = "id") Integer reportId, @RequestBody AdminRequest.ReportUpateDTO reqDTO) {
+
         ReportStatus status = adminService.updateStatus(reportId,reqDTO);
-        return "admin/report-page";
+        return Resp.ok(status);
     }
 
     // 관리자 신고 상세보기 (모달)
