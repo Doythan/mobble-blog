@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+
 @RequiredArgsConstructor
 @Repository
 public class BookmarkRepository {
@@ -43,9 +44,46 @@ public class BookmarkRepository {
         return bookmark;
     }
 
-    public List<Bookmark> bookmarkList(Integer userId) {
-        return em.createQuery("select bm from Bookmark bm join fetch bm.board b join fetch b.user where bm.user.id = :userId", Bookmark.class)
+    /*----------------------------------------------------*/
+    public List<Bookmark> bookmarkListOrderByCreatedAt(Integer userId,int page,int size) {
+        return em.createQuery("select bm from Bookmark bm join fetch bm.board b join fetch b.user where bm.user.id = :userId order by b.createdAt desc ,bm.board.id DESC ", Bookmark.class)
                 .setParameter("userId", userId)
+                .setFirstResult(page * size)   // OFFSET
+                .setMaxResults(size)           // LIMIT
                 .getResultList();
+    }
+
+    public List<Bookmark> bookmarkListOrderByViews(Integer userId,int page,int size) {
+        return em.createQuery("select bm from Bookmark bm join fetch bm.board b join fetch b.user where bm.user.id = :userId order by b.views DESC, bm.board.id ",Bookmark.class)
+                .setParameter("userId",userId)
+                .setFirstResult(page * size)   // OFFSET
+                .setMaxResults(size)           // LIMIT
+                .getResultList();
+    }
+
+    public List<Bookmark> bookmarkListOrderByBookmarkCount(Integer userId,int page,int size) {
+        String jpql = """
+        select bm
+        from Bookmark bm
+        join fetch bm.board b
+        join fetch b.user
+        where bm.user.id = :userId
+        order by
+          (select count(bm2) from Bookmark bm2 where bm2.board = b) desc,
+          b.id desc,
+          bm.id desc
+        """;
+
+        return em.createQuery(jpql, Bookmark.class)
+                .setParameter("userId", userId)
+                .setFirstResult(page * size)   // OFFSET
+                .setMaxResults(size)           // LIMIT
+                .getResultList();
+    }
+
+    public Long totalCount(Integer userId) {
+        return (Long) em.createQuery("select count(b) from Bookmark b where b.user.id = :userId")
+                .setParameter("userId", userId)
+                .getSingleResult();
     }
 }

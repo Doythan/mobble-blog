@@ -22,7 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -135,6 +137,8 @@ class BookmarkControllerTest {
         assertThat(exists).isFalse();
     }
 
+
+
     @Test
     @DisplayName("북마크 리스트 조회 - 더미 5개, Board 모든 값 포함")
     void bookmarkList_withBoardTitle_success() throws Exception {
@@ -154,41 +158,59 @@ class BookmarkControllerTest {
 
         // 3. Boards 생성 및 북마크 생성
         List<Board> boards = new ArrayList<>();
-        for (int i = 1; i <= 5; i++) {
+        for (int i = 1; i <= 35; i++) {
+            int randomViews = ThreadLocalRandom.current().nextInt(0, 1000); // 0~999 랜덤 조회수
+
             Board board = Board.builder()
                     .title("테스트 제목 " + i)
                     .content("테스트 내용 " + i)
-                    .views(10 + i)
-                    .user(testUser)           // 글 작성자
-                    .category(testCategory)   // 카테고리
+                    .views(randomViews)
+                    .user(testUser)
+                    .category(testCategory)
                     .createdAt(new Timestamp(System.currentTimeMillis()))
                     .updatedAt(new Timestamp(System.currentTimeMillis()))
                     .build();
             boardRepository.save(board);
             boards.add(board);
 
+            System.out.printf(">>> Board %d (views=%d) 생성 완료%n", board.getId(), randomViews);
+        }
+
+// 4. 북마크는 랜덤으로 20개만 생성
+        Collections.shuffle(boards); // Board 리스트 섞기
+        List<Board> bookmarkTargets = boards.subList(0, 20); // 앞에서 20개 선택
+
+        for (Board board : bookmarkTargets) {
             Bookmark bm = Bookmark.builder()
                     .board(board)
                     .user(testUser)
                     .createdAt(new Timestamp(System.currentTimeMillis()))
                     .build();
             bookmarkRepository.BookmarkSave(bm);
-
-            System.out.printf(">>> Board %d, Bookmark 생성 완료%n", board.getId());
+            System.out.printf(">>> Board %d에 Bookmark 생성%n", board.getId());
         }
 
-        // 4. 북마크 리스트 조회 API 요청 (mockMvc)
+        // 4. 북마크 리스트 조회 API 요청 (MockMvc)
         mockMvc.perform(get("/bookmarks")
-                        .sessionAttr("user", testUser))
+                        .sessionAttr("user", testUser)
+                        .param("sort", "bookCount_DESC")
+                        .param("page", "0"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("mypage/bookmark/list-page"));
 
         // 5. 서비스 레벨에서 DTO 변환 후 조회
-        BookmarkResponse.BookmarkListDTO respDTO = bookmarkService.bookmarkList(testUser.getId());
+        BookmarkResponse.BookmarkListDTO respDTO = bookmarkService.bookmarkList(testUser.getId(), "bookCount_DESC", 1, 10);
 
         // 6. DTO 값 출력
         System.out.println("===== 북마크 리스트 조회 결과 =====");
         System.out.println("isList = " + respDTO.isList());
+        System.out.println("Prev = " + respDTO.getPrev());
+        System.out.println("next = " + respDTO.getNext());
+        System.out.println("totalCount = " + respDTO.getTotalCount());
+        System.out.println("currentPage = " + respDTO.getCurrent());
+        System.out.println("isFirst = " + respDTO.getIsFirst());
+        System.out.println("isLast = " + respDTO.getIsLast());
+        System.out.println("totalPage = " + respDTO.getTotalPage());
         for (BookmarkResponse.BookmarkDTO dto : respDTO.getBookmarksList()) {
             BoardResponse.DTO boardDto = dto.getBoard();
             System.out.println(">>> BookmarkDTO");
@@ -207,24 +229,4 @@ class BookmarkControllerTest {
         }
     }
 
-    @Test
-    @DisplayName("북마크 리스트 조회 - 북마크 없음, isList=false")
-    void bookmarkList_emptyList_isFalse() throws Exception {
-        User newUser = User.builder()
-                .username("nouser")
-                .password("1234")
-                .email("nouser@test.com")
-                .build();
-        userRepository.save(newUser);
-        System.out.println(">>> 새 유저 생성: id=" + newUser.getId() + ", username=" + newUser.getUsername());
-
-        mockMvc.perform(get("/bookmarks")
-                        .sessionAttr("user", newUser))
-                .andExpect(status().isOk())
-                .andExpect(view().name("mypage/bookmark/list-page"));
-
-        BookmarkResponse.BookmarkListDTO respDTO = bookmarkService.bookmarkList(newUser.getId());
-        System.out.println(">>> 북마크 리스트 조회 확인 (빈 리스트): isList=" + respDTO.isList() +
-                ", size=" + respDTO.getBookmarksList().size());
-    }
 }

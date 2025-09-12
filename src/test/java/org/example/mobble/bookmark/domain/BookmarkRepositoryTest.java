@@ -177,18 +177,16 @@ public class BookmarkRepositoryTest {
         // 1. 테스트용 User 생성 및 저장
         User testUser = User.builder().username("tester").build();
         userRepository.save(testUser);
-        System.out.println(">>> Test User: " + testUser.getId() + ", " + testUser.getUsername());
 
-        //카데고리 만들기
+        // 2. 테스트용 Category 생성
         Category testCategory = Category.builder()
                 .category("테스트 카테고리")
                 .build();
         categoryRepository.save(testCategory);
-        System.out.println(">>> Test Category: " + testCategory.getCategory() + ", " + testCategory.getId());
 
-        // 2. Boards 생성 및 북마크 생성
+        // 3. Boards 생성 및 북마크 생성
         List<Board> savedBoards = new ArrayList<>();
-        for (int i = 1; i <= 5; i++) {
+        for (int i = 1; i <= 13; i++) {
             Board board = Board.builder()
                     .title("테스트 제목 " + i)
                     .content("테스트 내용 " + i)
@@ -206,18 +204,14 @@ public class BookmarkRepositoryTest {
                     .user(testUser)
                     .createdAt(new Timestamp(System.currentTimeMillis()))
                     .build();
-            bookmarkRepository.BookmarkSave(bookmark);
-
-            System.out.printf(">>> Board %d 저장, Bookmark 생성 완료%n", board.getId());
+            bookmarkRepository.BookmarkSave(bookmark); // save로 저장
         }
 
+        // 4. 서비스 레벨에서 DTO 변환 후 조회
+        BookmarkResponse.BookmarkListDTO respDTO = bookmarkService.bookmarkList(testUser.getId(), "createAt_DESC", 1, 10);
 
-        // 3. 서비스 레벨에서 DTO 변환 후 조회
-        BookmarkResponse.BookmarkListDTO respDTO = bookmarkService.bookmarkList(testUser.getId());
-
-        // 4. DTO 값 출력
-        System.out.println(">>> BookmarkListDTO 출력:");
-        System.out.println("isList: " + respDTO.isList());
+        // 5. DTO 값 출력
+        System.out.println("총 북마크 수: " + respDTO.getTotalCount());
         for (BookmarkResponse.BookmarkDTO dto : respDTO.getBookmarksList()) {
             System.out.println("===== BookmarkDTO =====");
             System.out.println("BookmarkId: " + dto.getBookId());
@@ -233,8 +227,6 @@ public class BookmarkRepositoryTest {
                 System.out.println("Board CreatedAt: " + boardDTO.getCreateAt());
                 System.out.println("Board UpdatedAt: " + boardDTO.getUpdateAt());
             }
-
-
             System.out.println("======================");
         }
     }

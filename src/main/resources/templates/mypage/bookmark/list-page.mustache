@@ -11,6 +11,7 @@
             rel="stylesheet"
     />
 
+
     <!-- 공통 CSS -->
     <link rel="stylesheet" href="/css/common.css"/>
     <link rel="stylesheet" href="/css/header.css"/>
@@ -18,6 +19,7 @@
     <link rel="stylesheet" href="/css/board-list.css"/>
     <link rel="stylesheet" href="/css/sidebar.css"/>
     <link rel="stylesheet" href="/css/mybookmark-list.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 <!-- Header -->
@@ -33,52 +35,42 @@
 
         <!-- 정렬 -->
         <div class="feed-sorting">
-            <a href="#">최신순</a> | <a href="#">조회수순</a> | <a href="#">북마크순</a>
+            <a href="/bookmarks?sort=createAt_DESC">최신순</a> | <a href="/bookmarks?sort=views_DESC">조회수순</a> | <a href="/bookmarks?sort=bookCount_DESC">북마크순</a>
         </div>
 
+        {{#model.bookmarksList}}
         <!-- 카드 1 -->
         <article class="post-card">
-            <a class="post-link" href="/boards/10">
+            <a class="post-link" href="/boards/{{board.id}}">
                 <div class="thumb"></div>
                 <div class="post-body">
-                    <div class="tags">FREE</div>
-                    <h3 class="title">북마크 글 제목1</h3>
+                    <div class="tags">{{board.category}}</div>
+                    <h3 class="title">{{board.title}}</h3>
                     <p class="excerpt">
-                        Lorem ipsum dolor sit amet consectetur. Vel volutpat rutrum…
+                        {{board.content}}
                     </p>
                     <div class="meta">
-                        <time datetime="2025-09-08">2025. 09. 08</time>
-                        <span>· 2.1k</span>
-                        <span>· 87</span>
+                        <time datetime="2025-09-08">{{createAt}}</time>
+                        <span><i class="fa-regular fa-eye"></i> {{board.views}}</span>
+                        <span><i class="fa-solid fa-bookmark"></i> {{board.bookmarkCount}}</span>
                     </div>
                 </div>
             </a>
         </article>
-
-        <!-- 카드 2 -->
-        <article class="post-card">
-            <a class="post-link" href="/boards/11">
-                <div class="thumb"></div>
-                <div class="post-body">
-                    <div class="tags">FREE</div>
-                    <h3 class="title">북마크 글 제목2</h3>
-                    <p class="excerpt">
-                        Lorem ipsum dolor sit amet consectetur. Vel volutpat rutrum…
-                    </p>
-                    <div class="meta">
-                        <time datetime="2025-09-07">2025. 09. 07</time>
-                        <span>· 1.5k</span>
-                        <span>· 63</span>
-                    </div>
-                </div>
-            </a>
-        </article>
+            {{/model.bookmarksList}}
 
         <!-- 페이징 -->
         <nav class="pagination" aria-label="페이지네이션">
-            <a href="#">prev</a>
-            <a href="#">next</a>
+            {{^model.isFirst}}
+                <a href="/bookmarks?&page={{model.prev}}&sort={{currentSort}}">prev</a>
+            {{/model.isFirst}}
+
+            {{^model.isLast}}
+                <a href="/bookmarks?&page={{model.next}}&sort={{currentSort}}">next</a>
+            {{/model.isLast}}
         </nav>
+
+
     </section>
 </main>
 

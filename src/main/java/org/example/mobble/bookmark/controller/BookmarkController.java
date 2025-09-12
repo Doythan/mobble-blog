@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RequiredArgsConstructor
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class BookmarkController {
     private final BookmarkService bookmarkService;
     private final HttpSession session;
+
+    public static final Integer size = 10;
 
     // 북마크 추가
     @PostMapping("/bookmark/{boardId}/save")
@@ -41,10 +44,12 @@ public class BookmarkController {
 
     // 북마크 리스트
     @GetMapping("/bookmarks")
-    public String bookmarkList(HttpServletRequest request) {
+    public String bookmarkList(HttpServletRequest request, @RequestParam(defaultValue = "createAt_DESC") String sort,
+                               @RequestParam(defaultValue = "0") int page) {
         User user = getLoginUser();
-        BookmarkResponse.BookmarkListDTO respDTO = bookmarkService.bookmarkList(user.getId());
+        BookmarkResponse.BookmarkListDTO respDTO = bookmarkService.bookmarkList(user.getId(),sort,page,size);
         request.setAttribute("model", respDTO);
+        request.setAttribute("currentSort", sort);
         return "mypage/bookmark/list-page"; // bookmark 페이지로 이동
     }
 

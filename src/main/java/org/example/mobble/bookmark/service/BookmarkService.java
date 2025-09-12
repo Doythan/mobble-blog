@@ -11,6 +11,7 @@ import org.example.mobble.board.domain.Board;
 import org.example.mobble.board.domain.BoardRepository;
 import org.example.mobble.bookmark.domain.Bookmark;
 import org.example.mobble.bookmark.domain.BookmarkRepository;
+import org.example.mobble.bookmark.domain.BookmarkSortType;
 import org.example.mobble.bookmark.dto.BookmarkResponse;
 import org.example.mobble.user.domain.User;
 import org.example.mobble.user.domain.UserRepository;
@@ -80,11 +81,18 @@ public class BookmarkService {
     }
 
     // 북마크 리스트
-    public BookmarkResponse.BookmarkListDTO bookmarkList(Integer userId) {
-        // 유저 아이디로 북마크 리스트 불러오기
-        List<Bookmark> bookmarkList = bookmarkRepository.bookmarkList(userId);
-        return new BookmarkResponse.BookmarkListDTO(bookmarkList);
-    }
+    public BookmarkResponse.BookmarkListDTO bookmarkList(Integer userId, String sort,int page,int size) {
+        BookmarkSortType sortType = BookmarkSortType.from(sort);
+        List<Bookmark> bookmarkList;
 
+        switch (sortType) {
+            case CREATE_AT_DESC -> bookmarkList = bookmarkRepository.bookmarkListOrderByCreatedAt(userId,page,size);
+            case VIEWS_DESC -> bookmarkList = bookmarkRepository.bookmarkListOrderByViews(userId,page,size);
+            case BOOK_COUNT_DESC -> bookmarkList = bookmarkRepository.bookmarkListOrderByBookmarkCount(userId,page,size);
+            default -> bookmarkList = bookmarkRepository.bookmarkListOrderByCreatedAt(userId,page,size);
+        }
+
+        return new BookmarkResponse.BookmarkListDTO(bookmarkList,page,size,bookmarkRepository.totalCount(userId));
+    }
 
 }

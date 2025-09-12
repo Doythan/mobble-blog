@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (isBookmarked) {
         // 삭제
         resp = await fetch(deleteUrl, {
-          method: "DELETE",
+          method: "POST",
           headers: { Accept: "application/json" },
         });
       } else {
