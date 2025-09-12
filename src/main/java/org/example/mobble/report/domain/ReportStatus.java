@@ -1,10 +1,9 @@
 package org.example.mobble.report.domain;
 
 public enum ReportStatus {
-    PENDING("처리 전"),
-    PROCESSING("처리 중"),
-    COMPLETED("처리완료");
-
+    PENDING("처리대기"),
+    COMPLETED("처리완료"),
+    REJECTED("신고반려");
     private final String label;
 
     ReportStatus(String label) {

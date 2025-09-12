@@ -24,7 +24,7 @@ public class BoardRepository {
         return Optional.ofNullable(em.find(Board.class, boardId));
     }
 
-    public Optional<BoardResponse.DetailDTO> findByIdDetail(Integer userId, Integer boardId) {
+    public Optional<BoardResponse.DetailDTO> findByIdDetail(Integer boardId, Integer userId) {
         List<Object[]> rows = em.createQuery("""
                         select b, u, c,
                                count(distinct bm),
@@ -48,6 +48,7 @@ public class BoardRepository {
                         .category((Category) result[2])
                         .bookmarkCount(((Number) result[3]).intValue())
                         .isBookmark(((Number) result[4]).intValue() > 0)
+                        .loginUserId(userId)
                         .build()
         );
     }

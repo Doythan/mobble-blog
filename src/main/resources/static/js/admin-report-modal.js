@@ -51,17 +51,21 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const STATUS_LABELS = {
-    PENDING: "처리 전",
-    PROCESSING: "처리 중",
-    COMPLETED: "처리 완료",
+    PENDING: "처리대기",
+    COMPLETED: "처리완료",
+    REJECTED: "신고반려",
   };
 
   function statusClass(s) {
-    return s === "COMPLETED"
-      ? "rmg-status rmg-status--d"
-      : s === "PROCESSING"
-      ? "rmg-status rmg-status--p"
-      : "rmg-status rmg-status--w";
+    if (s === "COMPLETED") {
+      return "rmg-status rmg-status--d"; // 처리완료
+    } else if (s === "PENDING") {
+      return "rmg-status rmg-status--w"; // 처리대기
+    } else if (s === "REJECTED") {
+      return "rmg-status rmg-status--r"; // 신고반려 (빨강색)
+    } else {
+      return "rmg-status"; // 기본값
+    }
   }
 
   function pickReasonText(r) {

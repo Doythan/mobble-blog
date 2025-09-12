@@ -17,6 +17,7 @@
             href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap"
             rel="stylesheet"
     />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 <!-- 전역 헤더 -->
@@ -99,6 +100,7 @@
             </button>
 
             <div id="postMenu" class="post-menu" role="menu" hidden>
+            {{#model.isOwner}}
                 <a
                         class="post-menu-item"
                         role="menuitem"
@@ -114,24 +116,24 @@
                 >
                     게시글 삭제
                 </button>
-
+            {{/model.isOwner}}
+            {{^model.isOwner}}
                 <button type="button" class="post-menu-item" id="openReportModal">
                     신고
                 </button>
+            {{/model.isOwner}}
             </div>
         </div>
     </div>
 
-    <!-- 커버 미디어(시안의 검은 박스) -->
-    <figure class="media" role="img" aria-label="커버 이미지 자리"></figure>
 
     <!-- 본문 -->
     <article class="post-body">
         {{model.content}}
         <div class="post-reaction">
             <div class="counts">
-                <span>👁️{{model.views}}</span>
-                <span>👍 {{model.bookmarkCount}}</span>
+                <span><i class="fa-regular fa-eye"></i>&nbsp;{{model.views}}</span>
+                <span><i class="fa-regular fa-bookmark"></i>&nbsp;{{model.bookmarkCount}}</span>
             </div>
         </div>
     </article>

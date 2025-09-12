@@ -86,6 +86,9 @@
 .rpts-status--done {
   color: #16a34a;
 }
+.rpts-status--rej {
+  color: #e74c3c; /* 신고반려: 빨강 */
+}
 
 /* ---------- 상세 모달 ---------- */
 /* 모달 스택을 최상단으로 끌어올려 sticky thead보다 항상 위 */

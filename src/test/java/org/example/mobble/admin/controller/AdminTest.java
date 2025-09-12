@@ -76,7 +76,7 @@ public class AdminTest {
         // given
         Integer reportId = 2;
         AdminRequest.ReportUpateDTO reqDTO = new AdminRequest.ReportUpateDTO();
-        reqDTO.setStatus(ReportStatus.PROCESSING); // 상태 변경 테스트용
+        reqDTO.setStatus(ReportStatus.REJECTED); // 상태 변경 테스트용
 
         String requestBody = om.writeValueAsString(reqDTO);
 

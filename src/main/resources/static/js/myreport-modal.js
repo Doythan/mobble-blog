@@ -42,9 +42,9 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const STATUS_LABELS = {
-    PENDING: "처리 전",
-    PROCESSING: "처리 중",
-    COMPLETED: "처리 완료",
+    PENDING: "처리대기",
+    COMPLETED: "처리완료",
+    REJECTED: "신고반려",
   };
 
   function pickReasonText(r) {
@@ -64,11 +64,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* ---------- 색 렌더링 ---------- */
   const statusClass = (s) =>
-    s === "COMPLETED"
-      ? "rpts-status rpts-status--done"
-      : s === "PROCESSING"
-      ? "rpts-status rpts-status--prog"
-      : "rpts-status rpts-status--wait";
+      s === "COMPLETED"
+          ? "rpts-status rpts-status--done"
+          : s === "REJECTED"
+              ? "rpts-status rpts-status--rej"
+              : "rpts-status rpts-status--wait";
 
   function render() {
     tbody.innerHTML = reports

@@ -142,7 +142,9 @@
 .rmg-status--d {
   color: #16a34a;
 } /* 처리 완료 */
-
+.rmg-status--r {
+  color: #e74c3c;
+}
 /* ================== 관리 모달 ================== */
 .rmg-modal.is-hidden {
   display: none;
