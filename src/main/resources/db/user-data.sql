@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 insert into user_tb(username, password, email, role)
 values ('ssar', '$2b$10$M5cXzOIOa1v0cPpkIZJXaupRbnrdJklUKb8vaxvJNJDHJ2EezRAva', 'ssar@nate.com', 'admin'),
        ('cos', '$2b$10$M5cXzOIOa1v0cPpkIZJXaupRbnrdJklUKb8vaxvJNJDHJ2EezRAva', 'cos@nate.com', 'admin'),

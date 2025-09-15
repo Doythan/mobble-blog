@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 insert into bookmark_tb(user_id, board_id)
 values
 -- user 1 (북마크 5개, 자신 글 제외)
