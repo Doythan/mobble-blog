@@ -1,9 +1,72 @@
-INSERT INTO bookmark_tb (board_id, user_id, created_at)
-VALUES (1, 1, CURRENT_TIMESTAMP), -- user1이 board1 북마크
-       (2, 1, CURRENT_TIMESTAMP), -- user1이 board2 북마크
-       (3, 1, CURRENT_TIMESTAMP),
-       (4, 1, CURRENT_TIMESTAMP),
-       (35, 1, CURRENT_TIMESTAMP),
-       (5, 1, CURRENT_TIMESTAMP),
-       (1, 2, CURRENT_TIMESTAMP),
-       (2, 2, CURRENT_TIMESTAMP); -- user2가 board3 북마크
+<<<<<<< HEAD
+insert into bookmark_tb(user_id, board_id)
+values
+-- user 1 (북마크 5개, 자신 글 제외)
+(1, 100),
+(1, 22),
+(1, 35),
+(1, 47),
+(1, 88),
+
+-- user 2
+(2, 100),
+(2, 11),
+(2, 36),
+(2, 55),
+(2, 77),
+
+-- user 3
+(3, 100),
+(3, 12),
+(3, 28),
+(3, 56),
+(3, 90),
+
+-- user 4
+(4, 100),
+(4, 13),
+(4, 29),
+(4, 44),
+(4, 78),
+
+-- user 5
+(5, 100),
+(5, 14),
+(5, 30),
+(5, 57),
+(5, 89),
+
+-- user 6
+(6, 100),
+(6, 15),
+(6, 40),
+(6, 58),
+(6, 79),
+
+-- user 7
+(7, 100),
+(7, 16),
+(7, 31),
+(7, 59),
+(7, 85),
+
+-- user 8
+(8, 100),
+(8, 17),
+(8, 32),
+(8, 60),
+(8, 86),
+
+-- user 9
+(9, 100),
+(9, 18),
+(9, 33),
+(9, 61),
+(9, 91),
+
+-- user 10
+(10, 19),
+(10, 34),
+(10, 45),
+(10, 62),
+(10, 87);
