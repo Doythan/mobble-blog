@@ -51,13 +51,14 @@
                     <a class="post-link" href="/boards/{{id}}">
                         <div class="thumb" aria-hidden="true">
                             {{#image}}<img src="{{image}}" alt="thumbnail"/>{{/image}}
+                            {{^image}}<img src="/img/thumbnail.png" alt="thumbnail"/>{{/image}}
                         </div>
                         <div class="post-body">
                             <div class="tags">#{{category}}</div>
                             <h4 class="title">{{title}}</h4>
                             <div class="tags">{{username}}</div>
                             <p class="excerpt">
-                                {{content}}
+                                {{excerpt}}
                             </p>
                             <div class="meta">
                                 <span>{{createAt}}</span>
@@ -119,6 +120,7 @@
                         <a class="popular-link" href="/boards/{{id}}">
                             <div class="thumb small" aria-hidden="true">
                                 {{#image}}<img src="{{image}}" alt="thumbnail"/>{{/image}}
+                                {{^image}}<img src="/img/thumbnail.png" alt="thumbnail"/>{{/image}}
                             </div>
                             <div class="info">
                                 <span class="author">{{username}}</span>

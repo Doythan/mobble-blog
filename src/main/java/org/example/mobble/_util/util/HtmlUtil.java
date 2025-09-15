@@ -68,4 +68,34 @@ public class HtmlUtil {
             }
         }
     }
+
+    public static String extractFirstParagraph(String sanitizedHtml) {
+        if (sanitizedHtml == null || sanitizedHtml.isBlank()) return "";
+
+        Document doc = Jsoup.parseBodyFragment(sanitizedHtml);
+
+        // 첫 번째 <p> 탐색
+        Element firstP = doc.selectFirst("p");
+
+        String text;
+        if (firstP != null) {
+            text = firstP.text();
+        } else {
+            // <p>가 없으면 body 전체 텍스트
+            text = doc.body().text();
+        }
+
+        return text.strip();
+    }
+
+    /**
+     * 길이 제한이 필요한 경우 (excerpt 길이 제한)
+     */
+    public static String extractFirstParagraph(String sanitizedHtml, int maxLen) {
+        String text = extractFirstParagraph(sanitizedHtml);
+        if (maxLen > 0 && text.length() > maxLen) {
+            return text.substring(0, maxLen).trim() + "…";
+        }
+        return text;
+    }
 }

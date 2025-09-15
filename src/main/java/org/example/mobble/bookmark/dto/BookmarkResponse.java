@@ -1,6 +1,7 @@
 package org.example.mobble.bookmark.dto;
 
 import lombok.Data;
+import org.example.mobble._util.util.HtmlUtil;
 import org.example.mobble.board.domain.Board;
 import org.example.mobble.board.dto.BoardResponse;
 import org.example.mobble.bookmark.domain.Bookmark;
@@ -25,7 +26,6 @@ public class BookmarkResponse {
             this.createAt = bookmark.getCreatedAt();
         }
     }
-
 
 
     @Data
@@ -64,6 +64,8 @@ public class BookmarkResponse {
         private BoardResponse.DTO board;
         private Boolean isBookmark;
         private String createAt;
+        private String image;
+        private String excerpt;
 
         public BookmarkDTO(Bookmark bookmark) {
             Board temp = bookmark.getBoard();
@@ -71,11 +73,13 @@ public class BookmarkResponse {
             this.board = BoardResponse.DTO.builder()
                     .board(temp)
                     .bookmarkCount(temp.getBookmarks().size())
-                    .image(null)
+                    .image(temp.getThumbnailUrl())
                     .category(temp.getCategory())
                     .user(temp.getUser())
                     .build();
             this.isBookmark = true;
+            this.image = temp.getThumbnailUrl() == null ? null : temp.getThumbnailUrl();
+            this.excerpt = HtmlUtil.extractFirstParagraph(temp.getContent(), 100);
 
             // Timestamp → yyyy-MM-dd
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -83,6 +87,7 @@ public class BookmarkResponse {
 
         }
     }
+
     private static Integer makeTotalPage(int totalCount, int size) {
         return totalCount / size + (totalCount % size == 0 ? 0 : 1);
     }

@@ -63,6 +63,7 @@ public class BoardResponse {
         String username;
         String title;
         String content;
+        String excerpt;
         Integer views;
         Integer bookmarkCount;
         Boolean isBookmark;
@@ -72,11 +73,12 @@ public class BoardResponse {
         String image;
 
         @Builder
-        public DTO(Board board, User user, Category category, Integer bookmarkCount, String image, Boolean isBookmark) {
+        public DTO(Board board, User user, String excerpt, Category category, Integer bookmarkCount, String image, Boolean isBookmark) {
             this.id = board.getId();
             this.username = user.getUsername();
             this.title = board.getTitle();
             this.content = board.getContent();
+            this.excerpt = excerpt;
             this.views = board.getViews();
             this.bookmarkCount = bookmarkCount;
             this.isBookmark = isBookmark;
@@ -135,7 +137,7 @@ public class BoardResponse {
             System.out.println("✅ Board.title = " + board.getTitle());
             System.out.println("✅ Board.user.id = " + board.getUser().getId());
             System.out.println("✅ Board.user.username = " + board.getUser().getUsername());
-            System.out.println("✅ User.username = " +  user.getUsername());
+            System.out.println("✅ User.username = " + user.getUsername());
             System.out.println("✅ LoginUserId = " + loginUserId);
         }
     }

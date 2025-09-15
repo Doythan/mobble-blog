@@ -30,64 +30,55 @@
 {{> layout/header}}
 
 {{> layout/sidebar}}
-<main class="write-wrap">
-    <form id="updateForm" action="/boards/1/update" method="post">
-        <div id="boardId" value="1" hidden></div>
-        <!-- 제목 -->
-        <div class="title-wrap">
-            <input
-                    class="title-input"
-                    type="text"
-                    name="title"
-                    placeholder="제목 입력..."
-                    value="제목1"
-                    required
-            />
-        </div>
+{{#model}}
+    <main class="write-wrap">
+        <form id="updateForm" action="/boards/{{id}}/update" method="post">
+            <!-- 숨김 ID는 hidden input으로 -->
+            <input type="hidden" id="boardId" name="id" value="{{id}}"/>
 
-        <!-- 카테고리 (1개 고정) -->
-        <section class="category-wrap">
-            <!-- 버튼 텍스트는 고정: Add Category -->
-            <button
-                    type="button"
-                    class="btn-chip gray"
-                    id="btnAddCategory"
-                    aria-expanded="false"
-                    aria-controls="categoryPicker"
-            >
-                Add Category
-            </button>
-
-            <!-- 선택된 카테고리 보여주는 칩 -->
-            <div class="chip-list" id="chipList" aria-live="polite"></div>
-
-            <!-- 더미 카테고리 피커 -->
-            <div class="category-picker" id="categoryPicker" hidden>
-                <button type="button" class="cat-option">java</button>
-                <button type="button" class="cat-option">springboot</button>
-                <button type="button" class="cat-option">docker</button>
+            <!-- 제목 -->
+            <div class="title-wrap">
+                <input
+                        class="title-input"
+                        type="text"
+                        name="title"
+                        placeholder="제목 입력..."
+                        value="{{title}}"
+                        required
+                />
             </div>
 
-            <!-- 서버 제출용 hidden: 서버값을 미리 채워줌 -->
-            <input
-                    type="hidden"
-                    name="category"
-                    id="categoryHidden"
-                    value="java"
-            />
-        </section>
+            <!-- 카테고리 -->
+            <section class="category-wrap">
+                <button type="button" class="btn-chip gray" id="btnAddCategory"
+                        aria-expanded="false" aria-controls="categoryPicker">
+                    Add Category
+                </button>
 
-        <!-- 에디터 -->
-        <section class="editor-wrap">
-            <textarea id="editor" name="content"></textarea>
-        </section>
+                <div class="chip-list" id="chipList" aria-live="polite"></div>
 
-        <!-- 에디터 밖 하단 버튼 -->
-        <div class="submit-wrap">
-            <button type="submit" class="btn-submit-board">수정하기</button>
-        </div>
-    </form>
-</main>
+                <div class="category-picker" id="categoryPicker" hidden>
+                    <button type="button" class="cat-option">java</button>
+                    <button type="button" class="cat-option">springboot</button>
+                    <button type="button" class="cat-option">docker</button>
+                </div>
+
+                <!-- 서버 제출용 hidden -->
+                <input type="hidden" name="category" id="categoryHidden" value="{{category}}"/>
+            </section>
+
+            <!-- 에디터 -->
+            <section class="editor-wrap">
+                <!-- ✅ content는 '그대로' 넣어야 하므로 triple mustache -->
+                <textarea id="editor" name="content">{{{content}}}</textarea>
+            </section>
+
+            <div class="submit-wrap">
+                <button type="submit" class="btn-submit-board">수정하기</button>
+            </div>
+        </form>
+    </main>
+{{/model}}
 
 {{> layout/footer}}
 

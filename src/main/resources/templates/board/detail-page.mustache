@@ -100,28 +100,28 @@
             </button>
 
             <div id="postMenu" class="post-menu" role="menu" hidden>
-            {{#model.isOwner}}
-                <a
-                        class="post-menu-item"
-                        role="menuitem"
-                        href="/boards/1/update-form"
-                >게시글 수정</a
-                >
-                <button
-                        class="post-menu-item danger"
-                        role="menuitem"
-                        type="button"
-                        data-action="delete"
-                        data-delete-url="/boards/1/delete"
-                >
-                    게시글 삭제
-                </button>
-            {{/model.isOwner}}
-            {{^model.isOwner}}
-                <button type="button" class="post-menu-item" id="openReportModal">
-                    신고
-                </button>
-            {{/model.isOwner}}
+                {{#model.isOwner}}
+                    <a
+                            class="post-menu-item"
+                            role="menuitem"
+                            href="/boards/{{model.id}}/update-form"
+                    >게시글 수정</a
+                    >
+                    <button
+                            class="post-menu-item danger"
+                            role="menuitem"
+                            type="button"
+                            data-action="delete"
+                            data-delete-url="/boards/{{model.id}}/delete"
+                    >
+                        게시글 삭제
+                    </button>
+                {{/model.isOwner}}
+                {{^model.isOwner}}
+                    <button type="button" class="post-menu-item" id="openReportModal">
+                        신고
+                    </button>
+                {{/model.isOwner}}
             </div>
         </div>
     </div>
@@ -129,7 +129,7 @@
 
     <!-- 본문 -->
     <article class="post-body">
-        {{model.content}}
+        {{{model.content}}}
         <div class="post-reaction">
             <div class="counts">
                 <span><i class="fa-regular fa-eye"></i>&nbsp;{{model.views}}</span>

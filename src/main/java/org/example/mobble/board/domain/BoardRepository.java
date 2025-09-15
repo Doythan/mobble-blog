@@ -2,6 +2,7 @@ package org.example.mobble.board.domain;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.example.mobble._util.util.HtmlUtil;
 import org.example.mobble.board.dto.BoardResponse;
 import org.example.mobble.category.domain.Category;
 import org.example.mobble.user.domain.User;
@@ -129,6 +130,7 @@ public class BoardRepository {
                             .board(b)
                             .user(u)
                             .category(c)
+                            .excerpt(HtmlUtil.extractFirstParagraph(b.getContent(), 100))
                             .bookmarkCount(cnt != null ? cnt.intValue() : 0)
                             .isBookmark(myBookmark)
                             .image(null)

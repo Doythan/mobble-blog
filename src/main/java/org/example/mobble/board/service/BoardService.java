@@ -8,6 +8,7 @@ import org.example.mobble._util.error.ex.Exception403;
 import org.example.mobble._util.error.ex.Exception404;
 import org.example.mobble._util.util.HtmlUtil;
 import org.example.mobble._util.util.ImgUtil;
+import org.example.mobble._util.util.MarkdownUtil;
 import org.example.mobble.board.domain.Board;
 import org.example.mobble.board.domain.BoardRepository;
 import org.example.mobble.board.domain.SearchOrderCase;
@@ -65,6 +66,7 @@ public class BoardService {
         }
 
         String safeHtml = HtmlUtil.HtmlSanitizer.sanitize(reqDTO.getContent());
+        String finalHtml = MarkdownUtil.applyBasicMarkdown(safeHtml);
 
         Board board =
                 Board.builder()
@@ -80,7 +82,7 @@ public class BoardService {
         ImgUtil.Result r;
         try {
             r = ImgUtil.replaceDataUrlsWithSavedFiles(
-                    safeHtml,
+                    finalHtml,
                     user.getUsername(),
                     /* 저장 전엔 ID가 없을 수 있으니, 임시 0 or 저장 후에 재치환 전략 중 택1 */
                     board.getId(),
@@ -112,12 +114,13 @@ public class BoardService {
 
         // HTML 정화
         String safeHtml = HtmlUtil.HtmlSanitizer.sanitize(reqDTO.getContent());
+        String finalHtml = MarkdownUtil.applyBasicMarkdown(safeHtml);
 
         // 2) dataURL → 파일 저장 & src 교체 (이번에는 boardId가 있으니 네이밍 완벽)
         ImgUtil.Result r;
         try {
             r = ImgUtil.replaceDataUrlsWithSavedFiles(
-                    safeHtml,
+                    finalHtml,
                     user.getUsername(),
                     boardId,
                     LocalDateTime.now()
@@ -126,7 +129,7 @@ public class BoardService {
             throw new RuntimeException("이미지 저장 실패", e);
         }
 
-        reqDTO.setContent(r.firstImageUrl());
+        reqDTO.setContent(r.html());
         boardPS.update(reqDTO, r.firstImageUrl());
 
         return boardPS;

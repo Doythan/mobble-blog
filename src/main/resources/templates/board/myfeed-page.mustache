@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="/css/board-list.css"/>
     <link rel="stylesheet" href="/css/myfeed-list.css"/>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 <!-- 헤더 -->
@@ -38,16 +39,25 @@
                     <a class="post-link" href="/boards/{{id}}">
                         <div class="thumb">
                             {{#image}}<img src="{{image}}" alt="thumbnail"/>{{/image}}
+                            {{^image}}<img src="/img/thumbnail.png" alt="thumbnail"/>{{/image}}
                         </div>
                         <div class="post-body">
                             <div class="tags">{{category}}</div>
                             <h3 class="title">{{title}}</h3>
                             <div class="tags">{{username}}</div>
-                            <p class="excerpt">{{content}}</p>
+                            <p class="excerpt">{{excerpt}}</p>
                             <div class="meta">
                                 <time datetime="{{createAt}}">{{createAt}}</time>
-                                <span>· {{views}}</span>
-                                <span>· {{bookmarkCount}}</span>
+                                <span><i class="fa-regular fa-eye"></i> {{views}}</span>
+                                <span>
+                                    {{#isBookmark}}
+                                        <i class="fa-solid fa-bookmark"></i>
+                                    {{/isBookmark}}
+                                    {{^isBookmark}}
+                                        <i class="fa-regular fa-bookmark"></i>
+                                    {{/isBookmark}}
+                                    {{bookmarkCount}}
+                                </span>
                             </div>
                         </div>
                     </a>

@@ -4,266 +4,286 @@
 
 /* 레이아웃 래퍼: 헤더 높이만큼 위 여백 확보 + 가운데 정렬 */
 .feed-container {
-  max-width: 1200px; /* 본문 폭 */
-  width: 100%;
-  margin: 0 auto;
-  padding: calc(var(--appbar-h) + 24px) 20px 80px; /* 상단: 헤더 보정 */
-  display: grid;
-  grid-template-columns: 1fr 360px; /* 좌: 목록 / 우: 인기글 */
-  gap: 40px;
+    max-width: 1200px; /* 본문 폭 */
+    width: 100%;
+    margin: 0 auto;
+    padding: calc(var(--appbar-h) + 24px) 20px 80px; /* 상단: 헤더 보정 */
+    display: grid;
+    grid-template-columns: 1fr 360px; /* 좌: 목록 / 우: 인기글 */
+    gap: 40px;
 }
 
 /* 좌측 피드 컬럼 */
 .feed-left h2 {
-  font-size: 22px;
-  font-weight: 800;
-  margin-bottom: 10px;
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 10px;
 }
 
 .feed-left h3 {
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: #555;
-  margin-bottom: 16px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #555;
+    margin-bottom: 16px;
 }
 
 .feed-left .feed-sorting {
-  margin-bottom: 18px;
-  font-size: 12px;
-  color: #777;
+    margin-bottom: 18px;
+    font-size: 12px;
+    color: #777;
 }
+
 .feed-left .feed-sorting a {
-  color: #222;
-  text-decoration: none;
+    color: #222;
+    text-decoration: none;
 }
+
 .feed-left .feed-sorting a:hover {
-  text-decoration: underline;
+    text-decoration: underline;
 }
 
 /* 글 카드 */
 .post-card {
-  display: grid;
-  grid-template-columns: 220px 1fr; /* 썸네일 / 본문 */
-  gap: 16px;
-  border: 1px solid #e6e6e6;
-  border-radius: 12px;
-  padding: 14px;
-  background: #fff;
-  transition: box-shadow 0.15s ease, transform 0.15s ease;
+    display: grid;
+    grid-template-columns: 220px 1fr; /* 썸네일 / 본문 */
+    gap: 16px;
+    border: 1px solid #e6e6e6;
+    border-radius: 12px;
+    padding: 14px;
+    background: #fff;
+    transition: box-shadow 0.15s ease, transform 0.15s ease;
 }
+
 .post-card + .post-card {
-  margin-top: 14px;
+    margin-top: 14px;
 }
 
 .post-card:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
 }
 
 /* 썸네일(시안의 검은 박스) */
 .post-card .thumb {
-  width: 100%;
-  aspect-ratio: 16 / 10;
-  background: #000;
-  border-radius: 10px;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    border-radius: 10px;
+}
+
+.thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 중요! 박스 안에 맞춰 자르기 */
+    display: block;
+    border-radius: 10px;
 }
 
 /* 본문(텍스트) */
 .post-card .post-body {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .post-card .tags {
-  font-size: 11px;
-  color: #777;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+    font-size: 11px;
+    color: #777;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .post-card .title {
-  font-size: 18px;
-  font-weight: 800;
-  line-height: 1.2;
-  color: #111;
+    font-size: 18px;
+    font-weight: 800;
+    line-height: 1.2;
+    color: #111;
 }
 
 .post-card .excerpt {
-  font-size: 13px;
-  color: #333;
-  line-height: 1.6;
-  max-height: 3.2em; /* 2줄 정도 */
-  overflow: hidden;
+    font-size: 13px;
+    color: #333;
+    line-height: 1.6;
+    max-height: 3.2em; /* 2줄 정도 */
+    overflow: hidden;
 }
 
 .post-card .meta {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  margin-top: auto;
-  font-size: 12px;
-  color: #666;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-top: auto;
+    font-size: 12px;
+    color: #666;
 }
 
 /* 페이징 */
 .pagination {
-  display: flex;
-  gap: 16px;
-  justify-content: center;
-  align-items: center;
-  margin-top: 24px;
-  font-size: 12px;
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 24px;
+    font-size: 12px;
 }
+
 .pagination a {
-  color: #111;
-  text-decoration: none;
-  padding: 6px 10px;
-  border-radius: 6px;
-  border: 1px solid #ddd;
+    color: #111;
+    text-decoration: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
 }
+
 .pagination a:hover {
-  background: #f6f6f6;
+    background: #f6f6f6;
 }
 
 /* 우측 인기글 영역 */
 .feed-right h3 {
-  font-size: 16px;
-  font-weight: 800;
-  margin-top: 4px;
-  margin-bottom: 14px;
+    font-size: 16px;
+    font-weight: 800;
+    margin-top: 4px;
+    margin-bottom: 14px;
 }
 
 .popular-link {
-  display: flex; /* 기존 .popular-item 내부 레이아웃 그대로 */
-  gap: 12px;
-  width: 100%;
-  height: 100%;
-  text-decoration: none; /* 밑줄 제거 */
-  color: inherit; /* 글자색 부모 따라가기 */
+    display: flex; /* 기존 .popular-item 내부 레이아웃 그대로 */
+    gap: 12px;
+    width: 100%;
+    height: 100%;
+    text-decoration: none; /* 밑줄 제거 */
+    color: inherit; /* 글자색 부모 따라가기 */
 }
+
 .popular-item {
-  display: grid;
-  grid-template-columns: 110px 1fr;
-  gap: 12px;
-  border: 1px solid #eee;
-  border-radius: 12px;
-  padding: 12px;
-  background: #fff;
-  transition: box-shadow 0.15s ease, transform 0.15s ease;
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 12px;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 12px;
+    background: #fff;
+    transition: box-shadow 0.15s ease, transform 0.15s ease;
 }
+
 .popular-item:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
 }
 
 .popular-item .thumb.small {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  background: #000;
-  border-radius: 10px;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background: #000;
+    border-radius: 10px;
 }
 
 .popular-item .info {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
 .popular-item .author {
-  font-size: 11px;
-  color: #777;
+    font-size: 11px;
+    color: #777;
 }
 
 .popular-item .title {
-  font-size: 15px;
-  font-weight: 800;
-  color: #111;
-  line-height: 1.3;
+    font-size: 15px;
+    font-weight: 800;
+    color: #111;
+    line-height: 1.3;
 }
 
 .popular-item .meta {
-  font-size: 12px;
-  color: #666;
-  display: flex;
-  gap: 10px;
+    font-size: 12px;
+    color: #666;
+    display: flex;
+    gap: 10px;
 }
 
 /* 반응형 */
 @media (max-width: 1200px) {
-  .feed-container {
-    padding-left: 16px;
-    padding-right: 16px;
-  }
+    .feed-container {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
 }
 
 @media (max-width: 1024px) {
-  .feed-container {
-    grid-template-columns: 1fr; /* 한 컬럼 */
-    gap: 28px;
-  }
-  .feed-right {
-    order: 2;
-  }
-  .feed-left {
-    order: 1;
-  }
+    .feed-container {
+        grid-template-columns: 1fr; /* 한 컬럼 */
+        gap: 28px;
+    }
+
+    .feed-right {
+        order: 2;
+    }
+
+    .feed-left {
+        order: 1;
+    }
 }
 
 @media (max-width: 560px) {
-  .post-card {
-    grid-template-columns: 1fr; /* 썸네일 위, 텍스트 아래 */
-  }
-  .post-card .thumb {
-    aspect-ratio: 16 / 9;
-  }
-  .popular-item {
-    grid-template-columns: 90px 1fr;
-  }
+    .post-card {
+        grid-template-columns: 1fr; /* 썸네일 위, 텍스트 아래 */
+    }
+
+    .post-card .thumb {
+        aspect-ratio: 16 / 9;
+    }
+
+    .popular-item {
+        grid-template-columns: 90px 1fr;
+    }
 }
 
 /* ===== 카드 전체를 링크로: 레이아웃은 유지, 밑줄 제거 ===== */
 .post-link,
 .popular-link {
-  display: contents; /* 부모(.post-card/.popular-item)의 그리드/플렉스 유지 */
-  text-decoration: none; /* 밑줄 제거 */
-  color: inherit; /* 글자색 상속 */
+    display: contents; /* 부모(.post-card/.popular-item)의 그리드/플렉스 유지 */
+    text-decoration: none; /* 밑줄 제거 */
+    color: inherit; /* 글자색 상속 */
 }
 
 /* 브라우저가 display: contents 미지원일 때의 안전한 대체 */
 @supports not (display: contents) {
-  .post-link {
-    display: grid;
-    grid-template-columns: 220px 1fr;
-    gap: 16px;
-  }
-  .popular-link {
-    display: grid;
-    grid-template-columns: 110px 1fr;
-    gap: 12px;
-  }
+    .post-link {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: 16px;
+    }
+
+    .popular-link {
+        display: grid;
+        grid-template-columns: 110px 1fr;
+        gap: 12px;
+    }
 }
 
 /* ===== 썸네일이 항상 보이도록(혹시 원본 CSS에 없거나 덮였을 때 대비) ===== */
 .post-card .thumb {
-  width: 100%;
-  aspect-ratio: 16 / 10;
-  background: #000; /* 시안의 검은 박스 */
-  border-radius: 10px;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    background: #000; /* 시안의 검은 박스 */
+    border-radius: 10px;
 }
+
 .popular-item .thumb.small {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  background: #000;
-  border-radius: 10px;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background: #000;
+    border-radius: 10px;
 }
 
 /* ===== 호버 효과(원본이 있다면 그대로, 없으면 기본 강조만 추가) ===== */
 .post-card:hover,
 .popular-item:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
-  transition: transform 150ms ease, box-shadow 150ms ease;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    transition: transform 150ms ease, box-shadow 150ms ease;
 }

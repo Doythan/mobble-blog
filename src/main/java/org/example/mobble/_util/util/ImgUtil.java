@@ -24,8 +24,8 @@ public class ImgUtil {
     private static final Pattern DATA_URL = Pattern.compile("^data:(image/[a-zA-Z0-9.+-]+);base64,(.+)$");
     private static final DateTimeFormatter TS_FMT = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
-    // 기본 썸네일 이미지 경로 (static/img/thumbnail.jpg)
-    private static final String DEFAULT_THUMBNAIL_URL = "/img/thumbnail.jpg";
+    // 기본 썸네일 이미지 경로 (static/img/thumbnail.png)
+    private static final String DEFAULT_THUMBNAIL_URL = "/img/thumbnail.png";
 
     private static String extFromMime(String mime) {
         return switch (mime) {
