@@ -3,6 +3,7 @@ package org.example.mobble.user.dto;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class UserRequest {
@@ -33,10 +34,10 @@ public class UserRequest {
     @Data
     @NoArgsConstructor
     public static class ProfileUpdateDTO {
-        private String profileImage;
+        private MultipartFile profileImage;
 
         @Builder
-        public ProfileUpdateDTO(String profileImage) {
+        public ProfileUpdateDTO(MultipartFile profileImage) {
             this.profileImage = profileImage;
         }
     }

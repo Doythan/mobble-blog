@@ -3,6 +3,7 @@ package org.example.mobble.user.service;
 import lombok.RequiredArgsConstructor;
 import org.example.mobble._util.error.ErrorEnum;
 import org.example.mobble._util.error.ex.*;
+import org.example.mobble._util.util.UploadImgUtil;
 import org.example.mobble.user.domain.User;
 import org.example.mobble.user.domain.UserRepository;
 import org.example.mobble.user.dto.UserRequest;
@@ -10,12 +11,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.nio.file.Paths;
+
 @RequiredArgsConstructor
 @Service
 public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    // 이미지는 base64 string으로 저장할거라 업로드 필요 X
 
     public User findByUser(UserRequest.LoginDTO reqDTO) {
         User user = userRepository.findByUsername(reqDTO.getUsername())
@@ -46,8 +48,19 @@ public class UserService {
         User userPS = getUser(user.getId());
         if (reqDTO == null || reqDTO.getProfileImage().isEmpty())
             throw new Exception400(ErrorEnum.BAD_REQUEST_NO_EXISTS_FILE);
-        userPS.updateProfileImage(reqDTO.getProfileImage());
-        return userPS;
+
+        try {
+            UploadImgUtil.SaveOptions opts = new UploadImgUtil.SaveOptions();
+            opts.subDir = null; // profile 폴더 바로 밑에 저장
+            opts.fixedFileName = userId + ".jpg"; // 사용자 ID 기반 저장
+
+            UploadImgUtil.SaveResult result = UploadImgUtil.saveImage(reqDTO.getProfileImage(), Paths.get("src/main/resources/static/profile"), "/profile", opts);
+            userPS.updateProfileImage(result.publicUrl);
+            return userPS;
+        } catch (Exception e) {
+            throw new Exception500(ErrorEnum.INVALID_DATABASE_DATA);
+        }
+
     }
 
     @Transactional
@@ -56,7 +69,7 @@ public class UserService {
             throw new Exception400(ErrorEnum.BAD_REQUEST_NO_EXISTS_PASSWORD);
         checkPermissions(user, userId);
         User userPS = getUser(user.getId());
-        userPS.updatePassword(reqDTO.getPassword());
+        userPS.updatePassword(bCryptPasswordEncoder.encode(reqDTO.getPassword()));
     }
 
     @Transactional

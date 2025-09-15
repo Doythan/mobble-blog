@@ -1,5 +1,6 @@
 package org.example.mobble.user.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.mobble.user.domain.User;
@@ -57,15 +58,15 @@ public class UserController {
      *  ------------------------------------------------------------------
      */
     @GetMapping("/users")
-    public String getUsers() {
+    public String getUsers(HttpServletRequest request) {
         User user = (User) session.getAttribute("user");
-        session.setAttribute("model", new UserResponse.UserDetailDTO(user));
+        request.setAttribute("model", new UserResponse.UserDetailDTO(user));
         return "mypage/main";
     }
 
     // 이미지 변경
-    @PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, value = "/users/{id}/profile")
-    public String updateUsersProfile(@PathVariable(name = "id") Integer userId, @ModelAttribute UserRequest.ProfileUpdateDTO reqDTO) {
+    @PostMapping("/users/{id}/profile")
+    public String updateUsersProfile(@PathVariable(name = "id") Integer userId, UserRequest.ProfileUpdateDTO reqDTO) {
         User user = (User) session.getAttribute("user");
         User userPS = userService.changeProfile(user, userId, reqDTO);
         session.setAttribute("user", userPS);
