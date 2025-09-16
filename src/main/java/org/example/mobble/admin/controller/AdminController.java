@@ -55,6 +55,11 @@ public class AdminController {
         return Resp.ok(resDTO);
     }
 
+    /*-------------------------------------------------------------------------------------------------------------*/
+//    @GetMapping("/admin/boards")
+//    public String
+    /*-------------------------------------------------------------------------------------------------------------*/
+
     // 관리자 로그인
     @GetMapping("/admin/login-form")
     public String loginForm() {
@@ -65,7 +70,7 @@ public class AdminController {
     public String adminLogin(AdminRequest.LoginDTO reqDTO) {
         User user = adminService.findUsername(reqDTO);
         session.setAttribute("user", user);
-        return "admin/report-page";
+        return "redirect:/admin/reports";
     }
 
     @GetMapping("/admin/logout")

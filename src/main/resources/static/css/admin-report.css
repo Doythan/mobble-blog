@@ -12,6 +12,32 @@
   border-bottom: 1px solid #e5e7eb;
   background: #fff;
 }
+/* 네비게이션 (좌측 메뉴) */
+.rmg-header__left {
+  display: flex;
+  align-items: center; /* 세로 가운데 */
+  height: 100%;        /* 헤더 높이에 맞춤 */
+  gap: 28px;           /* a 태그 사이 간격 */
+  padding-left: 0;     /* 좌측 끝에 붙임 */
+  padding-right: 800px;
+  margin-left: 0;      /* 혹시 남아있는 마진 제거 */
+  font-size: 16px;
+  font-weight: 700;
+  color: #111;
+  text-decoration: none;
+}
+
+/* 개별 링크 스타일 */
+.rmg-nav__link {
+  font-size: 16px;   /* 글씨 크기 */
+  font-weight: 700;  /* 굵게 */
+  color: #111;
+  text-decoration: none;
+}
+
+.rmg-nav__link:hover {
+  color: #2563eb;    /* hover 시 강조 색상 */
+}
 
 /* 우측 영역을 화면 너비의 4/5 지점에 고정
      - 헤더 중앙 높이에 맞춰 수직 정렬
