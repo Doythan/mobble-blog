@@ -6,8 +6,6 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.mobble._util.error.ex.Exception401;
 import org.example.mobble._util.util.Resp;
-import org.example.mobble.board.dto.BoardRequest;
-import org.example.mobble.report.domain.ReportStatus;
 import org.example.mobble.report.dto.ReportRequest;
 import org.example.mobble.report.dto.ReportResponse;
 import org.example.mobble.report.service.ReportService;
@@ -29,16 +27,16 @@ public class ReportController {
 
     //신고 수정 form 가기 (모달)
     @ResponseBody
-    @GetMapping ("/reports/{id}/update-form")
-    public ResponseEntity<?>  updateForm(@PathVariable(name = "id") Integer reportId) {
+    @GetMapping("/reports/{id}/update-form")
+    public ResponseEntity<?> updateForm(@PathVariable(name = "id") Integer reportId) {
         User user = getLoginUser();
         //조회
-        ReportResponse.ReportDetailDTO resDTO = reportService.getReport(reportId,user);
+        ReportResponse.ReportDetailDTO resDTO = reportService.getReport(reportId, user);
         return Resp.ok(resDTO);
     }
 
     //내 신고 리스트
-    @GetMapping ("/reports")
+    @GetMapping("/reports")
     public String getReportList(Model model) throws JsonProcessingException {
         User user = getLoginUser();
         //조회
@@ -50,34 +48,44 @@ public class ReportController {
 
     //내 신고 보기(모달)
     @ResponseBody
-    @GetMapping ("/reports/{id}")
+    @GetMapping("/reports/{id}")
     public ResponseEntity<?> getReport(@PathVariable(name = "id") Integer reportId) {
         User user = getLoginUser();
         //조회
-        ReportResponse.ReportDetailDTO resDTO = reportService.getReport(reportId,user);
+        ReportResponse.ReportDetailDTO resDTO = reportService.getReport(reportId, user);
         return Resp.ok(resDTO);
     }
 
     //내 신고 삭제
     @ResponseBody
-    @PostMapping ("/reports/{id}/delete")
+    @PostMapping("/reports/{id}/delete")
     public ResponseEntity<?> delete(@PathVariable(name = "id") Integer reportId) {
         User user = getLoginUser();
         //삭제
-        reportService.delete(reportId,user);
+        reportService.delete(reportId, user);
         return Resp.ok(null);
     }
 
     //내 신고 수정
     @ResponseBody
-    @PostMapping ("/reports/{id}/update")
+    @PostMapping("/reports/{id}/update")
     public ResponseEntity<?> update(@PathVariable(name = "id") Integer reportId,
                                     @RequestBody ReportRequest.ReportUpateDTO reqDTO) {
         User user = getLoginUser();
         //수정
-        ReportResponse.ReportUpateDTO resDTO = reportService.update(reportId,user,reqDTO);
+        ReportResponse.ReportUpateDTO resDTO = reportService.update(reportId, user, reqDTO);
         return Resp.ok(resDTO);
     }
+
+    // 스케줄러 테스트용
+    @ResponseBody
+    @PostMapping("/reports/delete/scheduled")
+    public ResponseEntity<?> deleteCompletedReports() {
+        User user = getLoginUser();
+        reportService.deleteReportPerWeek();
+        return Resp.ok(null);
+    }
+
 
     //서비스 이용자 확인 절차
     private User getLoginUser() {

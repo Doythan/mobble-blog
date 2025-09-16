@@ -1,13 +1,8 @@
 package org.example.mobble.report.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.mobble._util.error.ex.Exception400;
 import org.example.mobble._util.error.ex.Exception403;
 import org.example.mobble._util.error.ex.Exception404;
-import org.example.mobble.admin.dto.AdminRequest;
-import org.example.mobble.admin.dto.AdminResponse;
-import org.example.mobble.board.domain.Board;
-import org.example.mobble.board.domain.BoardRepository;
 import org.example.mobble.report.domain.Report;
 import org.example.mobble.report.domain.ReportRepository;
 import org.example.mobble.report.domain.ReportStatus;
@@ -18,7 +13,6 @@ import org.example.mobble.user.domain.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.example.mobble._util.error.ErrorEnum.*;
@@ -32,22 +26,23 @@ public class ReportService {
 
     //내 신고 글 삭제
     @Transactional
-    public void delete(Integer reportId,User user) {
+    public void delete(Integer reportId, User user) {
         //유저 정보 조회
         User userPS = getUser(user.getId());
         //신고 권한이 있는지 확인
-        Report reportPS = checkPermissions(reportId,userPS);
+        Report reportPS = checkPermissions(reportId, userPS);
         //삭제
         reportRepository.delete(reportPS);
 
     }
+
     //내 신고 글 수정
     @Transactional
     public ReportResponse.ReportUpateDTO update(Integer reportId, User user, ReportRequest.ReportUpateDTO reqDTO) {
         //유저 정보 조회
         User userPS = getUser(user.getId());
         //신고 권한이 있는지 확인
-        Report reportPS = checkPermissions(reportId,userPS);
+        Report reportPS = checkPermissions(reportId, userPS);
         //업데이트
         reportPS.updateInfo(reqDTO);
         return new ReportResponse.ReportUpateDTO(reportPS);
@@ -62,17 +57,17 @@ public class ReportService {
 
         List<Report> reportList = reportRepository.findAllByUserId(user.getId());
 
-        return  reportList.stream()
+        return reportList.stream()
                 .map(ReportResponse.ReportDTO::new)
                 .toList();
     }
 
     // 내 신고 글 보기
-    public ReportResponse.ReportDetailDTO getReport(Integer reportId,User user) {
+    public ReportResponse.ReportDetailDTO getReport(Integer reportId, User user) {
         //유저 정보 조회
         User userPS = getUser(user.getId());
         //신고 권한이 있는지 확인 + 조회
-        Report reportPS = checkPermissions(reportId,userPS);
+        Report reportPS = checkPermissions(reportId, userPS);
 
         return new ReportResponse.ReportDetailDTO(reportPS);
     }
@@ -86,6 +81,7 @@ public class ReportService {
         }
         return reportPS;
     }
+
     //유저 조회
     private User getUser(Integer userId) {
         return userRepository.findById(userId).orElseThrow(
@@ -93,5 +89,8 @@ public class ReportService {
         );
     }
 
-
+    @Transactional
+    public void deleteReportPerWeek() {
+        reportRepository.deleteByStatus(ReportStatus.COMPLETED);
+    }
 }

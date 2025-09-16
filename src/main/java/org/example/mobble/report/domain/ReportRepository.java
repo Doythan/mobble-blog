@@ -1,8 +1,8 @@
 package org.example.mobble.report.domain;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
-import org.example.mobble.report.dto.ReportResponse;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -28,7 +28,7 @@ public class ReportRepository {
     }
 
     public void delete(Report report) {
-            em.remove(report);
+        em.remove(report);
     }
 
     public List<Report> findAllByUserId(Integer userId) {
@@ -36,5 +36,11 @@ public class ReportRepository {
                 .setParameter("userId", userId)
                 .getResultList();
 
+    }
+
+    public void deleteByStatus(ReportStatus status) {
+        Query query = em.createQuery("delete from Report r where r.status = :status");
+        query.setParameter("status", status);
+        query.executeUpdate();
     }
 }
