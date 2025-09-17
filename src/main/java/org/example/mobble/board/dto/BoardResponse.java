@@ -9,6 +9,9 @@ import org.example.mobble.report.domain.Report;
 import org.example.mobble.report.domain.ReportCase;
 import org.example.mobble.user.domain.User;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -88,6 +91,10 @@ public class BoardResponse {
             this.createAt = board.getCreatedAt().toLocalDateTime().format(formatter);
             if (updatedAt != null) {
                 this.updateAt = updatedAt.toLocalDateTime().format(formatter);
+            }
+            Path imgPath = Paths.get("src/main/resources/static" + image);
+            if (Files.notExists(imgPath)) {
+                image = "/img/thumbnail.png";
             }
             this.image = image;
         }

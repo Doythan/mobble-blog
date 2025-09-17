@@ -61,6 +61,10 @@ public class ImgUtil {
         Document doc = Jsoup.parseBodyFragment(sanitizedHtml);
         Elements imgs = doc.select("img[src^=data:image]");
 
+
+        // --- 내부 URL(/img/...) 처리 추가 ---
+        Elements internalImgs = doc.select("img[src^=/img/]");
+
         Files.createDirectories(STATIC_IMG_DIR);
 
         int idx = 0;
@@ -97,6 +101,16 @@ public class ImgUtil {
 
             if (firstUrl == null) firstUrl = url;
             savedUrls.add(url);
+        }
+        // --- 내부 /img/ 처리 ---
+        for (Element img : internalImgs) {
+            String url = img.attr("src");
+            if (url.startsWith("/img/")) {
+                savedUrls.add(url);
+                if (firstUrl == null) firstUrl = url;
+            } else {
+                img.remove(); // 혹시 변칙적인 경우는 삭제
+            }
         }
 
         // 이미지가 없으면 기본 썸네일 사용

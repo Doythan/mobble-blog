@@ -23,9 +23,11 @@ public class HtmlUtil {
                 // 허용 태그
                 .addTags("h1", "h2", "h3", "h4", "h5", "h6", "ul", "li", "p", "br", "img")
                 // 허용 속성 (이미지에 한정)
+
                 .addAttributes("img", "src", "width", "height", "alt")
                 // 프로토콜 제한: data 만 명시 (상대경로는 프로토콜이 없으므로 통과)
-                .addProtocols("img", "src", "data")
+                // 기존 이미지를 재사용할 때, 사라지는 원인 임시적으로 OFF
+//                .addProtocols("img", "src", "data")
                 .addAttributes("img", "style") // width/float 등 인라인 스타일 보존
                 .addAttributes("p", "style");   // text-align 보존
 

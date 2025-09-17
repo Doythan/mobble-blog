@@ -23,9 +23,18 @@ import org.example.mobble.user.domain.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 @Service
@@ -64,7 +73,6 @@ public class BoardService {
                             .build()
             );
         }
-
         String safeHtml = HtmlUtil.HtmlSanitizer.sanitize(reqDTO.getContent());
         String finalHtml = MarkdownUtil.applyBasicMarkdown(safeHtml);
 
@@ -105,17 +113,18 @@ public class BoardService {
         if (!boardId.equals(reqDTO.getId()))
             throw new Exception400(ErrorEnum.BAD_REQUEST_NO_MATCHED_BOARD_ID);
         Board boardPS = findById(boardId);
+
         // 권한 체크 (403)
         checkPermissions(boardPS, user);
 
+        Map<String, byte[]> oldImg = getOldImgData(Paths.get("src/main/resources/static/img"), user.getUsername() + "-" + boardId, reqDTO);
         // 0) 기존 이미지 삭제
         ImgUtil.deleteAllImagesForPost(user.getUsername(), boardId);
-
-
+        // 재사용 파일 저장
+        saveOldFile(oldImg);
         // HTML 정화
         String safeHtml = HtmlUtil.HtmlSanitizer.sanitize(reqDTO.getContent());
         String finalHtml = MarkdownUtil.applyBasicMarkdown(safeHtml);
-
         // 2) dataURL → 파일 저장 & src 교체 (이번에는 boardId가 있으니 네이밍 완벽)
         ImgUtil.Result r;
         try {
@@ -129,11 +138,63 @@ public class BoardService {
             throw new RuntimeException("이미지 저장 실패", e);
         }
 
+        System.out.println("firstImage : " + r.firstImageUrl());
+
         reqDTO.setContent(r.html());
         boardPS.update(reqDTO, r.firstImageUrl());
 
         return boardPS;
     }
+
+    private void saveOldFile(Map<String, byte[]> oldImg) {
+        Path targetDir = Paths.get("src/main/resources/static/img");
+
+        try {
+            Files.createDirectories(targetDir); // 경로 없으면 생성
+        } catch (IOException e) {
+            System.out.println("디렉토리 생성 실패: " + e.getMessage());
+            return;
+        }
+
+        for (Map.Entry<String, byte[]> entry : oldImg.entrySet()) {
+            String fileName = entry.getKey();
+            byte[] data = entry.getValue();
+
+            try {
+                Path targetPath = targetDir.resolve(fileName);
+
+                Files.write(targetPath, data, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+
+                System.out.println("이미지 재저장 완료: " + targetPath);
+            } catch (Exception e) {
+                System.out.println("이미지 재저장 실패: " + fileName + " → " + e.getMessage());
+            }
+        }
+    }
+
+    private Map<String, byte[]> getOldImgData(Path path, String prefix, BoardRequest.BoardUpdateDTO reqDTO) {
+        try (Stream<Path> paths = Files.list(path)) {
+            return paths
+                    .filter(Files::isRegularFile)
+                    .map(Path::toFile)
+                    .filter(f -> f.getName().startsWith(prefix))
+                    .filter(f -> reqDTO.getContent().contains(f.getName()))
+                    .collect(Collectors.toMap(
+                            File::getName,
+                            f -> {
+                                try {
+                                    return Files.readAllBytes(f.toPath());
+                                } catch (IOException e) {
+                                    throw new UncheckedIOException(e);
+                                }
+                            }
+                    ));
+        } catch (Exception e) {
+            System.out.println("기존 파일 불러오기 실패: " + e.getMessage());
+            return Map.of();
+        }
+    }
+
 
     @Transactional
     public void delete(Integer boardId, User user) {

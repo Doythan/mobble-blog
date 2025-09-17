@@ -83,8 +83,10 @@ public class BookmarkResponse {
 
             // Timestamp → yyyy-MM-dd
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            this.createAt = bookmark.getCreatedAt().toLocalDateTime().format(formatter);
-
+            Timestamp createdAt = bookmark.getCreatedAt();
+            if (createdAt != null) {
+                this.createAt = createdAt.toLocalDateTime().format(formatter);
+            }
         }
     }
 

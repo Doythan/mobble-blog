@@ -11,6 +11,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @RequiredArgsConstructor
@@ -50,9 +52,15 @@ public class UserService {
             throw new Exception400(ErrorEnum.BAD_REQUEST_NO_EXISTS_FILE);
 
         try {
+            String oldProfile = user.getProfileImage();
+            if (oldProfile != null) {
+                Path path = Paths.get("src/main/resources/static" + oldProfile);
+                Files.deleteIfExists(path);
+            }
+
             UploadImgUtil.SaveOptions opts = new UploadImgUtil.SaveOptions();
             opts.subDir = null; // profile 폴더 바로 밑에 저장
-            opts.fixedFileName = userId + ".jpg"; // 사용자 ID 기반 저장
+            opts.fixedFileName = user.getUsername() + "_" + System.currentTimeMillis() + ".jpg"; // 사용자 ID 기반 저장
 
             UploadImgUtil.SaveResult result = UploadImgUtil.saveImage(reqDTO.getProfileImage(), Paths.get("src/main/resources/static/profile"), "/profile", opts);
             userPS.updateProfileImage(result.publicUrl);

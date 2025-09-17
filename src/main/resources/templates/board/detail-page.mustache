@@ -39,7 +39,12 @@
     <!-- ■ 제목 아래 서브 바: 좌(프로필/이름) · 우(작성일 + 북마크) -->
     <div class="post-subbar" data-author="true">
         <div class="sub-left">
-            <span class="avatar" aria-hidden="true">S</span>
+            <span class="avatar" aria-hidden="true">
+                {{#model.profileImage}}
+                    <img class="avatar" src="{{model.profileImage}}" alt="프로필">
+                {{/model.profileImage}}
+                {{^model.profileImage}}S{{/model.profileImage}}
+            </span>
             <span class="name">{{model.username}}</span>
         </div>
         <div class="sub-right">
@@ -111,7 +116,7 @@
                             class="post-menu-item danger"
                             role="menuitem"
                             type="button"
-                            data-action="delete"
+                            id="openDeleteModal"
                             data-delete-url="/boards/{{model.id}}/delete"
                     >
                         게시글 삭제

@@ -133,7 +133,7 @@ public class BoardRepository {
                             .excerpt(HtmlUtil.extractFirstParagraph(b.getContent(), 100))
                             .bookmarkCount(cnt != null ? cnt.intValue() : 0)
                             .isBookmark(myBookmark)
-                            .image(null)
+                            .image(b.getThumbnailUrl())
                             .build();
                 })
                 .toList();
