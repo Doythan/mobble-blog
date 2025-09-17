@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -19,6 +20,27 @@ public class UserRepository {
         } catch (Exception e) {
             return Optional.empty();
         }
+    }
+
+    public Optional<User> findActiveByUsername(String username) {
+        try {
+            return Optional.ofNullable(
+                    em.createQuery(
+                                    "select u from User u where u.username = :username and u.status <> :deleted",
+                                    User.class
+                            )
+                            .setParameter("username", username)
+                            .setParameter("deleted", UserStatus.DELETED)
+                            .getSingleResult()
+            );
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+
+    public List<User> findAll() {
+        return em.createQuery("select u from User u order by u.id", User.class)
+                .getResultList();
     }
 
     public void save(User user) {

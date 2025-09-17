@@ -55,10 +55,35 @@ public class AdminController {
         return Resp.ok(resDTO);
     }
 
-    /*-------------------------------------------------------------------------------------------------------------*/
-//    @GetMapping("/admin/boards")
-//    public String
-    /*-------------------------------------------------------------------------------------------------------------*/
+    // 관리자 유저 목록
+    @GetMapping("/admin/users")
+    public String getAdminUserList(Model model) throws JsonProcessingException {
+        var users = adminService.getUser();
+        model.addAttribute("usersJson", new ObjectMapper().writeValueAsString(users));
+
+        User loginUser = (User) session.getAttribute("user");
+        String currentAdmin = (loginUser != null) ? loginUser.getUsername() + " 님" : "관리자";
+        model.addAttribute("currentAdmin", currentAdmin);
+
+        return "admin/user-page";
+    }
+
+
+    // 관리자가 유저 닉네임 수정
+    @ResponseBody
+    @PostMapping("/admin/users/{id}/update")
+    public ResponseEntity<?> updateUsername(@PathVariable Integer id, @RequestBody AdminRequest.UsernameUpdateDTO reqDTO) {
+        String updated = adminService.updateUsername(id, reqDTO);
+        return Resp.ok(updated);  // updated username 반환
+    }
+
+    // 관리자가 유저 강제 탈퇴
+    @ResponseBody
+    @PostMapping("/admin/users/{id}/delete")
+    public ResponseEntity<?> forceDeleteUser(@PathVariable Integer id) {
+        adminService.forceDeleteUser(id);
+        return Resp.ok(true);
+    }
 
     // 관리자 로그인
     @GetMapping("/admin/login-form")

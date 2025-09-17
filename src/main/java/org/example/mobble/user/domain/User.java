@@ -61,12 +61,26 @@ public class User {
         this.role = role;
     }
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserStatus status = UserStatus.ACTIVE;
+
     public void updateProfileImage(String profileImage) {
         this.profileImage = profileImage;
     }
 
     public void updatePassword(String password) {
         this.password = password;
+    }
+
+    // username 변경 도메인 메서드
+    public void updateUsername(String newUsername) {
+        this.username = newUsername;
+    }
+
+    // 소프트 삭제
+    public void delete() {
+        this.status = UserStatus.DELETED;
     }
 }
 

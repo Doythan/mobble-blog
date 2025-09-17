@@ -1,0 +1,4 @@
+/* 유저관리 전용 보조 스타일. 신고관리 톤앤매너(rmg-*)와 함께 사용 */
+.rmg-nav__link.is-active { font-weight: 700; text-decoration: underline; }
+.rmg-table .is-muted td { color: #999; }
+.rmg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }

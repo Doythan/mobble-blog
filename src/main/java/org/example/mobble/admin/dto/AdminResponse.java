@@ -69,6 +69,23 @@ public class AdminResponse {
     }
 
     @Data
+    public static class UserDTO {
+        private Integer id;
+        private String username;
+        private String email;
+        private String role;
+        private String status;
+
+        public UserDTO(User u) {
+            this.id = u.getId();
+            this.username = u.getUsername();
+            this.email = u.getEmail();
+            this.role = u.getRole();
+            this.status = u.getStatus().name();
+        }
+    }
+
+    @Data
     public class LoginDTO {
         private String username;
     }

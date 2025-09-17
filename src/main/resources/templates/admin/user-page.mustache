@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>유저 관리</title>
+    <!-- 공통 -->
+    <link rel="stylesheet" href="/css/common.css"/>
+    <link rel="stylesheet" href="/css/header.css"/>
+    <link rel="stylesheet" href="/css/sidebar.css"/>
+    <link rel="stylesheet" href="/css/footer.css"/>
+    <!-- 전용 (신고관리와 톤&매너 통일) -->
+    <link rel="stylesheet" href="/css/admin-report.css"/>
+    <link rel="stylesheet" href="/css/admin-user.css"/>
+</head>
+<body>
+<!-- 상단 헤더 -->
+<header class="rmg-header">
+    <div class="rmg-header__left">
+        <a href="/admin/reports" class="rmg-nav__link">신고 관리</a>
+        <a href="/admin/boards" class="rmg-nav__link">게시글 관리</a>
+        <a href="/admin/users" class="rmg-nav__link is-active" aria-current="page">유저 관리</a>
+    </div>
+    <div class="rmg-header__right">
+        <span class="rmg-username">{{currentAdmin}}</span>
+        <button class="rmg-logout-btn">로그아웃</button>
+    </div>
+</header>
+
+<main class="rmg-page" role="main" aria-labelledby="umgHeading">
+    <div class="rmg-inner">
+        <h2 id="umgHeading" class="rmg-title">유저 관리</h2>
+
+        <section class="rmg-card" aria-label="유저 목록">
+            <div class="rmg-table">
+                <table>
+                    <thead>
+                    <tr>
+                        <th style="width:72px">ID</th>
+                        <th style="width:160px">닉네임</th>
+                        <th>이메일</th>
+                        <th style="width:120px">권한</th>
+                        <th style="width:120px">상태</th>
+                    </tr>
+                    </thead>
+                    <tbody id="umgTbody"></tbody>
+                </table>
+            </div>
+            <p class="rmg-help">목록의 행을 클릭하면 관리 모달이 열립니다. (닉네임 수정 · 강제 탈퇴)</p>
+        </section>
+    </div>
+</main>
+
+<!-- 관리 모달 -->
+<div id="umgModal" class="rmg-modal is-hidden" role="dialog" aria-modal="true" aria-labelledby="umgModalTitle">
+    <div class="rmg-modal__backdrop" data-close="true"></div>
+    <div class="rmg-modal__panel" role="document">
+        <h3 id="umgModalTitle" class="rmg-modal__title">유저 관리</h3>
+
+        <form id="umgForm" class="rmg-form" onsubmit="return false">
+            <input type="hidden" id="umgUserId"/>
+
+            <label class="rmg-label" for="umgUsername">닉네임</label>
+            <input id="umgUsername" class="rmg-input" type="text" placeholder="닉네임을 입력하세요." maxlength="20"/>
+
+            <label class="rmg-label" for="umgEmail">이메일</label>
+            <input id="umgEmail" class="rmg-input" type="email" readonly/>
+
+            <div class="rmg-grid">
+                <div>
+                    <label class="rmg-label" for="umgRole">권한</label>
+                    <input id="umgRole" class="rmg-input" type="text" readonly/>
+                </div>
+                <div>
+                    <label class="rmg-label" for="umgStatus">상태</label>
+                    <input id="umgStatus" class="rmg-input" type="text" readonly/>
+                </div>
+            </div>
+
+            <div class="rmg-actions">
+                <button type="button" class="rmg-btn rmg-btn--ghost" data-close="true">취소</button>
+                <button type="button" id="umgDeleteBtn" class="rmg-btn rmg-btn--danger">강제 탈퇴</button>
+                <button type="submit" id="umgApplyBtn" class="rmg-btn rmg-btn--primary" disabled>적용</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 서버에서 주입하는 JSON -->
+<div id="users-data" data-json='{{{usersJson}}}'></div>
+
+{{> layout/footer}}
+<script src="/js/footer.js" defer></script>
+<script src="/js/admin-user.js"></script>
+<script src="/js/admin-logout.js"></script>
+</body>
+</html>
