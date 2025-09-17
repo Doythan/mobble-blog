@@ -2,6 +2,7 @@ package org.example.mobble.admin.dto;
 
 import lombok.Data;
 import org.example.mobble.board.domain.Board;
+import org.example.mobble.board.dto.BoardResponse;
 import org.example.mobble.report.domain.Report;
 import org.example.mobble.report.domain.ReportCase;
 import org.example.mobble.report.domain.ReportStatus;
@@ -88,5 +89,36 @@ public class AdminResponse {
     @Data
     public class LoginDTO {
         private String username;
+    }
+
+
+    @Data
+    public static class BoardListDTO {
+        private Integer id;
+        private String title;
+        private String content;
+        private Integer userId;
+        private String username;
+        private Timestamp createdAt;
+        private Integer views;
+        private Integer bookmarkCount;
+        private String category;
+        private Timestamp createAt;
+        private String profileImage;
+
+
+        public BoardListDTO(Board board, BoardResponse.DetailDTO boardDetail) {
+            this.id = board.getId();
+            this.title = board.getTitle();
+            this.content = board.getContent();
+            this.userId = board.getUser().getId();
+            this.username = board.getUser().getUsername();
+            this.createdAt = board.getCreatedAt();
+            this.views = board.getViews();
+            this.bookmarkCount = boardDetail.getBookmarkCount();
+            this.category = boardDetail.getCategory();
+            this.createAt = board.getCreatedAt();
+            this.profileImage = boardDetail.getProfileImage();
+        }
     }
 }

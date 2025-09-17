@@ -4,11 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.example.mobble._util.error.ErrorEnum;
 import org.example.mobble._util.error.ex.Exception401;
 import org.example.mobble._util.util.Resp;
 import org.example.mobble.admin.dto.AdminRequest;
 import org.example.mobble.admin.dto.AdminResponse;
 import org.example.mobble.admin.service.AdminService;
+import org.example.mobble.board.service.BoardService;
 import org.example.mobble.report.domain.ReportStatus;
 import org.example.mobble.report.dto.ReportRequest;
 import org.example.mobble.report.dto.ReportResponse;
@@ -33,7 +35,9 @@ public class AdminController {
     //관리자 전체 신고 리스트
     @GetMapping("/admin/reports")
     public String getAdminReportList(Model model) throws JsonProcessingException {
+        User user = getSessionUser();
         List<AdminResponse.ReportDTO> resDTO = adminService.getList();
+        model.addAttribute("username", user.getUsername());
         model.addAttribute("reportsJson", new ObjectMapper().writeValueAsString(resDTO));
         return "admin/report-page";
     }
@@ -84,6 +88,25 @@ public class AdminController {
         adminService.forceDeleteUser(id);
         return Resp.ok(true);
     }
+    /*-------------------------------------------------------------------------------------------------------------*/
+    // 게시글 관리 리스트
+    @GetMapping("/admin/boards")
+    public String getAdminBoardList(Model model) throws JsonProcessingException {
+        User user = getSessionUser();
+        List<AdminResponse.BoardListDTO> resDTO = adminService.getBoardList();
+        model.addAttribute("username", user.getUsername());
+        model.addAttribute("reportsJson", new ObjectMapper().writeValueAsString(resDTO));
+        return "admin/board-page";
+    }
+    // 게시글 삭제
+    @ResponseBody
+    @PostMapping("/admin/boards/{id}/delete")
+    public ResponseEntity<?> deleteBoard(@PathVariable(name = "id") Integer boardId) {
+        System.out.println("왔나? : " + boardId);
+        adminService.deleteBoard(boardId);
+        return null;
+    }
+    /*-------------------------------------------------------------------------------------------------------------*/
 
     // 관리자 로그인
     @GetMapping("/admin/login-form")
@@ -102,6 +125,12 @@ public class AdminController {
     public String logout() {
         session.invalidate();
         return "redirect:/admin/login-form";
+    }
+
+    private User getSessionUser() {
+        User user = (User) session.getAttribute("user");
+        if (user == null) throw new Exception401(ErrorEnum.UNAUTHORIZED_NO_EXISTS_USER_INFO);
+        else return user;
     }
 
 }

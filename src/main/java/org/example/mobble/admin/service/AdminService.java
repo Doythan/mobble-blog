@@ -9,6 +9,7 @@ import org.example.mobble.admin.dto.AdminRequest;
 import org.example.mobble.admin.dto.AdminResponse;
 import org.example.mobble.board.domain.Board;
 import org.example.mobble.board.domain.BoardRepository;
+import org.example.mobble.board.dto.BoardResponse;
 import org.example.mobble.report.domain.Report;
 import org.example.mobble.report.domain.ReportRepository;
 import org.example.mobble.report.domain.ReportStatus;
@@ -125,5 +126,28 @@ public class AdminService {
             throw new Exception403(FORBIDDEN_NOT_ADMIN);
         }
         return foundUser;
+    }
+
+    @Transactional
+    public List<AdminResponse.BoardListDTO> getBoardList() {
+        List<Board> foundBoardList = boardRepository.findboardList();
+        List<AdminResponse.BoardListDTO> resDTO = new ArrayList<>();
+
+        for (Board board : foundBoardList) {
+            BoardResponse.DetailDTO boardPS = findByIdDetail(board.getId(),board.getUser().getId());
+            resDTO.add(new AdminResponse.BoardListDTO(board,boardPS));
+        }
+        return resDTO;
+
+    }
+    public BoardResponse.DetailDTO findByIdDetail(Integer boardId,Integer userId) {
+        return boardRepository.findByIdDetail(boardId,userId).orElseThrow(
+                () -> new Exception400(NOT_FOUND_BOARD)
+        );
+    }
+
+    @Transactional
+    public void deleteBoard(Integer boardId) {
+        boardRepository.delete(boardId);
     }
 }

@@ -1,6 +1,7 @@
 package org.example.mobble.board.domain;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
 import org.example.mobble._util.util.HtmlUtil;
 import org.example.mobble.board.dto.BoardResponse;
@@ -19,6 +20,10 @@ public class BoardRepository {
     public Board save(Board board) {
         em.persist(board);
         return board;
+    }
+    public List<Board> findboardList() {
+        return em.createQuery("select b from Board b left join b.category c left join b.user u order by b.id",Board.class)
+                .getResultList();
     }
 
     public Optional<Board> findById(Integer boardId) {

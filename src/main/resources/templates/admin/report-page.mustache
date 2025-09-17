@@ -17,14 +17,14 @@
 <header class="rmg-header">
     <!-- 좌측 메뉴 -->
     <div class="rmg-header__left">
-        <a href="/admin/reports" class="rmg-nav__link">신고 관리</a>
+        <a href="/admin/reports" class="rmg-nav__link">신고글 관리</a>
         <a href="/admin/boards" class="rmg-nav__link">게시글 관리</a>
         <a href="/admin/users" class="rmg-nav__link">유저 관리</a>
     </div>
 
     <!-- 우측 사용자 영역 -->
     <div class="rmg-header__right">
-        <span class="rmg-username">ssar 님</span>
+        <span class="rmg-username">{{username}} 님</span>
         <button class="rmg-logout-btn">로그아웃</button>
     </div>
 </header>
@@ -38,7 +38,7 @@
                     <thead>
                     <tr>
                         <th style="width: 72px">Id</th>
-                        <th style="width: 72px">게시물ID</th>
+                        <th style="width: 90px">게시물ID</th>
                         <th>글 제목</th>
                         <th style="width: 120px">게시자</th>
                         <th style="width: 120px">신고자</th>

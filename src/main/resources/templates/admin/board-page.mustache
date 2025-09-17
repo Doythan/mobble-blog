@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>신고글 관리</title>
+    <!-- 공통 -->
+    <link rel="stylesheet" href="/css/common.css"/>
+    <link rel="stylesheet" href="/css/header.css"/>
+    <link rel="stylesheet" href="/css/sidebar.css"/>
+    <link rel="stylesheet" href="/css/footer.css"/>
+    <!-- 전용 -->
+    <link rel="stylesheet" href="/css/admin-board.css"/>
+</head>
+<body>
+<!-- 상단 헤더 -->
+<header class="rmg-header">
+    <!-- 좌측 메뉴 -->
+    <div class="rmg-header__left">
+        <a href="/admin/reports" class="rmg-nav__link">신고글 관리</a>
+        <a href="/admin/boards" class="rmg-nav__link">게시글 관리</a>
+        <a href="/admin/users" class="rmg-nav__link">유저 관리</a>
+    </div>
+
+    <!-- 우측 사용자 영역 -->
+    <div class="rmg-header__right">
+        <span class="rmg-username">{{username}} 님</span>
+        <button class="rmg-logout-btn">로그아웃</button>
+    </div>
+</header>
+<main class="rmg-page" role="main" aria-labelledby="rmgHeading">
+    <div class="rmg-inner">
+        <h2 id="rmgHeading" class="rmg-title">게시글 관리</h2>
+
+        <section class="rmg-card" aria-label="신고글 목록">
+            <div class="rmg-table">
+                <table>
+                    <thead>
+                    <tr>
+                        <th style="width: 72px">게시물ID</th>
+                        <th style="width: 100px">글 제목</th>
+                        <th style="width: 120px">게시자</th>
+                        <th style="width: 300px">글내용</th>
+                        <th style="width: 140px">작성일</th>
+                    </tr>
+                    </thead>
+                    <tbody id="rmgTbody"></tbody>
+                </table>
+            </div>
+            <p class="rmg-help">목록의 항목을 클릭하면 관리 모달이 열립니다.</p>
+        </section>
+    </div>
+</main>
+
+<!-- 관리 모달 -->
+<div
+        id="rmgModal"
+        class="rmg-modal is-hidden"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="rmgModalTitle"
+>
+    <div class="rmg-modal__backdrop" data-close="true"></div>
+
+    <div class="rmg-modal__panel" role="document">
+        <h3 id="rmgModalTitle" class="rmg-modal__title">게시글 관리</h3>
+
+        <form id="rmgForm" class="rmg-form" onsubmit="return false">
+            <label class="rmg-label" for="rmgTitle">게시글 제목</label>
+            <div id="rmgTitle" class="rmg-input rmg-readonly"></div>
+
+            <label class="rmg-label" for="rmgCategory">카테고리</label>
+            <div id="rmgCategory" class="rmg-input rmg-readonly"></div>
+
+
+            <label class="rmg-label" for="rmgId">게시글 id</label>
+            <div id="rmgId" class="rmg-input rmg-readonly"></div>
+
+            <label class="rmg-label" for="rmgViews">조회수</label>
+            <div id="rmgViews" class="rmg-input rmg-readonly"></div>
+
+            <label class="rmg-label" for="rmgReportedAt">작성일</label>
+            <div id="rmgReportedAt" class="rmg-input rmg-readonly"></div>
+
+            <label class="rmg-label" for="rmgAuthor">글 게시자</label>
+            <div id="rmgAuthor" class="rmg-input rmg-readonly"></div>
+
+
+
+            <label class="rmg-label" for="rmgContent">게시글 내용</label>
+            <textarea
+                    id="rmgContent"
+                    class="rmg-textarea"
+                    rows="6"
+                    placeholder="상세 내용을 입력하세요."
+            ></textarea>
+
+
+            <div class="rmg-actions">
+                <button
+                        type="button"
+                        class="rmg-btn rmg-btn--ghost"
+                        data-close="true"
+                >
+                    닫기
+                </button>
+
+                <button
+                        type="button"
+                        id="rmgDeleteBtn"
+                        class="rmg-btn rmg-btn--danger"
+                >
+                    삭제
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<!--json data-->
+<div id="reports-data" data-json='{{{reportsJson}}}'></div>
+{{> layout/footer}}
+
+<script src="/js/footer.js" defer></script>
+<script src="/js/admin-boards-modal.js"></script>
+<script src="/js/admin-logout.js"></script>
+</body>
+</html>

@@ -200,4 +200,38 @@ public class ReportTest {
     }
 
 
+    //게시글 관리
+    @Test
+    void get_admin_board_list_test() throws Exception {
+        // when
+        ResultActions actions = mvc.perform(
+                get("/admin/boards")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .session(session)
+        );
+
+        // then
+        MvcResult result = actions
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin/board-page"))
+                .andExpect(model().attributeExists("reportsJson"))
+                .andReturn();
+
+        // JSON 문자열 꺼내오기
+        String boardsJson = (String) result.getModelAndView().getModel().get("reportsJson");
+        System.out.println("✅응답바디 : " + boardsJson);
+
+        // 파싱 후 값 검증
+        ObjectMapper om = new ObjectMapper();
+        Map<String, Object> boardListDTO = om.readValue(boardsJson, new TypeReference<>() {});
+        List<Map<String, Object>> boardList = (List<Map<String, Object>>) boardListDTO.get("boardList");
+
+        // 첫 번째 게시글 검증
+        Map<String, Object> first = boardList.get(0);
+        assertThat(first.get("id")).isEqualTo(1);
+        assertThat(first.get("title")).isEqualTo("user1-post1");
+        assertThat(first.get("content")).isNotNull();
+        assertThat(first.get("username")).isEqualTo("ssar");
+        assertThat(first.get("createdAt")).isNotNull();
+    }
 }
