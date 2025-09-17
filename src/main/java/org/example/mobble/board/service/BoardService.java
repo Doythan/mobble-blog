@@ -49,11 +49,14 @@ public class BoardService {
         return boardRepository.findAll(user.getId(), orderBy, firstIndex, size);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional()
     public BoardResponse.DetailDTO getBoardDetail(Integer boardId, User user) {
-        return boardRepository.findByIdDetail(boardId, user.getId()).orElseThrow(
-                () -> new Exception404(ErrorEnum.NOT_FOUND_BOARD)
-        );
+        Board boardPS = boardRepository.findById(boardId).orElseThrow(() -> new Exception404(ErrorEnum.NOT_FOUND_BOARD));
+        boardPS.viewsCounting();
+        boardRepository.flush();
+        BoardResponse.DetailDTO respDTO = boardRepository.findByIdDetail(boardId, user.getId()).orElseThrow(
+                () -> new Exception404(ErrorEnum.NOT_FOUND_BOARD));
+        return respDTO;
     }
 
     @Transactional(readOnly = true)

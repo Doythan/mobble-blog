@@ -158,4 +158,9 @@ public class BoardRepository {
                         .setMaxResults(maxResult)
                         .getResultList());
     }
+
+    // DB 즉시 반영
+    public void flush() {
+        em.flush();
+    }
 }
