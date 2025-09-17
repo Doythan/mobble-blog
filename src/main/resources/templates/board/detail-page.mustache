@@ -43,7 +43,8 @@
                 {{#model.profileImage}}
                     <img class="avatar" src="{{model.profileImage}}" alt="프로필">
                 {{/model.profileImage}}
-                {{^model.profileImage}}S{{/model.profileImage}}
+                {{^model.profileImage}}
+                    <img class="avatar" src="/img/default_profile.png" alt="프로필">{{/model.profileImage}}
             </span>
             <span class="name">{{model.username}}</span>
         </div>
