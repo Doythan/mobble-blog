@@ -1,6 +1,6 @@
 <img src="https://capsule-render.vercel.app/api?type=venom&height=300&color=gradient&text=Mobble&fontColor=black">
 
-# 심화프로젝트 2 - 모두의 블로그, Mobble
+# 모두의 블로그, Mobble
 
 - 자바와 스프링부트, Mustache, CSS 및 JS를 사용한 블로그 서비스입니다.
 - 전체 개발 기간 : 2025.08.28 ~ 2025.09.17
