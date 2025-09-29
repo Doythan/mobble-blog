@@ -6,6 +6,16 @@
 - 전체 개발 기간 : 2025.08.28 ~ 2025.09.17
   <br />
 
+<br />
+
+## 시연 영상
+### 유저 시연
+<img src="https://github.com/user-attachments/assets/73abe967-c8fc-4d24-8475-aee39fbb2724">
+<br />
+
+### 관리자 시연
+<img src="https://github.com/user-attachments/assets/236777e4-3a42-4b37-8159-f7e3ff41e492">
+
 ## Referenced
 
 - 시중 출시된 블로그 페이지를 참고하여 제작하였습니다.
